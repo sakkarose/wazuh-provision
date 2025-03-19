@@ -165,20 +165,21 @@ WAZUH_MONITORING_REPLICAS=0         ##
     │   ├── docker-compose.yml
     │   ├── generate-indexer-certs.yml
     │   └── README.md
-    └── VERSION.json
+    └── VERSION
+
 
 
 ## Branches
 
-* `main` branch contains the latest code, be aware of possible bugs on this branch.
+* `master` branch contains the latest code, be aware of possible bugs on this branch.
 * `stable` branch corresponds to the last Wazuh stable version.
 
 ## Compatibility Matrix
 
 | Wazuh version | ODFE    | XPACK  |
 |---------------|---------|--------|
-| v5.0.0        |         |        |
-| v4.10.2       |         |        |
+| v4.11.1       |         |        |
+| v4.11.0       |         |        |
 | v4.10.1       |         |        |
 | v4.10.0       |         |        |
 | v4.9.2        |         |        |
