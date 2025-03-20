@@ -1,4 +1,4 @@
-# Wazuh Containers for Docker
+# Wazuh on Docker
 
 ## Overview
 
