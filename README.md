@@ -8,7 +8,13 @@ Single-node only at the moment.
 
 Current version: v4.11.1
 
+## Done
+
+- YARA & Sysmon provisioning for Windows.
+
 ## To-do
+
+- Github Action to run **download_yara_rules.py** & append it with **yara_rules_append.yar** daily.
 
 ## Credits
 
