@@ -1,3 +1,5 @@
+// Custom config, append this file to the updated file from download_yara_rules.py
+
 rule M_AES_Encrypted_payload {
    meta:
       author = "MAS"
