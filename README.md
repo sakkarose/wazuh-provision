@@ -31,10 +31,10 @@ Current version: v4.11.1
 
 ### To-do
 
+- Provisioning for AIO setup
 - Shuffle worker provisioning.
 - Shuffle example workflows.
 - Grafana provisioning (Haven't decided between OpenSearch dashboard and Grafana).
-- Provisioning for AIO setup
 - Malware hash sample CDB lists automatic update
 
 ## Credits
