@@ -8,7 +8,9 @@ Single-node only at the moment.
 
 Current version: v4.11.1
 
-## Continuous
+## Task
+
+### Continuous
 
 - Provisioning CDB lists
 
@@ -16,14 +18,14 @@ Current version: v4.11.1
 
 - Provisioning rules
 
-## Done
+### Done
 
 - Windows agent provisioning.
     - Setup Sysmon
     - Setup YARA & rules
     - Enable PowerShell logs gathering 
 
-## To-do
+### To-do
 
 - Github Action to run **download_yara_rules.py** & append it with **yara_rules_append.yar** daily.
 
