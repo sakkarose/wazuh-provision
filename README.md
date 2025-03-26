@@ -32,6 +32,7 @@ Current version: v4.11.1
 
 - Shuffle worker provisioning.
 - Shuffle example workflows.
+- Grafana provisioning (Haven't decided between OpenSearch dashboard and Grafana).
 
 ## Credits
 
