@@ -2,7 +2,7 @@ name: Update YARA rules
 
 on:
   schedule:
-    - cron: '0 0 * * 1' # At 00:00 on Monday
+    - cron: '0 21 * * *' # At 21:00 UTC (4:00 AM GMT+7)
 
 jobs:
   build:
@@ -16,12 +16,20 @@ jobs:
         with:
           python-version: '3.12.2' # install the python version needed
 
-#      - name: install python packages
-#        run: |
-#          python -m pip install --upgrade pip
-#          pip install -r requirements.txt
+      - name: install python packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r single-node\config\wazuh_endpoint\windows\yara\requirements.txt
 
       - name: execute py script
-        run: python download_yara_rules.py
+        run: python single-node\config\wazuh_endpoint\windows\yara\download_yara_rules.py
 
-# Progress: https://www.python-engineer.com/posts/run-python-github-actions/#use-secrets-api-tokens-in-github-actions
+      - name: commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add single-node/config/wazuh_endpoint/windows/yara/yara_rules.yar
+          git commit -m "Daily YARA rules fetching"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
