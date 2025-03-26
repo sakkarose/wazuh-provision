@@ -10,7 +10,10 @@ Current version: v4.11.1
 
 ## Done
 
-- YARA & Sysmon provisioning for Windows.
+- Windows agent provisioning.
+    - Setup Sysmon
+    - Setup YARA & rules
+    - Enable PowerShell logs gathering 
 
 ## To-do
 

@@ -5,6 +5,27 @@ $yaraPath = "$ossecPath\active-response\bin\yara"
 $sysmonUrl = "https://download.sysinternals.com/files/Sysmon.zip"
 $yaraUrl = "https://github.com/VirusTotal/yara/releases/download/v4.5.2/yara-v4.5.2-2326-win64.zip"
 
+function Enable-PSLogging {
+    # Define registry paths for ScriptBlockLogging and ModuleLogging
+    $scriptBlockPath = 'HKLM:\Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging'
+    $moduleLoggingPath = 'HKLM:\Software\Policies\Microsoft\Windows\PowerShell\ModuleLogging'
+    
+    # Enable Script Block Logging
+    if (-not (Test-Path $scriptBlockPath)) {
+        $null = New-Item $scriptBlockPath -Force
+    }
+    Set-ItemProperty -Path $scriptBlockPath -Name EnableScriptBlockLogging -Value 1
+    # Enable Module Logging
+    if (-not (Test-Path $moduleLoggingPath)) {
+        $null = New-Item $moduleLoggingPath -Force
+    }
+    Set-ItemProperty -Path $moduleLoggingPath -Name EnableModuleLogging -Value 1
+    
+    # Specify modules to log - set to all (*) for comprehensive logging
+    $moduleNames = @('*')  # To specify individual modules, replace * with module names in the array
+    New-ItemProperty -Path $moduleLoggingPath -Name ModuleNames -PropertyType MultiString -Value $moduleNames -Force
+    Write-Output "Script Block Logging and Module Logging have been enabled."
+}
 
 # Rerun script as administrator if not already running as administrator
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
@@ -60,5 +81,9 @@ Copy-Item -Path "$PSScriptRoot\yara_rules.yar" -Destination "$yaraPath\rules\"
 # Copy the yara.bat file to the bin directory
 Copy-Item -Path "$PSScriptRoot\yara.bat" -Destination "$ossecPath\active-response\bin\"
 
-# Restart the Wazuh agent service
-Restart-Service -Name wazuh
+# Enable PowerShell logging
+Enable-PSLogging
+
+# Print a message asking the user to restart the computer
+Write-Host "Provisioning completed. Please restart your computer to apply all changes."
+Read-Host -Prompt "Press Enter to exit"
