@@ -2,9 +2,9 @@
 
 ## Overview
 
-This forked "wazuh-docker" repository is aimed at provisioning with personal configurations (rules and active responses).
+This forked "wazuh-docker" repository is aimed at provisioning with personal configurations.
 
-Single-node only at the moment.
+Single-node deployment only at the moment.
 
 Current version: v4.11.1
 
