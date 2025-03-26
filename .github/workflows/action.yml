@@ -17,6 +17,10 @@ jobs:
         with:
           python-version: '3.12.2'
 
+      - name: List directory contents
+        working-directory: ./single-node/config/wazuh_endpoint/windows/yara
+        run: ls -la
+
       - name: install python packages
         working-directory: ./single-node/config/wazuh_endpoint/windows/yara
         run: |
