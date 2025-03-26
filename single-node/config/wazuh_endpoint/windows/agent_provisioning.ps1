@@ -84,6 +84,9 @@ Copy-Item -Path "$PSScriptRoot\yara.bat" -Destination "$ossecPath\active-respons
 # Enable PowerShell logging
 Enable-PSLogging
 
+# Active-response provisioning
+Copy-Item -Path "$PSScriptRoot\active-response\*" -Destination "$ossecPath\active-response\bin\" -Recurse
+
 # Print a message asking the user to restart the computer
 Write-Host "Provisioning completed. Please restart your computer to apply all changes."
 Read-Host -Prompt "Press Enter to exit"

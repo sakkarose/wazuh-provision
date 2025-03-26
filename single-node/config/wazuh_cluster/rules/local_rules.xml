@@ -48,3 +48,11 @@
 <description>Active Response: Error removing "$(yara_scanned_file)". YARA rule: $(yara_rule)</description>
   </rule>
 </group>
+
+<!-- VSS Ransomware Restore -->
+<group name="ransomware,ransomware_rollback,">
+  <rule id="100105" level="5">
+    <field name="rollback_status">completed</field>
+    <description>Wazuh_Ransomware_Protection: Files restored successfully.</description>
+  </rule>
+</group>
