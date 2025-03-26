@@ -20,10 +20,10 @@ jobs:
       - name: install python packages
         run: |
           python -m pip install --upgrade pip
-          pip install -r ./single-node/config/wazuh_endpoint/windows/yara/requirements.txt
+          pip install -r .\\single-node\\config\\wazuh_endpoint\\windows\\yara\\requirements.txt
 
       - name: execute py script
-        run: python ./single-node/config/wazuh_endpoint/windows/yara/download_yara_rules.py
+        run: python .\\single-node\\config\\wazuh_endpoint\\windows\\yara\\download_yara_rules.py
 
       - name: commit and push changes
         run: |
