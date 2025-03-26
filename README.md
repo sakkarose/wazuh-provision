@@ -26,6 +26,7 @@ Current version: v4.11.1
     - Setup Sysmon
     - Setup YARA & rules
     - Enable PowerShell logs gathering
+    - Provision ransomware active response
 - YARA rule update thourgh Github Action.
 
 ### To-do
