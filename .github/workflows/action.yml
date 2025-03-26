@@ -23,8 +23,6 @@ jobs:
           pip install -r ./single-node/config/wazuh_endpoint/windows/yara/requirements.txt
 
       - name: execute py script
-        env:
-          VALHALLA_API_KEY: ${{ secrets.VALHALLA_API_KEY }}
         run: python ./single-node/config/wazuh_endpoint/windows/yara/download_yara_rules.py
 
       - name: commit and push changes
