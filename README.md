@@ -26,10 +26,12 @@ Current version: v4.11.1
     - Setup Sysmon
     - Setup YARA & rules
     - Enable PowerShell logs gathering
+- YARA rule update thourgh Github Action.
 
 ### To-do
 
-- Github Action to run **download_yara_rules.py** & append it with **yara_rules_append.yar** daily.
+- Shuffle worker provisioning.
+- Shuffle example workflows.
 
 ## Credits
 
