@@ -12,16 +12,20 @@ Current version: v4.11.1
 
 ### Continuous
 
-- Provisioning CDB lists
-- Provisioning decoders
-- Provisioning rules
+- Updating CDB lists
+- Updating decoders
+- Updating rules
 
 ### Done
 
+- Configuration provisioning.
+    - CDB lists
+    - Decoders
+    - Rules
 - Windows agent provisioning.
     - Setup Sysmon
     - Setup YARA & rules
-    - Enable PowerShell logs gathering 
+    - Enable PowerShell logs gathering
 
 ### To-do
 
