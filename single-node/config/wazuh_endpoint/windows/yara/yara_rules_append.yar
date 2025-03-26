@@ -1,4 +1,4 @@
-// Custom config, append this file to the updated file from download_yara_rules.py
+/* Peaklight Ransomware */
 
 rule M_AES_Encrypted_payload {
    meta:
@@ -31,4 +31,40 @@ rule M_Downloader_PEAKLIGHT_1 {
      $str8 = "[IO.Compression.ZipFile]::OpenRead"
    condition:
      4 of them and filesize < 10KB         
+}
+
+/* BrainCipher Ransomware */
+
+rule BrainCipher_ransomware {
+   meta:
+      description = "Brain Cipher ransomware executable detection"
+      author = "Aishat Motunrayo Awujola"
+      reference = "https://github.com/Neo23x0/yarGen"
+      date = "2025-01-20"
+    hash1= "eb82946fa0de261e92f8f60aa878c9fef9ebb34fdababa66995403b110118b12"
+
+  strings:
+      $s1 = "L%nu%s\"^6" fullword ascii
+      $s2 = "D$PWSP" fullword ascii /* Goodware String - occurred 1 times */
+      $s3 = "2'2b2v2" fullword ascii /* Goodware String - occurred 1 times */
+      $s4 = "Loyn?P00" fullword ascii
+      $s5 = "4f5l5x5~5" fullword ascii /* Goodware String - occurred 1 times */
+      $s6 = "4 444u4" fullword ascii /* Goodware String - occurred 1 times */
+      $s7 = "wSYM ,9" fullword ascii
+      $s8 = "=V=\\={=" fullword ascii /* Goodware String - occurred 1 times */
+      $s9 = "5E6L6S6Z6" fullword ascii /* Goodware String - occurred 1 times */
+      $s10 = ";&;P;_;" fullword ascii /* Goodware String - occurred 1 times */
+      $s11 = "?0N0]0l0" fullword ascii /* Goodware String - occurred 1 times */
+      $s12 = "9D$$ua" fullword ascii /* Goodware String - occurred 2 times */
+      $s13 = "4.4=4L4" fullword ascii /* Goodware String - occurred 2 times */
+      $s14 = "SQRVW3" fullword ascii
+      $s15 = "_^ZY[]" fullword ascii /* Goodware String - occurred 3 times */
+      $s16 = "?%U$38O" fullword ascii
+      $s17 = "9&9,949" fullword ascii
+      $s18 = "303M3W3" fullword ascii
+      $s19 = "7+7:7I7H8R8z8" fullword ascii
+      $s20 = "+D$H[_]^" fullword ascii
+   condition:
+      uint16(0) == 0x5a4d and filesize < 400KB and
+      8 of them
 }

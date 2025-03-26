@@ -1,5 +1,3 @@
-:: This script deletes Peaklight malware executable as well as other malicious files matched by the YARA Rules
- 
 @echo off
 setlocal enableDelayedExpansion
 reg Query "HKLM\Hardware\Description\System\CentralProcessor\0" | find /i "x86" > NUL && SET OS=32BIT || SET OS=64BIT

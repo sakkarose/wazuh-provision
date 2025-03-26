@@ -4,6 +4,7 @@ $yaraPath = "$ossecPath\active-response\bin\yara"
 
 $sysmonUrl = "https://download.sysinternals.com/files/Sysmon.zip"
 $yaraUrl = "https://github.com/VirusTotal/yara/releases/download/v4.5.2/yara-v4.5.2-2326-win64.zip"
+$yararuleURL = "https://github.com/sakkarose/wazuh-docker/blob/main/single-node/config/wazuh_endpoint/windows/yara/yara_rules.yar"
 
 function Enable-PSLogging {
     # Define registry paths for ScriptBlockLogging and ModuleLogging
@@ -70,6 +71,9 @@ if (-Not (Test-Path -Path $yaraPath)) {
 # Copy the YARA binary to the new directory
 Copy-Item -Path "$PSScriptRoot\yara64.exe" -Destination $yaraPath
 
+# Download the YARA rules file
+Invoke-WebRequest -Uri $yararuleURL -OutFile "$PSScriptRoot\yara_rules.yar"
+
 # Create the YARA rules directory
 if (-Not (Test-Path -Path "$yaraPath\rules")) {
     New-Item -ItemType Directory -Path "$yaraPath\rules"
@@ -77,9 +81,6 @@ if (-Not (Test-Path -Path "$yaraPath\rules")) {
 
 # Copy the YARA rules to the new directory
 Copy-Item -Path "$PSScriptRoot\yara_rules.yar" -Destination "$yaraPath\rules\"
-
-# Copy the yara.bat file to the bin directory
-Copy-Item -Path "$PSScriptRoot\yara.bat" -Destination "$ossecPath\active-response\bin\"
 
 # Enable PowerShell logging
 Enable-PSLogging
