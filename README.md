@@ -13,9 +13,7 @@ Current version: v4.11.1
 ### Continuous
 
 - Provisioning CDB lists
-
 - Provisioning decoders
-
 - Provisioning rules
 
 ### Done
