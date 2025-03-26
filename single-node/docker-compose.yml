@@ -46,6 +46,7 @@ services:
       - ./config/wazuh_cluster/wazuh_manager.conf:/wazuh-config-mount/etc/ossec.conf
       - ./config/wazuh_cluster/rules:/var/ossec/etc/rules
       - ./config/wazuh_cluster/decoders:/var/ossec/etc/decoders
+      - ./config/wazuh_cluster/lists:/var/ossec/etc/lists
       - ./config/wazuh_endpoint/windows/agent_config:/var/ossec/etc/shared/windows
 #     - ./config/wazuh_endpoint/linux/agent_config:/var/ossec/etc/shared/linux
 

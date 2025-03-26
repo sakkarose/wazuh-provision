@@ -5,6 +5,7 @@
 
 <!-- YARA Provisioning -->
 <!-- File added to the Downloads folder -->
+
 <group name= "syscheck,">
   <rule id="100010" level="7">
     <if_sid>550</if_sid>
