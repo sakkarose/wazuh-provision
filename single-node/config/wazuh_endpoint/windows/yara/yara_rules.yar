@@ -1,6 +1,6 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-03-25 07:19
+    Retrieved: 2025-03-26 09:49
     Generated for User: demo
     Number of Rules: 3209
     
@@ -31,6 +31,31 @@ rule SUSP_SVG_JS_Payload_Mar25_RID2FB6 : DEMO GEN SUSP {
       $ss2 = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\">" 
    condition: 
       $a1 in ( 0 .. 1024 ) and ( filesize < 100KB and 1 of ( $sx* ) or filesize < 1MB and 2 of ( $s* ) )
+}
+
+rule MAL_PHISH_Final_Payload_Feb25_RID310B : DEMO MAL T1203 T1566_001 {
+   meta:
+      description = "Detects possible final payload of phishing-delivered malware, where embedded shellcode is used to decrypt and execute the payload after user-supplied password input."
+      author = "X__Junior"
+      reference = "https://x.com/dtcert/status/1890384162818802135"
+      date = "2025-02-14 13:05:41"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, MAL, T1203, T1566_001"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "%lu: %s %s" wide
+      $s2 = "(Direct Inbound)" wide
+      $s3 = "(Primary Domain)" wide
+      $s4 = "(Forest Tree Root" wide
+      $s5 = "(Native Mode)" wide
+      $s6 = "(In Forest)" wide
+      $s7 = "(None)" wide
+   condition: 
+      all of them
 }
 
 rule SUSP_Sysinternals_Desktops_Anomaly_Feb25_RID3679 : ANOMALY DEMO EXE FILE SUSP {
@@ -73,31 +98,6 @@ rule SUSP_PE_Compromised_Certificate_Feb25_RID34C6 : DEMO EXE FILE SUSP T1203 T1
       $sb3 = { 40 A3 62 E3 50 68 91 19 F5 2E C3 4C } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 20MB and 1 of them
-}
-
-rule MAL_PHISH_Final_Payload_Feb25_RID310B : DEMO MAL T1203 T1566_001 {
-   meta:
-      description = "Detects possible final payload of phishing-delivered malware, where embedded shellcode is used to decrypt and execute the payload after user-supplied password input."
-      author = "X__Junior"
-      reference = "https://x.com/dtcert/status/1890384162818802135"
-      date = "2025-02-14 13:05:41"
-      score = 80
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, MAL, T1203, T1566_001"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "%lu: %s %s" wide
-      $s2 = "(Direct Inbound)" wide
-      $s3 = "(Primary Domain)" wide
-      $s4 = "(Forest Tree Root" wide
-      $s5 = "(Native Mode)" wide
-      $s6 = "(In Forest)" wide
-      $s7 = "(None)" wide
-   condition: 
-      all of them
 }
 
 rule SUSP_LNK_Suspicious_Folders_Jan25_RID3343 : DEMO FILE SUSP T1210 T1547_009 {
@@ -15687,32 +15687,6 @@ rule HKTL_EXPL_POC_LibSSH_Auth_Bypass_CVE_2023_2283_Jun23_1_RID3855 : CVE_2023_2
       uint16 ( 0 ) == 0x457f and all of them
 }
 
-rule SUSP_Fake_AMSI_DLL_Jun23_1_RID2F77 : DEMO EXE FILE SUSP {
-   meta:
-      description = "Detects an amsi.dll that has the same exports as the legitimate one but very different contents or file sizes"
-      author = "Florian Roth"
-      reference = "https://twitter.com/eversinc33/status/1666121784192581633?s=20"
-      date = "2023-06-07 11:58:21"
-      score = 65
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2023-06-12"
-      tags = "DEMO, EXE, FILE, SUSP"
-      required_modules = "pe"
-      minimum_yara = "3.0.0"
-      
-   strings:
-      $a1 = "Microsoft.Antimalware.Scan.Interface" ascii
-      $a2 = "Amsi.pdb" ascii fullword
-      $a3 = "api-ms-win-core-sysinfo-" ascii
-      $a4 = "Software\\Microsoft\\AMSI\\Providers" wide
-      $a5 = "AmsiAntimalware@" ascii
-      $a6 = "AMSI UAC Scan" ascii
-      $fp1 = "Wine builtin DLL" 
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and ( pe.exports ( "AmsiInitialize" ) and pe.exports ( "AmsiScanString" ) ) and ( filesize > 200KB or filesize < 35KB or not 4 of ( $a* ) ) and not 1 of ( $fp* )
-}
-
 rule MAL_ELF_ReverseShell_SSLShell_Jun23_1_RID341E : CVE_2023_2868 DEMO FILE LINUX MAL SCRIPT {
    meta:
       description = "Detects a reverse shell named SSLShell used in Barracuda ESG exploitation (CVE-2023-2868)"
@@ -15757,6 +15731,32 @@ rule MAL_ELF_SALTWATER_Jun23_1_RID2EB8 : CVE_2023_2868 DEMO LINUX MAL {
       $s7 = "/home/product/code/config/ssl_engine_cert.pem" 
    condition: 
       uint16 ( 0 ) == 0x457f and filesize < 6000KB and ( ( 1 of ( $x* ) and 2 of them ) or 3 of them ) or all of them
+}
+
+rule SUSP_Fake_AMSI_DLL_Jun23_1_RID2F77 : DEMO EXE FILE SUSP {
+   meta:
+      description = "Detects an amsi.dll that has the same exports as the legitimate one but very different contents or file sizes"
+      author = "Florian Roth"
+      reference = "https://twitter.com/eversinc33/status/1666121784192581633?s=20"
+      date = "2023-06-07 11:58:21"
+      score = 65
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2023-06-12"
+      tags = "DEMO, EXE, FILE, SUSP"
+      required_modules = "pe"
+      minimum_yara = "3.0.0"
+      
+   strings:
+      $a1 = "Microsoft.Antimalware.Scan.Interface" ascii
+      $a2 = "Amsi.pdb" ascii fullword
+      $a3 = "api-ms-win-core-sysinfo-" ascii
+      $a4 = "Software\\Microsoft\\AMSI\\Providers" wide
+      $a5 = "AmsiAntimalware@" ascii
+      $a6 = "AMSI UAC Scan" ascii
+      $fp1 = "Wine builtin DLL" 
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and ( pe.exports ( "AmsiInitialize" ) and pe.exports ( "AmsiScanString" ) ) and ( filesize > 200KB or filesize < 35KB or not 4 of ( $a* ) ) and not 1 of ( $fp* )
 }
 
 rule LOG_EXPL_MOVEit_Exploitation_Indicator_Jun23_2_RID37DB : DEMO EXPLOIT LOG {
@@ -17685,6 +17685,28 @@ rule SUSP_PS1_Msdt_Execution_May22_RID3183 : CVE_2022_30190 DEMO FILE SCRIPT SUS
       filesize < 10MB and $a and 1 of ( $sa* ) and 1 of ( $sb* ) and not 1 of ( $fp* ) and not uint8 ( 0 ) == 0x7B
 }
 
+rule EXPL_Follina_CVE_2022_30190_Msdt_MSProtocolURI_May22_RID384E : CVE_2022_30190 DEMO EXPLOIT {
+   meta:
+      description = "Detects the malicious usage of the ms-msdt URI as seen in CVE-2022-30190 / Follina exploitation"
+      author = "Tobias Michalski, Christian Burkard"
+      reference = "https://doublepulsar.com/follina-a-microsoft-office-code-execution-vulnerability-1a47fce5629e"
+      date = "2022-05-30 18:15:31"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2022-07-18"
+      hash1 = "4a24048f81afbe9fb62e7a6a49adbd1faf41f266b5f9feecdceb567aec096784"
+      hash2 = "778cbb0ee4afffca6a0b788a97bc2f4855ceb69ddc5eaa230acfa2834e1aeb07"
+      tags = "CVE_2022_30190, DEMO, EXPLOIT"
+      minimum_yara = "2.2.0"
+      
+   strings:
+      $re1 = /location\.href\s{0,20}=\s{0,20}"ms-msdt:/ 
+      $a1 = "%6D%73%2D%6D%73%64%74%3A%2F" ascii
+   condition: 
+      filesize > 3KB and filesize < 100KB and 1 of them
+}
+
 rule SUSP_Doc_WordXMLRels_May22_RID303D : CVE_2022_30190 DEMO SUSP {
    meta:
       description = "Detects a suspicious pattern in docx document.xml.rels file as seen in CVE-2022-30190 / Follina exploitation"
@@ -17727,28 +17749,6 @@ rule SUSP_Doc_RTF_ExternalResource_May22_RID33F0 : CVE_2022_30190 DEMO FILE SUSP
       $s2 = ".html!\" " ascii
    condition: 
       uint32be ( 0 ) == 0x7B5C7274 and filesize < 300KB and all of them
-}
-
-rule EXPL_Follina_CVE_2022_30190_Msdt_MSProtocolURI_May22_RID384E : CVE_2022_30190 DEMO EXPLOIT {
-   meta:
-      description = "Detects the malicious usage of the ms-msdt URI as seen in CVE-2022-30190 / Follina exploitation"
-      author = "Tobias Michalski, Christian Burkard"
-      reference = "https://doublepulsar.com/follina-a-microsoft-office-code-execution-vulnerability-1a47fce5629e"
-      date = "2022-05-30 18:15:31"
-      score = 80
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2022-07-18"
-      hash1 = "4a24048f81afbe9fb62e7a6a49adbd1faf41f266b5f9feecdceb567aec096784"
-      hash2 = "778cbb0ee4afffca6a0b788a97bc2f4855ceb69ddc5eaa230acfa2834e1aeb07"
-      tags = "CVE_2022_30190, DEMO, EXPLOIT"
-      minimum_yara = "2.2.0"
-      
-   strings:
-      $re1 = /location\.href\s{0,20}=\s{0,20}"ms-msdt:/ 
-      $a1 = "%6D%73%2D%6D%73%64%74%3A%2F" ascii
-   condition: 
-      filesize > 3KB and filesize < 100KB and 1 of them
 }
 
 rule VULN_PHP_Hack_Backdoored_Phpass_May21_RID3477 : DEMO VULN {
@@ -18037,55 +18037,6 @@ rule APT_UA_Hermetic_Wiper_Scheduled_Task_Feb22_1_RID3723 : APT DEMO T1021_002 T
       $a0 and 1 of ( $s* )
 }
 
-rule MAL_OBFUSC_Unknown_Jan22_1_RID2FC7 : DEMO EXE FILE MAL OBFUS T1027 {
-   meta:
-      description = "Detects samples similar to reversed stage3 found in Ukrainian wiper incident named WhisperGate"
-      author = "Florian Roth"
-      reference = "https://twitter.com/juanandres_gs/status/1482827018404257792"
-      date = "2022-01-16 12:11:41"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "9ef7dbd3da51332a78eff19146d21c82957821e464e8133e9594a07d716d892d"
-      tags = "DEMO, EXE, FILE, MAL, OBFUS, T1027"
-      minimum_yara = "1.7"
-      
-   strings:
-      $xc1 = { 37 00 63 00 38 00 63 00 62 00 35 00 35 00 39 00
-               38 00 65 00 37 00 32 00 34 00 64 00 33 00 34 00
-               33 00 38 00 34 00 63 00 63 00 65 00 37 00 34 00
-               30 00 32 00 62 00 31 00 31 00 66 00 30 00 65 } 
-      $xc2 = { 4D 61 69 6E 00 43 6C 61 73 73 4C 69 62 72 61 72
-               79 31 00 70 63 31 65 } 
-      $s1 = ".dll" wide
-      $s2 = "%&%,%s%" ascii fullword
-      $op1 = { a2 87 fa b1 44 a5 f5 12 da a7 49 11 5c 8c 26 d4 75 } 
-      $op2 = { d7 af 52 38 c7 47 95 c8 0e 88 f3 d5 0b } 
-      $op3 = { 6c 05 df d6 b8 ac 11 f2 67 16 cb b7 34 4d b6 91 } 
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and ( 1 of ( $x* ) or 3 of them )
-}
-
-rule MAL_Unknown_Discord_Characteristics_Jan22_1_RID3748 : DEMO EXE FILE MAL {
-   meta:
-      description = "Detects unknown malware with a few indicators also found in Wiper malware"
-      author = "Florian Roth"
-      reference = "https://www.microsoft.com/security/blog/2022/01/15/destructive-malware-targeting-ukrainian-organizations/"
-      date = "2022-01-16 17:31:51"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "dcbbae5a1c61dbbbb7dcd6dc5dd1eb1169f5329958d38b58c3fd9384081c9b78"
-      tags = "DEMO, EXE, FILE, MAL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "xownxloxadDxatxxax" wide
-      $s2 = "https://cdn.discordapp.com/attachments/" wide
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and all of them
-}
-
 rule APT_HKTL_Wiper_WhisperGate_Jan22_1_RID331C : APT DEMO EXE HKTL {
    meta:
       description = "Detects unknown wiper malware"
@@ -18140,6 +18091,55 @@ rule APT_HKTL_Wiper_WhisperGate_Jan22_2_RID331D : APT DEMO EXE HKTL {
       $op4 = { d4 67 d4 61 80 1c 00 00 04 38 35 02 00 00 20 27 c0 db 56 65 20 3d eb 24 de 61 } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and 5 of them or 7 of them
+}
+
+rule MAL_OBFUSC_Unknown_Jan22_1_RID2FC7 : DEMO EXE FILE MAL OBFUS T1027 {
+   meta:
+      description = "Detects samples similar to reversed stage3 found in Ukrainian wiper incident named WhisperGate"
+      author = "Florian Roth"
+      reference = "https://twitter.com/juanandres_gs/status/1482827018404257792"
+      date = "2022-01-16 12:11:41"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "9ef7dbd3da51332a78eff19146d21c82957821e464e8133e9594a07d716d892d"
+      tags = "DEMO, EXE, FILE, MAL, OBFUS, T1027"
+      minimum_yara = "1.7"
+      
+   strings:
+      $xc1 = { 37 00 63 00 38 00 63 00 62 00 35 00 35 00 39 00
+               38 00 65 00 37 00 32 00 34 00 64 00 33 00 34 00
+               33 00 38 00 34 00 63 00 63 00 65 00 37 00 34 00
+               30 00 32 00 62 00 31 00 31 00 66 00 30 00 65 } 
+      $xc2 = { 4D 61 69 6E 00 43 6C 61 73 73 4C 69 62 72 61 72
+               79 31 00 70 63 31 65 } 
+      $s1 = ".dll" wide
+      $s2 = "%&%,%s%" ascii fullword
+      $op1 = { a2 87 fa b1 44 a5 f5 12 da a7 49 11 5c 8c 26 d4 75 } 
+      $op2 = { d7 af 52 38 c7 47 95 c8 0e 88 f3 d5 0b } 
+      $op3 = { 6c 05 df d6 b8 ac 11 f2 67 16 cb b7 34 4d b6 91 } 
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and ( 1 of ( $x* ) or 3 of them )
+}
+
+rule MAL_Unknown_Discord_Characteristics_Jan22_1_RID3748 : DEMO EXE FILE MAL {
+   meta:
+      description = "Detects unknown malware with a few indicators also found in Wiper malware"
+      author = "Florian Roth"
+      reference = "https://www.microsoft.com/security/blog/2022/01/15/destructive-malware-targeting-ukrainian-organizations/"
+      date = "2022-01-16 17:31:51"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "dcbbae5a1c61dbbbb7dcd6dc5dd1eb1169f5329958d38b58c3fd9384081c9b78"
+      tags = "DEMO, EXE, FILE, MAL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "xownxloxadDxatxxax" wide
+      $s2 = "https://cdn.discordapp.com/attachments/" wide
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and all of them
 }
 
 rule APT_MAL_HP_iLO_Firmware_Dec21_1_RID3183 : APT DEMO LINUX MAL {
@@ -18243,6 +18243,32 @@ rule EXPL_Log4j_CVE_2021_44228_JAVA_Exception_Dec21_1_RID361A : CVE_2021_44228 D
       $xa1 or all of ( $sa* )
 }
 
+rule EXPL_Log4j_CVE_2021_44228_Dec21_Hard_RID31D9 : CVE_2021_44228 DEMO EXPLOIT FILE {
+   meta:
+      description = "Detects indicators in server logs that indicate the exploitation of CVE-2021-44228"
+      author = "Florian Roth"
+      reference = "https://twitter.com/h113sdx/status/1469010902183661568?s=20"
+      date = "2021-12-10 13:40:01"
+      score = 65
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2025-03-20"
+      tags = "CVE_2021_44228, DEMO, EXPLOIT, FILE"
+      minimum_yara = "2.2.0"
+      
+   strings:
+      $x1 = /\$\{jndi:(ldap|ldaps|rmi|dns|iiop|http|nis|nds|corba):\/[\/]?[a-z-\.0-9]{3,120}:[0-9]{2,5}\/[a-zA-Z\.]{1,32}\}/ 
+      $x2 = "Reference Class Name: foo" 
+      $fp1r = /(ldap|rmi|ldaps|dns):\/[\/]?(127\.0\.0\.1|192\.168\.|172\.[1-3][0-9]\.|10\.)/ 
+      $fpg2 = "<html" 
+      $fpg3 = "<HTML" 
+      $fp1 = "/QUALYSTEST" ascii
+      $fp2 = "w.nessus.org/nessus" 
+      $fp3 = "/nessus}" 
+   condition: 
+      1 of ( $x* ) and not 1 of ( $fp* )
+}
+
 rule SUSP_Base64_Encoded_Exploit_Indicators_Dec21_RID3732 : CVE_2021_44228 DEMO EXPLOIT FILE SUSP T1132_001 {
    meta:
       description = "Detects base64 encoded strings found in payloads of exploits against log4j CVE-2021-44228"
@@ -18285,32 +18311,6 @@ rule SUSP_JDNIExploit_Indicators_Dec21_RID3302 : DEMO FILE SUSP {
       $xr1 = /(ldap|ldaps|rmi|dns|iiop|http|nis|nds|corba):\/\/[a-zA-Z0-9\.]{7,80}:[0-9]{2,5}\/(Basic\/Command\/Base64|Basic\/ReverseShell|Basic\/TomcatMemshell|Basic\/JBossMemshell|Basic\/WebsphereMemshell|Basic\/SpringMemshell|Basic\/Command|Deserialization\/CommonsCollectionsK|Deserialization\/CommonsBeanutils|Deserialization\/Jre8u20\/TomcatMemshell|Deserialization\/CVE_2020_2555\/WeblogicMemshell|TomcatBypass|GroovyBypass|WebsphereBypass)\// 
    condition: 
       filesize < 100MB and $xr1
-}
-
-rule EXPL_Log4j_CVE_2021_44228_Dec21_Hard_RID31D9 : CVE_2021_44228 DEMO EXPLOIT FILE {
-   meta:
-      description = "Detects indicators in server logs that indicate the exploitation of CVE-2021-44228"
-      author = "Florian Roth"
-      reference = "https://twitter.com/h113sdx/status/1469010902183661568?s=20"
-      date = "2021-12-10 13:40:01"
-      score = 65
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2025-03-20"
-      tags = "CVE_2021_44228, DEMO, EXPLOIT, FILE"
-      minimum_yara = "2.2.0"
-      
-   strings:
-      $x1 = /\$\{jndi:(ldap|ldaps|rmi|dns|iiop|http|nis|nds|corba):\/[\/]?[a-z-\.0-9]{3,120}:[0-9]{2,5}\/[a-zA-Z\.]{1,32}\}/ 
-      $x2 = "Reference Class Name: foo" 
-      $fp1r = /(ldap|rmi|ldaps|dns):\/[\/]?(127\.0\.0\.1|192\.168\.|172\.[1-3][0-9]\.|10\.)/ 
-      $fpg2 = "<html" 
-      $fpg3 = "<HTML" 
-      $fp1 = "/QUALYSTEST" ascii
-      $fp2 = "w.nessus.org/nessus" 
-      $fp3 = "/nessus}" 
-   condition: 
-      1 of ( $x* ) and not 1 of ( $fp* )
 }
 
 rule EXPL_Zoho_RCE_Fix_Lines_Dec21_1_RID31C0 : DEMO EXPLOIT {
@@ -18450,6 +18450,26 @@ rule LOG_EXPL_ADSelfService_CVE_2021_40539_WebLog_Sep21_1_RID37A8 : CVE_2021_405
       filesize < 50MB and 1 of them
 }
 
+rule EXPL_MAL_MalDoc_OBFUSCT_MHTML_Sep21_1_RID32E2 : CVE_2021_40444 DEMO EXPLOIT MAL OBFUS OFFICE {
+   meta:
+      description = "Detects suspicious office reference files including an obfuscated MHTML reference exploiting CVE-2021-40444"
+      author = "Florian Roth"
+      reference = "https://twitter.com/decalage2/status/1438946225190014984?s=20"
+      date = "2021-09-18 14:24:11"
+      score = 90
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CVE_2021_40444, DEMO, EXPLOIT, MAL, OBFUS, OFFICE"
+      minimum_yara = "1.7"
+      
+   strings:
+      $h1 = "<?xml " ascii wide
+      $s1 = "109;&#104;&#116;&#109;&#108;&#58;&#104;&#116;&#109;&#108" ascii wide
+   condition: 
+      filesize < 25KB and all of them
+}
+
 rule SUSP_OBFUSC_Indiators_XML_OfficeDoc_Sep21_1_RID3614 : DEMO OBFUS OFFICE SUSP T1027 T1203 T1566_001 {
    meta:
       description = "Detects suspicious encodings in fields used in reference files found in weaponized MS Office documents"
@@ -18491,26 +18511,6 @@ rule SUSP_OBFUSC_Indiators_XML_OfficeDoc_Sep21_2_RID3615 : CVE DEMO OBFUS OFFICE
       $xml_e = "&#x0000" ascii wide
    condition: 
       filesize < 500KB and all of them
-}
-
-rule EXPL_MAL_MalDoc_OBFUSCT_MHTML_Sep21_1_RID32E2 : CVE_2021_40444 DEMO EXPLOIT MAL OBFUS OFFICE {
-   meta:
-      description = "Detects suspicious office reference files including an obfuscated MHTML reference exploiting CVE-2021-40444"
-      author = "Florian Roth"
-      reference = "https://twitter.com/decalage2/status/1438946225190014984?s=20"
-      date = "2021-09-18 14:24:11"
-      score = 90
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CVE_2021_40444, DEMO, EXPLOIT, MAL, OBFUS, OFFICE"
-      minimum_yara = "1.7"
-      
-   strings:
-      $h1 = "<?xml " ascii wide
-      $s1 = "109;&#104;&#116;&#109;&#108;&#58;&#104;&#116;&#109;&#108" ascii wide
-   condition: 
-      filesize < 25KB and all of them
 }
 
 rule VULN_LNX_OMI_RCE_CVE_2021_386471_Sep21_RID320B : CVE_2021_38647 CVE_2021_386471 DEMO FILE LINUX VULN {
@@ -18584,30 +18584,6 @@ rule HKTL_Khepri_Beacon_Sep21_1_RID3027 : COBALTSTRIKE DEMO EXE HKTL T1105 {
       ( uint16 ( 0 ) == 0x5a4d or uint32be ( 0 ) == 0x7f454c46 ) and filesize < 2000KB and ( 1 of ( $x* ) or 2 of ( $sx* ) or all of ( $sa* ) or 3 of ( $op* ) ) or ( filesize < 10MB and 1 of ( $xe* ) ) or 5 of them
 }
 
-rule SUSP_OBFUSC_JS_Sept21_2_RID2E68 : DEMO G0046 OBFUS RUSSIA SUSP T1027 {
-   meta:
-      description = "Detects JavaScript obfuscation as used in MalDocs by FIN7 group"
-      author = "Florian Roth"
-      reference = "https://www.anomali.com/blog/cybercrime-group-fin7-using-windows-11-alpha-themed-docs-to-drop-javascript-backdoor"
-      date = "2021-09-07 11:13:11"
-      score = 65
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, G0046, OBFUS, RUSSIA, SUSP, T1027"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "=new RegExp(String.fromCharCode(" ascii
-      $s2 = ".charCodeAt(" ascii
-      $s3 = ".substr(0, " ascii
-      $s4 = "var shell = new ActiveXObject(" ascii
-      $s5 = "= new Date().getUTCMilliseconds();" ascii
-      $s6 = ".deleteFile(WScript.ScriptFullName);" ascii
-   condition: 
-      filesize < 6000KB and ( 4 of them )
-}
-
 rule APT_FIN7_MsDoc_Sep21_1_RID2E18 : APT DEMO FILE G0046 RUSSIA {
    meta:
       description = "Detects MalDocs used by FIN7 group"
@@ -18630,6 +18606,30 @@ rule APT_FIN7_MsDoc_Sep21_1_RID2E18 : APT DEMO FILE G0046 RUSSIA {
       $s4 = "W10ProOff16" ascii
    condition: 
       uint16 ( 0 ) == 0xcfd0 and ( 1 of ( $x* ) or 3 of them )
+}
+
+rule SUSP_OBFUSC_JS_Sept21_2_RID2E68 : DEMO G0046 OBFUS RUSSIA SUSP T1027 {
+   meta:
+      description = "Detects JavaScript obfuscation as used in MalDocs by FIN7 group"
+      author = "Florian Roth"
+      reference = "https://www.anomali.com/blog/cybercrime-group-fin7-using-windows-11-alpha-themed-docs-to-drop-javascript-backdoor"
+      date = "2021-09-07 11:13:11"
+      score = 65
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, G0046, OBFUS, RUSSIA, SUSP, T1027"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "=new RegExp(String.fromCharCode(" ascii
+      $s2 = ".charCodeAt(" ascii
+      $s3 = ".substr(0, " ascii
+      $s4 = "var shell = new ActiveXObject(" ascii
+      $s5 = "= new Date().getUTCMilliseconds();" ascii
+      $s6 = ".deleteFile(WScript.ScriptFullName);" ascii
+   condition: 
+      filesize < 6000KB and ( 4 of them )
 }
 
 rule LOG_EXPL_Confluence_RCE_CVE_2021_26084_Sep21_RID34D3 : CVE_2021_26084 DEMO EXPLOIT LOG {
@@ -19464,6 +19464,29 @@ rule LOG_F5_BIGIP_Exploitation_Artefacts_CVE_2021_22986_Mar21_1_RID3A2F : CVE_20
       1 of them
 }
 
+rule WEBSHELL_ASPX_Mar21_1_RID2D74 : DEMO FILE T1505_003 WEBSHELL {
+   meta:
+      description = "Detects ASPX Web Shells"
+      author = "Florian Roth"
+      reference = "Internal Research"
+      date = "2021-03-12 10:32:31"
+      score = 95
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "10b6e82125a2ddf3cc31a238e0d0c71a64f902e0d77171766713affede03174d"
+      hash2 = "170bee832df176aac0a3c6c7d5aa3fee413b4572030a24c994a97e70f6648ffc"
+      hash3 = "31c4d1fc81c052e269866deff324dffb215e7d481a47a2b6357a572a3e685d90"
+      tags = "DEMO, FILE, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = ".StartInfo.FileName = 'cmd.exe';" ascii fullword
+      $s2 = "<xsl:template match=\"\"/root\"\">" ascii fullword
+      $s3 = "<?xml version=\"\"1.0\"\"?><root>test</root>\";" ascii fullword
+   condition: 
+      uint16 ( 0 ) == 0x253c and filesize < 6KB and all of them
+}
+
 rule MAL_CRIME_RANSOM_DearCry_Mar21_1_RID3164 : CRIME DEMO EXE MAL RANSOM {
    meta:
       description = "Detects DearCry Ransomware affecting Exchange servers"
@@ -19490,29 +19513,6 @@ rule MAL_CRIME_RANSOM_DearCry_Mar21_1_RID3164 : CRIME DEMO EXE MAL RANSOM {
       $op3 = { 31 40 00 13 31 40 00 a4 31 40 00 41 32 40 00 5f 33 40 00 e5 } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 4000KB and 3 of them or 5 of them
-}
-
-rule WEBSHELL_ASPX_Mar21_1_RID2D74 : DEMO FILE T1505_003 WEBSHELL {
-   meta:
-      description = "Detects ASPX Web Shells"
-      author = "Florian Roth"
-      reference = "Internal Research"
-      date = "2021-03-12 10:32:31"
-      score = 95
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "10b6e82125a2ddf3cc31a238e0d0c71a64f902e0d77171766713affede03174d"
-      hash2 = "170bee832df176aac0a3c6c7d5aa3fee413b4572030a24c994a97e70f6648ffc"
-      hash3 = "31c4d1fc81c052e269866deff324dffb215e7d481a47a2b6357a572a3e685d90"
-      tags = "DEMO, FILE, T1505_003, WEBSHELL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = ".StartInfo.FileName = 'cmd.exe';" ascii fullword
-      $s2 = "<xsl:template match=\"\"/root\"\">" ascii fullword
-      $s3 = "<?xml version=\"\"1.0\"\"?><root>test</root>\";" ascii fullword
-   condition: 
-      uint16 ( 0 ) == 0x253c and filesize < 6KB and all of them
 }
 
 rule APT_LemonDuck_ForensicArtefacts_Cab_Recon_Mar21_1_RID3939 : APT DEMO FILE {
@@ -19735,25 +19735,6 @@ rule HKTL_Nishang_PS1_Invoke_PowerShellTcpOneLine_RID379E : DEMO HKTL SCRIPT T10
       all of them
 }
 
-rule EXPL_LOG_CVE_2021_26858_Exchange_Forensic_Artefacts_Mar21_1_RID3AE0 : CVE_2021_26858 DEMO EXPLOIT G0125 LOG {
-   meta:
-      description = "Detects forensic artefacts found in HAFNIUM intrusions exploiting CVE-2021-26858"
-      author = "Florian Roth"
-      reference = "https://www.volexity.com/blog/2021/03/02/active-exploitation-of-microsoft-exchange-zero-day-vulnerabilities/"
-      date = "2021-03-02 20:05:11"
-      score = 65
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2021-03-04"
-      tags = "CVE_2021_26858, DEMO, EXPLOIT, G0125, LOG"
-      minimum_yara = "2.2.0"
-      
-   strings:
-      $xr1 = /POST (\/owa\/auth\/Current\/themes\/resources\/logon\.css|\/owa\/auth\/Current\/themes\/resources\/owafont_ja\.css|\/owa\/auth\/Current\/themes\/resources\/lgnbotl\.gif|\/owa\/auth\/Current\/themes\/resources\/owafont_ko\.css|\/owa\/auth\/Current\/themes\/resources\/SegoeUI-SemiBold\.eot|\/owa\/auth\/Current\/themes\/resources\/SegoeUI-SemiLight\.ttf|\/owa\/auth\/Current\/themes\/resources\/lgnbotl\.gif)/ 
-   condition: 
-      $xr1
-}
-
 rule EXPL_CVE_2021_27065_Exchange_Forensic_Artefacts_Mar21_1_RID3996 : CVE_2021_27065 DEMO EXPLOIT G0125 SCRIPT {
    meta:
       description = "Detects forensic artefacts found in HAFNIUM intrusions exploiting CVE-2021-27065"
@@ -19817,6 +19798,25 @@ rule HKTL_PS1_PowerCat_Mar21_RID2EDD : DEMO HKTL SCRIPT T1059_001 {
       uint16 ( 0 ) == 0x7566 and filesize < 200KB and 1 of ( $x* ) or 3 of them
 }
 
+rule EXPL_LOG_CVE_2021_26858_Exchange_Forensic_Artefacts_Mar21_1_RID3AE0 : CVE_2021_26858 DEMO EXPLOIT G0125 LOG {
+   meta:
+      description = "Detects forensic artefacts found in HAFNIUM intrusions exploiting CVE-2021-26858"
+      author = "Florian Roth"
+      reference = "https://www.volexity.com/blog/2021/03/02/active-exploitation-of-microsoft-exchange-zero-day-vulnerabilities/"
+      date = "2021-03-02 20:05:11"
+      score = 65
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2021-03-04"
+      tags = "CVE_2021_26858, DEMO, EXPLOIT, G0125, LOG"
+      minimum_yara = "2.2.0"
+      
+   strings:
+      $xr1 = /POST (\/owa\/auth\/Current\/themes\/resources\/logon\.css|\/owa\/auth\/Current\/themes\/resources\/owafont_ja\.css|\/owa\/auth\/Current\/themes\/resources\/lgnbotl\.gif|\/owa\/auth\/Current\/themes\/resources\/owafont_ko\.css|\/owa\/auth\/Current\/themes\/resources\/SegoeUI-SemiBold\.eot|\/owa\/auth\/Current\/themes\/resources\/SegoeUI-SemiLight\.ttf|\/owa\/auth\/Current\/themes\/resources\/lgnbotl\.gif)/ 
+   condition: 
+      $xr1
+}
+
 rule WEBSHELL_PHP_DEWMODE_UNC2546_Feb21_1_RID3187 : DEMO T1505_003 WEBSHELL {
    meta:
       description = "Detects DEWMODE webshells"
@@ -19872,27 +19872,6 @@ rule SUSP_VEST_Encryption_Core_Accumulator_Jan21_RID3729 : DEMO EXE FILE G0032 N
       uint16 ( 0 ) == 0x5a4d and 1 of them
 }
 
-rule PUA_WIN_XMRIG_CryptoCoin_Miner_Dec20_RID33BA : DEMO EXE MAL {
-   meta:
-      description = "Detects XMRIG crypto coin miners"
-      author = "Florian Roth"
-      reference = "https://www.intezer.com/blog/research/new-golang-worm-drops-xmrig-miner-on-servers/"
-      date = "2020-12-31 15:00:11"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "b6154d25b3aa3098f2cee790f5de5a727fc3549865a7aa2196579fe39a86de09"
-      tags = "DEMO, EXE, MAL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "xmrig.exe" fullword wide
-      $x2 = "xmrig.com" fullword wide
-      $x3 = "* for x86, CRYPTOGAMS" fullword ascii
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 6000KB and 2 of them or all of them
-}
-
 rule SUSP_LNX_SH_CryptoMiner_Indicators_Dec20_1_RID364E : DEMO LINUX SCRIPT SUSP {
    meta:
       description = "Detects helper script used in a crypto miner campaign"
@@ -19913,6 +19892,27 @@ rule SUSP_LNX_SH_CryptoMiner_Indicators_Dec20_1_RID364E : DEMO LINUX SCRIPT SUSP
       $x4 = " -o pool.minexmr.com:5555 " ascii
    condition: 
       filesize < 20KB and 1 of them
+}
+
+rule PUA_WIN_XMRIG_CryptoCoin_Miner_Dec20_RID33BA : DEMO EXE MAL {
+   meta:
+      description = "Detects XMRIG crypto coin miners"
+      author = "Florian Roth"
+      reference = "https://www.intezer.com/blog/research/new-golang-worm-drops-xmrig-miner-on-servers/"
+      date = "2020-12-31 15:00:11"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "b6154d25b3aa3098f2cee790f5de5a727fc3549865a7aa2196579fe39a86de09"
+      tags = "DEMO, EXE, MAL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "xmrig.exe" fullword wide
+      $x2 = "xmrig.com" fullword wide
+      $x3 = "* for x86, CRYPTOGAMS" fullword ascii
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 6000KB and 2 of them or all of them
 }
 
 rule SUSP_AdobePDF_SFX_Bitmap_Combo_Executable_RID362C : ANOMALY DEMO EXE FILE SUSP {
@@ -20037,31 +20037,6 @@ rule APT_CN_MAL_RedDelta_Shellcode_Loader_Oct20_3_RID36A4 : APT CHINA DEMO EXE F
       uint16 ( 0 ) == 0x5a4d and filesize < 400KB and 4 of them
 }
 
-rule MAL_RANSOM_REvil_Oct20_1_RID2ED2 : CRIME DEMO EXE MAL RANSOM {
-   meta:
-      description = "Detects REvil ransomware"
-      author = "Florian Roth"
-      reference = "Internal Research"
-      date = "2020-10-13 11:30:51"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "5966c25dc1abcec9d8603b97919db57aac019e5358ee413957927d3c1790b7f4"
-      hash2 = "f66027faea8c9e0ff29a31641e186cbed7073b52b43933ba36d61e8f6bce1ab5"
-      hash3 = "f6857748c050655fb3c2192b52a3b0915f3f3708cd0a59bbf641d7dd722a804d"
-      tags = "CRIME, DEMO, EXE, MAL, RANSOM"
-      minimum_yara = "1.7"
-      
-   strings:
-      $op1 = { 0f 8c 74 ff ff ff 33 c0 5f 5e 5b 8b e5 5d c3 8b } 
-      $op2 = { 8d 85 68 ff ff ff 50 e8 2a fe ff ff 8d 85 68 ff } 
-      $op3 = { 89 4d f4 8b 4e 0c 33 4e 34 33 4e 5c 33 8e 84 } 
-      $op4 = { 8d 85 68 ff ff ff 50 e8 05 06 00 00 8d 85 68 ff } 
-      $op5 = { 8d 85 68 ff ff ff 56 57 ff 75 0c 50 e8 2f } 
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 400KB and 2 of them or 4 of them
-}
-
 rule APT_MAL_MalDoc_CloudAtlas_Oct20_1_RID3280 : APT DEMO FILE G0100 MAL {
    meta:
       description = "Detects unknown maldoc dropper noticed in October 2020"
@@ -20101,6 +20076,31 @@ rule APT_MAL_URL_CloudAtlas_Oct20_2_RID3144 : APT DEMO FILE G0100 MAL {
                72 67 } 
    condition: 
       uint16 ( 0 ) == 0x495b and filesize < 200 and $hc1 at 0
+}
+
+rule MAL_RANSOM_REvil_Oct20_1_RID2ED2 : CRIME DEMO EXE MAL RANSOM {
+   meta:
+      description = "Detects REvil ransomware"
+      author = "Florian Roth"
+      reference = "Internal Research"
+      date = "2020-10-13 11:30:51"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "5966c25dc1abcec9d8603b97919db57aac019e5358ee413957927d3c1790b7f4"
+      hash2 = "f66027faea8c9e0ff29a31641e186cbed7073b52b43933ba36d61e8f6bce1ab5"
+      hash3 = "f6857748c050655fb3c2192b52a3b0915f3f3708cd0a59bbf641d7dd722a804d"
+      tags = "CRIME, DEMO, EXE, MAL, RANSOM"
+      minimum_yara = "1.7"
+      
+   strings:
+      $op1 = { 0f 8c 74 ff ff ff 33 c0 5f 5e 5b 8b e5 5d c3 8b } 
+      $op2 = { 8d 85 68 ff ff ff 50 e8 2a fe ff ff 8d 85 68 ff } 
+      $op3 = { 89 4d f4 8b 4e 0c 33 4e 34 33 4e 5c 33 8e 84 } 
+      $op4 = { 8d 85 68 ff ff ff 50 e8 05 06 00 00 8d 85 68 ff } 
+      $op5 = { 8d 85 68 ff ff ff 56 57 ff 75 0c 50 e8 2f } 
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 400KB and 2 of them or 4 of them
 }
 
 rule MAL_DOC_ZLoader_Oct20_1_RID2EA7 : DEMO FILE MAL {
@@ -20939,28 +20939,6 @@ rule WEBSHELL_ASPX_XslTransform_Aug21_RID3233 : DEMO T1505_003 WEBSHELL {
       filesize < 500KB and $csharpshell and ( 1 of ( $x* ) or all of ( $s* ) )
 }
 
-rule MAL_Emotet_Jan20_1_RID2D22 : DEMO EXE FILE MAL {
-   meta:
-      description = "Detects Emotet malware"
-      author = "Florian Roth"
-      reference = "https://app.any.run/tasks/5e81638e-df2e-4a5b-9e45-b07c38d53929/"
-      date = "2020-01-29 10:18:51"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "e7c22ccdb1103ee6bd15c528270f56913bb2f47345b360802b74084563f1b73d"
-      tags = "DEMO, EXE, FILE, MAL"
-      required_modules = "pe"
-      minimum_yara = "3.2.0"
-      
-   strings:
-      $op0 = { 74 60 8d 34 18 eb 54 03 c3 50 ff 15 18 08 41 00 } 
-      $op1 = { 03 fe 66 39 07 0f 85 2a ff ff ff 8b 4d f0 6a 20 } 
-      $op2 = { 8b 7d fc 0f 85 49 ff ff ff 85 db 0f 84 d1 } 
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize <= 200KB and ( pe.imphash ( ) == "009889c73bd2e55113bf6dfa5f395e0d" or 1 of them )
-}
-
 rule SUSP_BAT_Aux_Jan20_1_RID2D89 : DEMO FILE SCRIPT SUSP {
    meta:
       description = "Detects BAT file often dropped to cleanup temp dirs during infection"
@@ -20982,6 +20960,28 @@ rule SUSP_BAT_Aux_Jan20_1_RID2D89 : DEMO FILE SCRIPT SUSP {
       $s5 = ".exe\" goto" ascii
    condition: 
       uint8 ( 0 ) == 0x3a and filesize <= 1KB and all of them
+}
+
+rule MAL_Emotet_Jan20_1_RID2D22 : DEMO EXE FILE MAL {
+   meta:
+      description = "Detects Emotet malware"
+      author = "Florian Roth"
+      reference = "https://app.any.run/tasks/5e81638e-df2e-4a5b-9e45-b07c38d53929/"
+      date = "2020-01-29 10:18:51"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "e7c22ccdb1103ee6bd15c528270f56913bb2f47345b360802b74084563f1b73d"
+      tags = "DEMO, EXE, FILE, MAL"
+      required_modules = "pe"
+      minimum_yara = "3.2.0"
+      
+   strings:
+      $op0 = { 74 60 8d 34 18 eb 54 03 c3 50 ff 15 18 08 41 00 } 
+      $op1 = { 03 fe 66 39 07 0f 85 2a ff ff ff 8b 4d f0 6a 20 } 
+      $op2 = { 8b 7d fc 0f 85 49 ff ff ff 85 db 0f 84 d1 } 
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize <= 200KB and ( pe.imphash ( ) == "009889c73bd2e55113bf6dfa5f395e0d" or 1 of them )
 }
 
 rule EXPL_Shitrix_Exploit_Code_Jan20_1_RID331C : CVE_2019_19781 DEMO EXPLOIT FILE T1105 {
@@ -21837,6 +21837,47 @@ rule SUSP_XMRIG_Reference_RID2E30 : DEMO EXE FILE SUSP {
       uint16 ( 0 ) == 0x5a4d and filesize < 2000KB and 1 of them
 }
 
+rule EXPL_Strings_CVE_POC_May19_1_RID3091 : DEMO EXE EXPLOIT FILE {
+   meta:
+      description = "Detects strings used in CVE POC noticed in May 2019"
+      author = "Florian Roth"
+      reference = "https://www.guardicore.com/2019/05/nansh0u-campaign-hackers-arsenal-grows-stronger/"
+      date = "2019-05-31 12:45:21"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "01c3882e8141a25abe37bb826ab115c52fd3d109c4a1b898c0c78cee8dac94b4"
+      tags = "DEMO, EXE, EXPLOIT, FILE"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "\\Debug\\poc_cve_20" ascii
+      $x2 = "\\Release\\poc_cve_20" ascii
+      $x3 = "alloc fake fail: %x!" fullword ascii
+      $x4 = "Allocate fake tagWnd fail!" fullword ascii
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 400KB and 1 of them
+}
+
+rule SUSP_PDB_CN_Threat_Actor_May19_1_RID3220 : CHINA DEMO EXE FILE SUSP {
+   meta:
+      description = "Detects PDB path user name used by Chinese threat actors"
+      author = "Florian Roth"
+      reference = "https://www.guardicore.com/2019/05/nansh0u-campaign-hackers-arsenal-grows-stronger/"
+      date = "2019-05-31 13:51:51"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "01c3882e8141a25abe37bb826ab115c52fd3d109c4a1b898c0c78cee8dac94b4"
+      tags = "CHINA, DEMO, EXE, FILE, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "C:\\Users\\zcg\\Desktop\\" ascii
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 400KB and 1 of them
+}
+
 rule MAL_XMR_Miner_May19_1_RID2E1B : DEMO EXE FILE HIGHVOL MAL {
    meta:
       description = "Detects Monero Crypto Coin Miner"
@@ -21922,47 +21963,6 @@ rule MAL_Parite_Malware_May19_2_RID3058 : DEMO EXE FILE MAL {
       uint16 ( 0 ) == 0x5a4d and filesize < 18000KB and ( pe.imphash ( ) == "b132a2719be01a6ef87d9939d785e19e" or pe.imphash ( ) == "78f4f885323ffee9f8fa011455d0523d" )
 }
 
-rule SUSP_PDB_CN_Threat_Actor_May19_1_RID3220 : CHINA DEMO EXE FILE SUSP {
-   meta:
-      description = "Detects PDB path user name used by Chinese threat actors"
-      author = "Florian Roth"
-      reference = "https://www.guardicore.com/2019/05/nansh0u-campaign-hackers-arsenal-grows-stronger/"
-      date = "2019-05-31 13:51:51"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "01c3882e8141a25abe37bb826ab115c52fd3d109c4a1b898c0c78cee8dac94b4"
-      tags = "CHINA, DEMO, EXE, FILE, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "C:\\Users\\zcg\\Desktop\\" ascii
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 400KB and 1 of them
-}
-
-rule EXPL_Strings_CVE_POC_May19_1_RID3091 : DEMO EXE EXPLOIT FILE {
-   meta:
-      description = "Detects strings used in CVE POC noticed in May 2019"
-      author = "Florian Roth"
-      reference = "https://www.guardicore.com/2019/05/nansh0u-campaign-hackers-arsenal-grows-stronger/"
-      date = "2019-05-31 12:45:21"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "01c3882e8141a25abe37bb826ab115c52fd3d109c4a1b898c0c78cee8dac94b4"
-      tags = "DEMO, EXE, EXPLOIT, FILE"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "\\Debug\\poc_cve_20" ascii
-      $x2 = "\\Release\\poc_cve_20" ascii
-      $x3 = "alloc fake fail: %x!" fullword ascii
-      $x4 = "Allocate fake tagWnd fail!" fullword ascii
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 400KB and 1 of them
-}
-
 rule HKTL_CN_ProcHook_May19_1_RID2F38 : CHINA DEMO EXE FILE HKTL {
    meta:
       description = "Detects hacktool used by Chinese threat groups"
@@ -21979,6 +21979,26 @@ rule HKTL_CN_ProcHook_May19_1_RID2F38 : CHINA DEMO EXE FILE HKTL {
       
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 300KB and pe.imphash ( ) == "343d580dd50ee724746a5c28f752b709"
+}
+
+rule HKTL_LNX_Pnscan_RID2C57 : DEMO HKTL LINUX T1046 {
+   meta:
+      description = "Detects Pnscan port scanner"
+      author = "Florian Roth"
+      reference = "https://github.com/ptrrkssn/pnscan"
+      date = "2019-05-27 09:45:01"
+      score = 55
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, HKTL, LINUX, T1046"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "-R<hex list>   Hex coded response string to look for." fullword ascii
+      $x2 = "This program implements a multithreaded TCP port scanner." ascii wide
+   condition: 
+      filesize < 6000KB and 1 of them
 }
 
 rule MAL_QuasarRAT_May19_1_RID2E1E : DEMO EXE FILE MAL {
@@ -22013,26 +22033,6 @@ rule MAL_QuasarRAT_May19_1_RID2E1E : DEMO EXE FILE MAL {
                00 20 00 } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 10000KB and 1 of them
-}
-
-rule HKTL_LNX_Pnscan_RID2C57 : DEMO HKTL LINUX T1046 {
-   meta:
-      description = "Detects Pnscan port scanner"
-      author = "Florian Roth"
-      reference = "https://github.com/ptrrkssn/pnscan"
-      date = "2019-05-27 09:45:01"
-      score = 55
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, HKTL, LINUX, T1046"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "-R<hex list>   Hex coded response string to look for." fullword ascii
-      $x2 = "This program implements a multithreaded TCP port scanner." ascii wide
-   condition: 
-      filesize < 6000KB and 1 of them
 }
 
 rule APT_ATP28_Sofacy_Indicators_May19_1_RID3357 : APT DEMO EXE FILE G0007 RUSSIA {
@@ -22134,25 +22134,6 @@ rule APT_NK_BabyShark_KimJoingRAT_Apr19_1_RID339E : APT DEMO EXE FILE NK {
       uint16 ( 0 ) == 0x5a4d and filesize < 2000KB and ( 1 of ( $x* ) or ( $a1 and 3 of ( $s* ) ) )
 }
 
-rule SUSP_DropperBackdoor_Keywords_RID3273 : DEMO EXE FILE SUSP {
-   meta:
-      description = "Detects suspicious keywords that indicate a backdoor"
-      author = "Florian Roth"
-      reference = "https://blog.talosintelligence.com/2019/04/dnspionage-brings-out-karkoff.html"
-      date = "2019-04-24 14:05:41"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "cd4b9d0f2d1c0468750855f0ed352c1ed6d4f512d66e0e44ce308688235295b5"
-      tags = "DEMO, EXE, FILE, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x4 = "DropperBackdoor" fullword wide ascii
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and 1 of them
-}
-
 rule APT_DNSpionage_Karkoff_Malware_Apr19_1_RID34E4 : APT DEMO EXE FILE {
    meta:
       description = "Detects DNSpionage Karkoff malware"
@@ -22178,6 +22159,25 @@ rule APT_DNSpionage_Karkoff_Malware_Apr19_1_RID34E4 : APT DEMO EXE FILE {
       $s4 = "get_ProcessDictionaryKeys" fullword ascii
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and ( 1 of ( $x* ) or all of ( $s* ) )
+}
+
+rule SUSP_DropperBackdoor_Keywords_RID3273 : DEMO EXE FILE SUSP {
+   meta:
+      description = "Detects suspicious keywords that indicate a backdoor"
+      author = "Florian Roth"
+      reference = "https://blog.talosintelligence.com/2019/04/dnspionage-brings-out-karkoff.html"
+      date = "2019-04-24 14:05:41"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "cd4b9d0f2d1c0468750855f0ed352c1ed6d4f512d66e0e44ce308688235295b5"
+      tags = "DEMO, EXE, FILE, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x4 = "DropperBackdoor" fullword wide ascii
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and 1 of them
 }
 
 rule SUSP_Netsh_PortProxy_Command_Apr19_RID33ED : DEMO SCRIPT SUSP T1016 {
@@ -22703,6 +22703,26 @@ rule SUSP_WordDoc_VBA_Macro_Strings_RID323F : DEMO FILE OFFICE SCRIPT SUSP T1203
       uint16 ( 0 ) == 0xcfd0 and filesize < 800KB and all of them
 }
 
+rule SUSP_Katz_PDB_RID2B8A : DEMO EXE FILE SUSP {
+   meta:
+      description = "Detects suspicious PDB in file"
+      author = "Florian Roth"
+      reference = "Internal Research"
+      date = "2019-02-04 09:10:51"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "6888ce8116c721e7b2fc3d7d594666784cf38a942808f35e309a48e536d8e305"
+      tags = "DEMO, EXE, FILE, SUSP"
+      minimum_yara = "2.2.0"
+      
+   strings:
+      $s1 = /\\Release\\[a-z]{0,8}katz.pdb/ 
+      $s2 = /\\Debug\\[a-z]{0,8}katz.pdb/ 
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 6000KB and all of them
+}
+
 rule MAL_ExileRAT_Feb19_1_RID2D8E : DEMO EXE FILE MAL {
    meta:
       description = "Detects Exile RAT"
@@ -22726,26 +22746,6 @@ rule MAL_ExileRAT_Feb19_1_RID2D8E : DEMO EXE FILE MAL {
       $s5 = "ver:%d.%d.%d" fullword ascii
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 500KB and ( pe.imphash ( ) == "da8475fc7c3c90c0604ce6a0b56b5f21" or 3 of them )
-}
-
-rule SUSP_Katz_PDB_RID2B8A : DEMO EXE FILE SUSP {
-   meta:
-      description = "Detects suspicious PDB in file"
-      author = "Florian Roth"
-      reference = "Internal Research"
-      date = "2019-02-04 09:10:51"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "6888ce8116c721e7b2fc3d7d594666784cf38a942808f35e309a48e536d8e305"
-      tags = "DEMO, EXE, FILE, SUSP"
-      minimum_yara = "2.2.0"
-      
-   strings:
-      $s1 = /\\Release\\[a-z]{0,8}katz.pdb/ 
-      $s2 = /\\Debug\\[a-z]{0,8}katz.pdb/ 
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 6000KB and all of them
 }
 
 rule PUA_CryptoMiner_Jan19_1_RID2F44 : DEMO MAL {
@@ -22926,6 +22926,24 @@ rule MAL_Ryuk_Ransomware_RID2E73 : CRIME DEMO EXE FILE MAL RANSOM {
       uint16 ( 0 ) == 0x5a4d and filesize < 400KB and ( pe.imphash ( ) == "4a069c1abe5aca148d5a8fdabc26751e" or pe.imphash ( ) == "dc5733c013378fa418d13773f5bfe6f1" or 1 of them )
 }
 
+rule APT_APT10_Malware_Imphash_Dec18_1_RID3250 : APT CHINA DEMO EXE FILE G0045 {
+   meta:
+      description = "Detects APT10 malware based on ImpHashes"
+      author = "Florian Roth"
+      reference = "AlienVault OTX IOCs - statistical sample analysis"
+      date = "2018-12-28 13:59:51"
+      score = 90
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "APT, CHINA, DEMO, EXE, FILE, G0045"
+      required_modules = "pe"
+      minimum_yara = "3.2.0"
+      
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 6000KB and ( pe.imphash ( ) == "0556ff5e5f8744bff47d4921494ba46d" or pe.imphash ( ) == "cb1194123f68a68eb14552c085b620ce" or pe.imphash ( ) == "efad9ff8c0d2a6419bf1dd970bcd806d" or pe.imphash ( ) == "7a861cd9c495e1d950a43cb708a22985" or pe.imphash ( ) == "a5d0545030be75a421529c2b0be6c4bd" or pe.imphash ( ) == "94491f4a812b0297419dc888aa4fd2a5" )
+}
+
 rule SUSP_XMRIG_String_RID2D18 : DEMO EXE FILE SUSP {
    meta:
       description = "Detects a suspicious XMRIG crypto miner executable string in filr"
@@ -22943,24 +22961,6 @@ rule SUSP_XMRIG_String_RID2D18 : DEMO EXE FILE SUSP {
       $x1 = "xmrig.exe" fullword ascii
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 2000KB and 1 of them
-}
-
-rule APT_APT10_Malware_Imphash_Dec18_1_RID3250 : APT CHINA DEMO EXE FILE G0045 {
-   meta:
-      description = "Detects APT10 malware based on ImpHashes"
-      author = "Florian Roth"
-      reference = "AlienVault OTX IOCs - statistical sample analysis"
-      date = "2018-12-28 13:59:51"
-      score = 90
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "APT, CHINA, DEMO, EXE, FILE, G0045"
-      required_modules = "pe"
-      minimum_yara = "3.2.0"
-      
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 6000KB and ( pe.imphash ( ) == "0556ff5e5f8744bff47d4921494ba46d" or pe.imphash ( ) == "cb1194123f68a68eb14552c085b620ce" or pe.imphash ( ) == "efad9ff8c0d2a6419bf1dd970bcd806d" or pe.imphash ( ) == "7a861cd9c495e1d950a43cb708a22985" or pe.imphash ( ) == "a5d0545030be75a421529c2b0be6c4bd" or pe.imphash ( ) == "94491f4a812b0297419dc888aa4fd2a5" )
 }
 
 rule HKTL_NoPowerShell_RID2D65 : DEMO HKTL {
@@ -23278,26 +23278,6 @@ rule VULN_JQuery_FileUpload_CVE_2018_9206_Oct18_RID34DE : CVE_2018_9206 DEMO VUL
       all of them
 }
 
-rule SUSP_Size_of_ASUS_TuningTool_RID3197 : DEMO EXE FILE SUSP {
-   meta:
-      description = "Detects an ASUS tuning tool with a suspicious size"
-      author = "Florian Roth"
-      reference = "https://www.welivesecurity.com/2018/10/17/greyenergy-updated-arsenal-dangerous-threat-actors/"
-      date = "2018-10-17 13:29:01"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2022-12-21"
-      hash1 = "d4e97a18be820a1a3af639c9bca21c5f85a3f49a37275b37fd012faeffcb7c4a"
-      tags = "DEMO, EXE, FILE, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "\\Release\\ASGT.pdb" ascii
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 300KB and filesize > 70KB and all of them
-}
-
 rule APT_GreyEnergy_Malware_Oct18_1_RID31FC : APT DEMO EXE FILE {
    meta:
       description = "Detects samples from Grey Energy report"
@@ -23404,6 +23384,26 @@ rule APT_GreyEnergy_Malware_Oct18_5_RID3200 : APT DEMO EXE FILE {
       $s12 = "WespySSld.eQ" fullword ascii
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 300KB and 1 of them
+}
+
+rule SUSP_Size_of_ASUS_TuningTool_RID3197 : DEMO EXE FILE SUSP {
+   meta:
+      description = "Detects an ASUS tuning tool with a suspicious size"
+      author = "Florian Roth"
+      reference = "https://www.welivesecurity.com/2018/10/17/greyenergy-updated-arsenal-dangerous-threat-actors/"
+      date = "2018-10-17 13:29:01"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2022-12-21"
+      hash1 = "d4e97a18be820a1a3af639c9bca21c5f85a3f49a37275b37fd012faeffcb7c4a"
+      tags = "DEMO, EXE, FILE, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "\\Release\\ASGT.pdb" ascii
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 300KB and filesize > 70KB and all of them
 }
 
 rule MAL_JRAT_Oct18_1_RID2BF9 : DEMO FILE MAL {
@@ -24174,33 +24174,6 @@ rule APT_FIN7_Sample_EXE_Aug18_1_RID2FE0 : APT DEMO EXE FILE G0046 RUSSIA {
       uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and all of ( $s* ) and $co1 at 0x015D
 }
 
-rule SUSP_BAT2EXE_BDargo_Converted_BAT_RID3273 : DEMO EXE FILE SCRIPT SUSP {
-   meta:
-      description = "Detects binaries created with BDARGO Advanced BAT to EXE converter"
-      author = "Florian Roth"
-      reference = "https://www.majorgeeks.com/files/details/advanced_bat_to_exe_converter.html"
-      date = "2018-07-28 14:05:41"
-      score = 45
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2022-06-23"
-      hash1 = "d428d79f58425d831c2ee0a73f04749715e8c4dd30ccd81d92fe17485e6dfcda"
-      hash1 = "d428d79f58425d831c2ee0a73f04749715e8c4dd30ccd81d92fe17485e6dfcda"
-      tags = "DEMO, EXE, FILE, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "Error #bdembed1 -- Quiting" fullword ascii
-      $s2 = "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s" fullword ascii
-      $s3 = "\\a.txt" ascii
-      $s4 = "command.com" fullword ascii
-      $s6 = "DFDHERGDCV" fullword ascii
-      $s7 = "DFDHERGGZV" fullword ascii
-      $s8 = "%s%s%s%s%s%s%s%s" fullword ascii
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 300KB and 5 of them
-}
-
 rule APT_DarkHydrus_Jul18_1_RID2ED9 : APT DEMO EXE FILE G0079 MIDDLE_EAST {
    meta:
       description = "Detects strings found in malware samples in APT report in DarkHydrus"
@@ -24286,6 +24259,33 @@ rule HKTL_Unlicensed_CobaltStrike_EICAR_Jul18_5_RID361D : APT COBALTSTRIKE DEMO 
       $s2 = "libgcj-12.dll" fullword ascii
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 900KB and ( pe.imphash ( ) == "829da329ce140d873b4a8bde2cbfaa7e" or all of ( $s* ) or $x1 )
+}
+
+rule SUSP_BAT2EXE_BDargo_Converted_BAT_RID3273 : DEMO EXE FILE SCRIPT SUSP {
+   meta:
+      description = "Detects binaries created with BDARGO Advanced BAT to EXE converter"
+      author = "Florian Roth"
+      reference = "https://www.majorgeeks.com/files/details/advanced_bat_to_exe_converter.html"
+      date = "2018-07-28 14:05:41"
+      score = 45
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2022-06-23"
+      hash1 = "d428d79f58425d831c2ee0a73f04749715e8c4dd30ccd81d92fe17485e6dfcda"
+      hash1 = "d428d79f58425d831c2ee0a73f04749715e8c4dd30ccd81d92fe17485e6dfcda"
+      tags = "DEMO, EXE, FILE, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "Error #bdembed1 -- Quiting" fullword ascii
+      $s2 = "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s" fullword ascii
+      $s3 = "\\a.txt" ascii
+      $s4 = "command.com" fullword ascii
+      $s6 = "DFDHERGDCV" fullword ascii
+      $s7 = "DFDHERGGZV" fullword ascii
+      $s8 = "%s%s%s%s%s%s%s%s" fullword ascii
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 300KB and 5 of them
 }
 
 rule HKTL_beRootexe_RID2C50 : DEMO EXE FILE HKTL {
@@ -24898,29 +24898,6 @@ rule APT_Thrip_Sample_Jun18_18_RID2FDA : APT DEMO EXE FILE G0076 {
       uint16 ( 0 ) == 0x5a4d and filesize < 200KB and all of them
 }
 
-rule PLEAD_Downloader_Jun18_1_RID2F6A : DEMO EXE FILE MAL {
-   meta:
-      description = "Detects PLEAD Downloader"
-      author = "Florian Roth"
-      reference = "https://blog.jpcert.or.jp/2018/06/plead-downloader-used-by-blacktech.html"
-      date = "2018-06-16 11:56:11"
-      score = 90
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "a26df4f62ada084a596bf0f603691bc9c02024be98abec4a9872f0ff0085f940"
-      tags = "DEMO, EXE, FILE, MAL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "%02d:%02d:%02d" ascii fullword
-      $s2 = "%02d-%02d-%02d" ascii fullword
-      $s3 = "1111%02d%02d%02d_%02d%02d2222" ascii fullword
-      $a1 = "Scanning..." wide fullword
-      $a2 = "Checking..." wide fullword
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 200KB and ( all of ( $s* ) or ( 2 of ( $s* ) and 1 of ( $a* ) ) )
-}
-
 rule APT_Turla_Agent_BTZ_Gen_1_RID3003 : APT DEMO EXE FILE G0010 GEN RUSSIA {
    meta:
       description = "Detects Turla Agent.BTZ"
@@ -24952,6 +24929,29 @@ rule APT_Turla_Agent_BTZ_Gen_1_RID3003 : APT DEMO EXE FILE G0010 GEN RUSSIA {
       $s13 = "%02d.%02d.%04d Log begin:" fullword ascii
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 500KB and ( pe.imphash ( ) == "9d0d6daa47d6e6f2d80eb05405944f87" or ( pe.exports ( "Entry" ) and pe.exports ( "InstallM" ) and pe.exports ( "InstallS" ) ) or $x1 or 3 of them ) or ( 5 of them )
+}
+
+rule PLEAD_Downloader_Jun18_1_RID2F6A : DEMO EXE FILE MAL {
+   meta:
+      description = "Detects PLEAD Downloader"
+      author = "Florian Roth"
+      reference = "https://blog.jpcert.or.jp/2018/06/plead-downloader-used-by-blacktech.html"
+      date = "2018-06-16 11:56:11"
+      score = 90
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "a26df4f62ada084a596bf0f603691bc9c02024be98abec4a9872f0ff0085f940"
+      tags = "DEMO, EXE, FILE, MAL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "%02d:%02d:%02d" ascii fullword
+      $s2 = "%02d-%02d-%02d" ascii fullword
+      $s3 = "1111%02d%02d%02d_%02d%02d2222" ascii fullword
+      $a1 = "Scanning..." wide fullword
+      $a2 = "Checking..." wide fullword
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 200KB and ( all of ( $s* ) or ( 2 of ( $s* ) and 1 of ( $a* ) ) )
 }
 
 rule APT_NK_AR18_165A_1_RID2C15 : APT DEMO EXE FILE NK T1562_001 {
@@ -25392,6 +25392,25 @@ rule SUSP_LNK_File_PathTraversal_RID311F : DEMO FILE SUSP T1210 T1547_009 {
       uint16 ( 0 ) == 0x004c and uint32 ( 4 ) == 0x00021401 and ( filesize < 1KB and all of them )
 }
 
+rule SUSP_Microsoft_Copyright_String_Anomaly_2_RID3720 : ANOMALY DEMO EXE FILE SUSP {
+   meta:
+      description = "Detects Floxif Malware"
+      author = "Florian Roth"
+      reference = "Internal Research"
+      date = "2018-05-11 17:25:11"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "de055a89de246e629a8694bde18af2b1605e4b9b493c7e4aef669dd67acf5085"
+      tags = "ANOMALY, DEMO, EXE, FILE, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "Microsoft(C) Windows(C) Operating System" fullword wide
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 200KB and 1 of them
+}
+
 rule MAL_Floxif_Generic_RID2DCE : DEMO EXE FILE GEN MAL {
    meta:
       description = "Detects Floxif Malware"
@@ -25429,25 +25448,6 @@ rule MAL_CN_FlyStudio_May18_1_RID2F5C : CHINA DEMO EXE FILE MAL {
       $s2 = "www.cfyhack.cn" fullword ascii
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 5000KB and ( pe.imphash ( ) == "65ae5cf17140aeaf91e3e9911da0ee3e" or 1 of them )
-}
-
-rule SUSP_Microsoft_Copyright_String_Anomaly_2_RID3720 : ANOMALY DEMO EXE FILE SUSP {
-   meta:
-      description = "Detects Floxif Malware"
-      author = "Florian Roth"
-      reference = "Internal Research"
-      date = "2018-05-11 17:25:11"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "de055a89de246e629a8694bde18af2b1605e4b9b493c7e4aef669dd67acf5085"
-      tags = "ANOMALY, DEMO, EXE, FILE, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "Microsoft(C) Windows(C) Operating System" fullword wide
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 200KB and 1 of them
 }
 
 rule MAL_BurningUmbrella_Sample_1_RID31A4 : APT DEMO EXE FILE MAL {
@@ -25954,6 +25954,27 @@ rule MAL_Visel_Sample_May18_1_RID2F8D : APT DEMO EXE FILE MAL {
       uint16 ( 0 ) == 0x5a4d and filesize < 200KB and ( pe.exports ( "szFile" ) or 2 of them )
 }
 
+rule SUSP_Bad_PDF_RID2AFB : DEMO FILE SUSP {
+   meta:
+      description = "Detects PDF that embeds code to steal NTLM hashes"
+      author = "Florian Roth, Markus Neis"
+      reference = "Internal Research"
+      date = "2018-05-03 08:47:01"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "d8c502da8a2b8d1c67cb5d61428f273e989424f319cfe805541304bdb7b921a8"
+      tags = "DEMO, FILE, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "         /F (http//" ascii
+      $s2 = "        /F (\\\\\\\\" ascii
+      $s3 = "<</F (\\\\" ascii
+   condition: 
+      ( uint32 ( 0 ) == 0x46445025 or uint32 ( 0 ) == 0x4450250a ) and 1 of them
+}
+
 rule MAL_Turla_Sample_May18_1_RID2F92 : DEMO EXE FILE G0010 MAL RUSSIA {
    meta:
       description = "Detects Turla samples"
@@ -25980,27 +26001,6 @@ rule MAL_Turla_Sample_May18_1_RID2F92 : DEMO EXE FILE G0010 MAL RUSSIA {
       $x9 = "system32\\dxsnd32x.exe" fullword ascii
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 500KB and 1 of them
-}
-
-rule SUSP_Bad_PDF_RID2AFB : DEMO FILE SUSP {
-   meta:
-      description = "Detects PDF that embeds code to steal NTLM hashes"
-      author = "Florian Roth, Markus Neis"
-      reference = "Internal Research"
-      date = "2018-05-03 08:47:01"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "d8c502da8a2b8d1c67cb5d61428f273e989424f319cfe805541304bdb7b921a8"
-      tags = "DEMO, FILE, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "         /F (http//" ascii
-      $s2 = "        /F (\\\\\\\\" ascii
-      $s3 = "<</F (\\\\" ascii
-   condition: 
-      ( uint32 ( 0 ) == 0x46445025 or uint32 ( 0 ) == 0x4450250a ) and 1 of them
 }
 
 rule MAL_Hogfish_Report_Related_Sample_RID33CE : APT CHINA DEMO EXE FILE G0045 MAL {
@@ -26930,6 +26930,25 @@ rule Slingshot_APT_Malware_4_RID2FCB : APT DEMO EXE FILE {
       uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and ( $x1 or 2 of them )
 }
 
+rule Gsecdump_password_dump_file_RID322F : DEMO FILE SUSP T1003 {
+   meta:
+      description = "Detects a gsecdump output file"
+      author = "Florian Roth"
+      reference = "https://t.co/OLIj1yVJ4m"
+      date = "2018-03-06 13:54:21"
+      score = 65
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, FILE, SUSP, T1003"
+      minimum_yara = "3.2.0"
+      
+   strings:
+      $x1 = "Administrator(current):500:" ascii
+   condition: 
+      uint32be ( 0 ) == 0x41646d69 and filesize < 3000 and $x1 at 0
+}
+
 rule TSCookie_RAT_RID2B58 : DEMO EXE FILE MAL {
    meta:
       description = "Detects TSCookie RAT"
@@ -26983,25 +27002,6 @@ rule CrimsonRAT_Mar18_1_RID2D4B : DEMO EXE FILE MAL T1082 T1113 {
       $fp1 = "Copyright Software Secure" wide
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 400KB and ( 1 of ( $x* ) or all of ( $a* ) ) and not 1 of ( $fp* )
-}
-
-rule Gsecdump_password_dump_file_RID322F : DEMO FILE SUSP T1003 {
-   meta:
-      description = "Detects a gsecdump output file"
-      author = "Florian Roth"
-      reference = "https://t.co/OLIj1yVJ4m"
-      date = "2018-03-06 13:54:21"
-      score = 65
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, FILE, SUSP, T1003"
-      minimum_yara = "3.2.0"
-      
-   strings:
-      $x1 = "Administrator(current):500:" ascii
-   condition: 
-      uint32be ( 0 ) == 0x41646d69 and filesize < 3000 and $x1 at 0
 }
 
 rule HoneyBee_Dropper_MalDoc_RID2FEA : APT DEMO FILE G0072 T1047 T1057 T1569_002 {
@@ -27404,6 +27404,34 @@ rule LokiBot_Dropper_Packed_R11_Feb18_RID328F : DEMO FILE MAL T1027_002 {
       uint16 ( 0 ) == 0x0000 and filesize < 2000KB and 1 of them
 }
 
+rule VBS_Obfuscated_Mal_Feb18_1_RID3039 : DEMO MAL OBFUS SCRIPT T1059 {
+   meta:
+      description = "Detects malicious obfuscated VBS observed in February 2018"
+      author = "Florian Roth"
+      reference = "https://www.virustotal.com/gui/file/c03da12acbe7f7dfed6219f8809f377fb35b6100a0e560ac0f55313d34f0db17/detection"
+      date = "2018-02-12 12:30:41"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2024-07-19"
+      hash1 = "06960cb721609fe5a857fe9ca3696a84baba88d06c20920370ddba1b0952a8ab"
+      hash2 = "c5c0e28093e133d03c3806da0061a35776eed47d351e817709d2235b95d3a036"
+      hash3 = "e1765a2b10e2ff10235762b9c65e9f5a4b3b47d292933f1a710e241fe0417a74"
+      tags = "DEMO, MAL, OBFUS, SCRIPT, T1059"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "A( Array( (1* 2^1 )+" ascii
+      $x2 = ".addcode(A( Array(" ascii
+      $x3 = "false:AA.send:Execute(AA.responsetext):end" ascii
+      $x4 = "& A( Array(  (1* 2^1 )+" ascii
+      $s1 = ".SYSTEMTYPE:NEXT:IF (UCASE(" ascii
+      $s2 = "A = STR:next:end function" ascii
+      $s3 = "&WSCRIPT.SCRIPTFULLNAME&CHR" fullword ascii
+   condition: 
+      filesize < 600KB and ( 1 of ( $x* ) or 3 of them )
+}
+
 rule HawkEye_Keylogger_Feb18_1_RID302C : DEMO EXE FILE MAL T1056_001 {
    meta:
       description = "Semiautomatically generated YARA rule"
@@ -27474,34 +27502,6 @@ rule OlympicDestroyer_Gen2_RID2F5A : DEMO EXE FILE MAL {
       $s4 = "%s \\\\%s -u \"%s\" -p \"%s\" -accepteula -d %s %s \"%s\"" fullword ascii
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 5000KB and ( pe.imphash ( ) == "fd7200dcd5c0d9d4d277a26d951210aa" or pe.imphash ( ) == "975087e9286238a80895b195efb3968d" or pe.imphash ( ) == "da1c2d7acfe54df797bfb1f470257bc3" or 1 of ( $x* ) or 3 of them )
-}
-
-rule VBS_Obfuscated_Mal_Feb18_1_RID3039 : DEMO MAL OBFUS SCRIPT T1059 {
-   meta:
-      description = "Detects malicious obfuscated VBS observed in February 2018"
-      author = "Florian Roth"
-      reference = "https://www.virustotal.com/gui/file/c03da12acbe7f7dfed6219f8809f377fb35b6100a0e560ac0f55313d34f0db17/detection"
-      date = "2018-02-12 12:30:41"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2024-07-19"
-      hash1 = "06960cb721609fe5a857fe9ca3696a84baba88d06c20920370ddba1b0952a8ab"
-      hash2 = "c5c0e28093e133d03c3806da0061a35776eed47d351e817709d2235b95d3a036"
-      hash3 = "e1765a2b10e2ff10235762b9c65e9f5a4b3b47d292933f1a710e241fe0417a74"
-      tags = "DEMO, MAL, OBFUS, SCRIPT, T1059"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "A( Array( (1* 2^1 )+" ascii
-      $x2 = ".addcode(A( Array(" ascii
-      $x3 = "false:AA.send:Execute(AA.responsetext):end" ascii
-      $x4 = "& A( Array(  (1* 2^1 )+" ascii
-      $s1 = ".SYSTEMTYPE:NEXT:IF (UCASE(" ascii
-      $s2 = "A = STR:next:end function" ascii
-      $s3 = "&WSCRIPT.SCRIPTFULLNAME&CHR" fullword ascii
-   condition: 
-      filesize < 600KB and ( 1 of ( $x* ) or 3 of them )
 }
 
 rule CN_disclosed_20180208_lsls_RID2FCC : CHINA DEMO FILE MAL {
@@ -28225,6 +28225,29 @@ rule MAL_Envrial_Jan18_1_RID2D8C : DEMO EXE FILE MAL T1003 {
       uint16 ( 0 ) == 0x5a4d and filesize < 900KB and ( 1 of ( $x* ) or 3 of them or 2 of ( $s* ) )
 }
 
+rule Turla_Mal_Script_Jan18_1_RID2FD7 : DEMO G0010 MAL RUSSIA SCRIPT T1059 {
+   meta:
+      description = "Detects Turla malicious script"
+      author = "Florian Roth"
+      reference = "https://ghostbin.com/paste/jsph7"
+      date = "2018-01-19 12:14:21"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "180b920e9cea712d124ff41cd1060683a14a79285d960e17f0f49b969f15bfcc"
+      tags = "DEMO, G0010, MAL, RUSSIA, SCRIPT, T1059"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = ".charCodeAt(i % " ascii
+      $s2 = "{WScript.Quit();}" fullword ascii
+      $s3 = ".charAt(i)) << 10) |" ascii
+      $s4 = " = WScript.Arguments;var " ascii
+      $s5 = "= \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\";var i;" ascii
+   condition: 
+      filesize < 200KB and 2 of them
+}
+
 rule MAL_unspecified_Jan18_1_RID2F4A : DEMO MAL {
    meta:
       description = "Detects unspecified malware sample"
@@ -28248,29 +28271,6 @@ rule MAL_unspecified_Jan18_1_RID2F4A : DEMO MAL {
       $s7 = "DEL /s \"%s\" >nul 2>&1" fullword ascii
    condition: 
       filesize < 300KB and 2 of them
-}
-
-rule Turla_Mal_Script_Jan18_1_RID2FD7 : DEMO G0010 MAL RUSSIA SCRIPT T1059 {
-   meta:
-      description = "Detects Turla malicious script"
-      author = "Florian Roth"
-      reference = "https://ghostbin.com/paste/jsph7"
-      date = "2018-01-19 12:14:21"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "180b920e9cea712d124ff41cd1060683a14a79285d960e17f0f49b969f15bfcc"
-      tags = "DEMO, G0010, MAL, RUSSIA, SCRIPT, T1059"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = ".charCodeAt(i % " ascii
-      $s2 = "{WScript.Quit();}" fullword ascii
-      $s3 = ".charAt(i)) << 10) |" ascii
-      $s4 = " = WScript.Arguments;var " ascii
-      $s5 = "= \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\";var i;" ascii
-   condition: 
-      filesize < 200KB and 2 of them
 }
 
 rule MAL_Neshta_Generic_RID2DC9 : DEMO EXE FILE GEN HIGHVOL MAL {
@@ -28775,26 +28775,6 @@ rule Invoke_PSImage_RID2C62 : DEMO SCRIPT T1059 T1059_001 {
       filesize < 3000KB and 1 of them
 }
 
-rule Suspicious_AutoIt_by_Microsoft_RID334C : DEMO EXE FILE SCRIPT SUSP {
-   meta:
-      description = "Detects a AutoIt script with Microsoft identification"
-      author = "Florian Roth"
-      reference = "Internal Research - VT"
-      date = "2017-12-14 14:41:51"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "c0cbcc598d4e8b501aa0bd92115b4c68ccda0993ca0c6ce19edd2e04416b6213"
-      tags = "DEMO, EXE, FILE, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "Microsoft Corporation. All rights reserved" fullword wide
-      $s2 = "AutoIt" fullword ascii
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 2000KB and all of them
-}
-
 rule Triton_trilog_RID2C81 : APT DEMO EXE FILE {
    meta:
       description = "Detects Triton APT malware - file trilog.exe"
@@ -28817,54 +28797,24 @@ rule Triton_trilog_RID2C81 : APT DEMO EXE FILE {
       uint16 ( 0 ) == 0x5a4d and filesize < 60KB and all of them
 }
 
-rule ZXshell_20171211_chrsben_RID2F0D : DEMO EXE FILE MAL {
+rule Suspicious_AutoIt_by_Microsoft_RID334C : DEMO EXE FILE SCRIPT SUSP {
    meta:
-      description = "Detects ZxShell variant surfaced in Dec 17"
+      description = "Detects a AutoIt script with Microsoft identification"
       author = "Florian Roth"
-      reference = "https://www.virustotal.com/#/file/dd01e7a1c9b20d36ea2d961737780f2c0d56005c370e50247e38c5ca80dcaa4f/detection"
-      date = "2017-12-11 11:40:41"
-      score = 90
+      reference = "Internal Research - VT"
+      date = "2017-12-14 14:41:51"
+      score = 60
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2024-07-19"
-      hash1 = "dd01e7a1c9b20d36ea2d961737780f2c0d56005c370e50247e38c5ca80dcaa4f"
-      tags = "DEMO, EXE, FILE, MAL"
-      required_modules = "pe"
-      minimum_yara = "3.2.0"
-      
-   strings:
-      $x1 = "ncProxyXll" fullword ascii
-      $s1 = "Uniscribe.dll" fullword ascii
-      $s2 = "GetModuleFileNameDll" fullword ascii
-      $s4 = "$Hangzhou Shunwang Technology Co.,Ltd0" fullword ascii
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 2000KB and ( pe.imphash ( ) == "de481441d675e9aca4f20bd8e16a5faa" or pe.exports ( "PerfectWorld" ) or pe.exports ( "ncProxyXll" ) or 1 of ( $x* ) or 2 of them )
-}
-
-rule ReconCommands_in_File_RID2F4F : DEMO FILE SUSP T1007 T1033 T1057 T1082 {
-   meta:
-      description = "Detects various recon commands in a single file"
-      author = "Florian Roth"
-      reference = "https://twitter.com/haroonmeer/status/939099379834658817"
-      date = "2017-12-11 11:51:41"
-      score = 40
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, FILE, SUSP, T1007, T1033, T1057, T1082"
+      hash1 = "c0cbcc598d4e8b501aa0bd92115b4c68ccda0993ca0c6ce19edd2e04416b6213"
+      tags = "DEMO, EXE, FILE, SCRIPT, SUSP"
       minimum_yara = "1.7"
       
    strings:
-      $ = "tasklist" 
-      $ = "net time" 
-      $ = "systeminfo" 
-      $ = "whoami" 
-      $ = "nbtstat" 
-      $ = "net start" 
-      $ = "qprocess" 
-      $ = "nslookup" 
+      $s1 = "Microsoft Corporation. All rights reserved" fullword wide
+      $s2 = "AutoIt" fullword ascii
    condition: 
-      filesize < 5KB and 4 of them
+      uint16 ( 0 ) == 0x5a4d and filesize < 2000KB and all of them
 }
 
 rule xRAT_1_RID2900 : APT DEMO EXE FILE G0040 {
@@ -28896,6 +28846,56 @@ rule xRAT_1_RID2900 : APT DEMO EXE FILE G0040 {
       $s7 = "set_RunHidden" fullword ascii
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and ( 1 of ( $x* ) or 3 of them )
+}
+
+rule ReconCommands_in_File_RID2F4F : DEMO FILE SUSP T1007 T1033 T1057 T1082 {
+   meta:
+      description = "Detects various recon commands in a single file"
+      author = "Florian Roth"
+      reference = "https://twitter.com/haroonmeer/status/939099379834658817"
+      date = "2017-12-11 11:51:41"
+      score = 40
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, FILE, SUSP, T1007, T1033, T1057, T1082"
+      minimum_yara = "1.7"
+      
+   strings:
+      $ = "tasklist" 
+      $ = "net time" 
+      $ = "systeminfo" 
+      $ = "whoami" 
+      $ = "nbtstat" 
+      $ = "net start" 
+      $ = "qprocess" 
+      $ = "nslookup" 
+   condition: 
+      filesize < 5KB and 4 of them
+}
+
+rule ZXshell_20171211_chrsben_RID2F0D : DEMO EXE FILE MAL {
+   meta:
+      description = "Detects ZxShell variant surfaced in Dec 17"
+      author = "Florian Roth"
+      reference = "https://www.virustotal.com/#/file/dd01e7a1c9b20d36ea2d961737780f2c0d56005c370e50247e38c5ca80dcaa4f/detection"
+      date = "2017-12-11 11:40:41"
+      score = 90
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2024-07-19"
+      hash1 = "dd01e7a1c9b20d36ea2d961737780f2c0d56005c370e50247e38c5ca80dcaa4f"
+      tags = "DEMO, EXE, FILE, MAL"
+      required_modules = "pe"
+      minimum_yara = "3.2.0"
+      
+   strings:
+      $x1 = "ncProxyXll" fullword ascii
+      $s1 = "Uniscribe.dll" fullword ascii
+      $s2 = "GetModuleFileNameDll" fullword ascii
+      $s4 = "$Hangzhou Shunwang Technology Co.,Ltd0" fullword ascii
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 2000KB and ( pe.imphash ( ) == "de481441d675e9aca4f20bd8e16a5faa" or pe.exports ( "PerfectWorld" ) or pe.exports ( "ncProxyXll" ) or 1 of ( $x* ) or 2 of them )
 }
 
 rule APT34_Malware_HTA_RID2CC1 : DEMO G0049 G0057 MAL MIDDLE_EAST {
@@ -28954,6 +28954,28 @@ rule APT34_Malware_Exeruner_RID2F32 : DEMO EXE FILE G0049 G0057 MAL MIDDLE_EAST 
       uint16 ( 0 ) == 0x5a4d and filesize < 100KB and 1 of them
 }
 
+rule Universal_Exploit_Strings_RID3157 : DEMO EXPLOIT SUSP {
+   meta:
+      description = "Detects a group of strings often used in exploit codes"
+      author = "Florian Roth"
+      reference = "not set"
+      date = "2017-12-02 13:18:21"
+      score = 50
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "9b07dacf8a45218ede6d64327c38478640ff17d0f1e525bd392c002e49fe3629"
+      tags = "DEMO, EXPLOIT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "Exploit" fullword ascii
+      $s2 = "Payload" fullword ascii
+      $s3 = "CVE-201" ascii
+      $s4 = "bindshell" 
+   condition: 
+      ( filesize < 2KB and 3 of them )
+}
+
 rule Suspicious_JS_script_content_RID3292 : DEMO SCRIPT T1059 T1218_010 {
    meta:
       description = "Detects suspicious statements in JavaScript files"
@@ -28975,28 +28997,6 @@ rule Suspicious_JS_script_content_RID3292 : DEMO SCRIPT T1059 T1218_010 {
       $x4 = "args='/s /u /i:" ascii
    condition: 
       ( filesize < 10KB and 1 of them )
-}
-
-rule Universal_Exploit_Strings_RID3157 : DEMO EXPLOIT SUSP {
-   meta:
-      description = "Detects a group of strings often used in exploit codes"
-      author = "Florian Roth"
-      reference = "not set"
-      date = "2017-12-02 13:18:21"
-      score = 50
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "9b07dacf8a45218ede6d64327c38478640ff17d0f1e525bd392c002e49fe3629"
-      tags = "DEMO, EXPLOIT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "Exploit" fullword ascii
-      $s2 = "Payload" fullword ascii
-      $s3 = "CVE-201" ascii
-      $s4 = "bindshell" 
-   condition: 
-      ( filesize < 2KB and 3 of them )
 }
 
 rule UBootRAT_RID29E1 : APT DEMO EXE FILE {
@@ -30246,28 +30246,6 @@ rule URL_File_Local_EXE_RID2D6E : DEMO SCRIPT T1059 {
       filesize < 400 and all of them
 }
 
-rule CMStar_Malware_Sep17_RID2E52 : DEMO EXE FILE MAL {
-   meta:
-      description = "Detects CMStar Malware"
-      author = "Florian Roth"
-      reference = "https://www.paloaltonetworks.com/blog/2017/09/unit42-threat-actors-target-government-belarus-using-cmstar-trojan/"
-      date = "2017-10-03 11:09:31"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2024-07-19"
-      hash1 = "16697c95db5add6c1c23b2591b9d8eec5ed96074d057b9411f0b57a54af298d5"
-      tags = "DEMO, EXE, FILE, MAL"
-      required_modules = "pe"
-      minimum_yara = "3.2.0"
-      
-   strings:
-      $s1 = "UpdateService.tmp" fullword ascii
-      $s2 = "StateNum:%d,FileSize:%d" fullword ascii
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 100KB and ( pe.imphash ( ) == "22021985de78a48ea8fb82a2ff9eb693" or pe.exports ( "WinCred" ) or all of them )
-}
-
 rule APT17_Malware_Oct17_1_RID2E03 : APT DEMO EXE FILE G0025 {
    meta:
       description = "Detects APT17 malware"
@@ -30374,6 +30352,28 @@ rule APT17_Malware_Oct17_Gen_RID2EEC : APT DEMO EXE FILE G0025 GEN {
       $s8 = "[IISEND=0x%08X][Recv:] 0x%08X %s" fullword ascii
    condition: 
       ( uint16 ( 0 ) == 0x5a4d and filesize < 200KB and ( pe.imphash ( ) == "414bbd566b700ea021cfae3ad8f4d9b9" or 1 of ( $x* ) or 6 of them ) )
+}
+
+rule CMStar_Malware_Sep17_RID2E52 : DEMO EXE FILE MAL {
+   meta:
+      description = "Detects CMStar Malware"
+      author = "Florian Roth"
+      reference = "https://www.paloaltonetworks.com/blog/2017/09/unit42-threat-actors-target-government-belarus-using-cmstar-trojan/"
+      date = "2017-10-03 11:09:31"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2024-07-19"
+      hash1 = "16697c95db5add6c1c23b2591b9d8eec5ed96074d057b9411f0b57a54af298d5"
+      tags = "DEMO, EXE, FILE, MAL"
+      required_modules = "pe"
+      minimum_yara = "3.2.0"
+      
+   strings:
+      $s1 = "UpdateService.tmp" fullword ascii
+      $s2 = "StateNum:%d,FileSize:%d" fullword ascii
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 100KB and ( pe.imphash ( ) == "22021985de78a48ea8fb82a2ff9eb693" or pe.exports ( "WinCred" ) or all of them )
 }
 
 rule redSails_EXE_RID2B89 : DEMO EXE FILE HKTL {
@@ -31495,35 +31495,25 @@ rule ShadowPad_nssock2_RID2DAE : DEMO EXE FILE MAL {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 500KB and ( pe.imphash ( ) == "c67de089f2009b21715744762fc484e8" or pe.imphash ( ) == "11522f7d4b2fc05acba8f534ca1b828a" ) )
 }
 
-rule Pupy_Backdoor_RID2C43 : DEMO EXE FILE MAL {
+rule git_CVE_2017_9800_poc_RID2D8C : CVE_2017_9800 DEMO SUSP {
    meta:
-      description = "Detects Pupy backdoor"
+      description = "Detects a CVE-2017-9800 exploitation attempt"
       author = "Florian Roth"
-      reference = "https://github.com/n1nj4sec/pupy-binaries"
-      date = "2017-08-11 09:41:41"
-      score = 75
+      reference = "https://twitter.com/mzbat/status/895811803325898753"
+      date = "2017-08-11 10:36:31"
+      score = 60
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "ae93714203c7ab4ab73f2ad8364819d16644c7649ea04f483b46924bd5bc0153"
-      hash2 = "83380f351214c3bd2c8e62430f70f8f90d11c831695027f329af04806b9f8ea4"
-      hash3 = "90757c1ae9597bea39bb52a38fb3d497358a2499c92c7636d71b95ec973186cc"
-      tags = "DEMO, EXE, FILE, MAL"
-      required_modules = "pe"
-      minimum_yara = "3.2.0"
+      
+      tags = "CVE_2017_9800, DEMO, SUSP"
+      minimum_yara = "1.7"
       
    strings:
-      $x1 = "reflectively inject a dll into a process." fullword ascii
-      $x2 = "ld_preload_inject_dll(cmdline, dll_buffer, hook_exit) -> pid" fullword ascii
-      $x3 = "LD_PRELOAD=%s HOOK_EXIT=%d CLEANUP=%d exec %s 1>/dev/null 2>/dev/null" fullword ascii
-      $x4 = "reflective_inject_dll" fullword ascii
-      $x5 = "ld_preload_inject_dll" fullword ascii
-      $x6 = "get_pupy_config() -> string" fullword ascii
-      $x7 = "[INJECT] inject_dll. OpenProcess failed." fullword ascii
-      $x8 = "reflective_inject_dll" fullword ascii
-      $x9 = "reflective_inject_dll(pid, dll_buffer, isRemoteProcess64bits)" fullword ascii
-      $x10 = "linux_inject_main" fullword ascii
+      $s1 = "git clone ssh://-oProxyCommand=" ascii
+      $s2 = "git clone http://-" ascii
+      $s3 = "git clone https://-" ascii
    condition: 
-      ( ( uint16 ( 0 ) == 0x457f or uint16 ( 0 ) == 0x5a4d ) and filesize < 7000KB and 1 of them ) or 3 of them or ( uint16 ( 0 ) == 0x5a4d and pe.imphash ( ) == "84a69bce2ff6d9f866b7ae63bd70b163" )
+      filesize < 200KB and 1 of them
 }
 
 rule SUSP_PowerShell_Case_Anomaly_Aug17_RID33AF : ANOMALY DEMO OBFUS SCRIPT SUSP T1059 T1059_001 {
@@ -31565,25 +31555,35 @@ rule SUSP_PowerShell_Case_Anomaly_Aug17_RID33AF : ANOMALY DEMO OBFUS SCRIPT SUSP
       filesize < 800KB and ( ( #s1 > #sn1 + #sn2 + #sn3 + #sn4 + #sn5 + #sn6 + #sn7 ) or ( #a1 > #an1 + #an2 ) or ( #k1 > #kn1 + #kn2 + #kn3 + #kn4 + #kn5 ) ) and not 1 of ( $fp* )
 }
 
-rule git_CVE_2017_9800_poc_RID2D8C : CVE_2017_9800 DEMO SUSP {
+rule Pupy_Backdoor_RID2C43 : DEMO EXE FILE MAL {
    meta:
-      description = "Detects a CVE-2017-9800 exploitation attempt"
+      description = "Detects Pupy backdoor"
       author = "Florian Roth"
-      reference = "https://twitter.com/mzbat/status/895811803325898753"
-      date = "2017-08-11 10:36:31"
-      score = 60
+      reference = "https://github.com/n1nj4sec/pupy-binaries"
+      date = "2017-08-11 09:41:41"
+      score = 75
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CVE_2017_9800, DEMO, SUSP"
-      minimum_yara = "1.7"
+      hash1 = "ae93714203c7ab4ab73f2ad8364819d16644c7649ea04f483b46924bd5bc0153"
+      hash2 = "83380f351214c3bd2c8e62430f70f8f90d11c831695027f329af04806b9f8ea4"
+      hash3 = "90757c1ae9597bea39bb52a38fb3d497358a2499c92c7636d71b95ec973186cc"
+      tags = "DEMO, EXE, FILE, MAL"
+      required_modules = "pe"
+      minimum_yara = "3.2.0"
       
    strings:
-      $s1 = "git clone ssh://-oProxyCommand=" ascii
-      $s2 = "git clone http://-" ascii
-      $s3 = "git clone https://-" ascii
+      $x1 = "reflectively inject a dll into a process." fullword ascii
+      $x2 = "ld_preload_inject_dll(cmdline, dll_buffer, hook_exit) -> pid" fullword ascii
+      $x3 = "LD_PRELOAD=%s HOOK_EXIT=%d CLEANUP=%d exec %s 1>/dev/null 2>/dev/null" fullword ascii
+      $x4 = "reflective_inject_dll" fullword ascii
+      $x5 = "ld_preload_inject_dll" fullword ascii
+      $x6 = "get_pupy_config() -> string" fullword ascii
+      $x7 = "[INJECT] inject_dll. OpenProcess failed." fullword ascii
+      $x8 = "reflective_inject_dll" fullword ascii
+      $x9 = "reflective_inject_dll(pid, dll_buffer, isRemoteProcess64bits)" fullword ascii
+      $x10 = "linux_inject_main" fullword ascii
    condition: 
-      filesize < 200KB and 1 of them
+      ( ( uint16 ( 0 ) == 0x457f or uint16 ( 0 ) == 0x5a4d ) and filesize < 7000KB and 1 of them ) or 3 of them or ( uint16 ( 0 ) == 0x5a4d and pe.imphash ( ) == "84a69bce2ff6d9f866b7ae63bd70b163" )
 }
 
 rule CobaltStrike_CN_Group_BeaconDropper_Aug17_RID369B : CHINA COBALTSTRIKE DEMO G0080 MAL S0154 SCRIPT T1218_010 T1550_002 {
@@ -32383,6 +32383,26 @@ rule Kekeo_Hacktool_RID2C94 : DEMO EXE FILE HKTL {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 2000KB and ( 1 of ( $x* ) ) )
 }
 
+rule Exp_EPS_CVE20152545_RID2C5A : DEMO EXPLOIT FILE OFFICE {
+   meta:
+      description = "Detects EPS Word Exploit"
+      author = "Florian Roth"
+      reference = "Internal Research - ME"
+      date = "2017-07-19 09:45:31"
+      score = 90
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, EXPLOIT, FILE, OFFICE"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "word/media/image1.eps" ascii
+      $s2 = "-la;7(la+" ascii
+   condition: 
+      uint16 ( 0 ) == 0x4b50 and ( $s1 and #s2 > 20 )
+}
+
 rule JS_Suspicious_Obfuscation_Dropbox_RID345D : DEMO OBFUS SCRIPT T1059 T1059_001 {
    meta:
       description = "Detects PowerShell AMSI Bypass"
@@ -32422,26 +32442,6 @@ rule JS_Suspicious_MSHTA_Bypass_RID30F1 : DEMO SCRIPT T1059 T1218_005 {
       $s3 = "/c start mshta j" ascii nocase
    condition: 
       2 of them
-}
-
-rule Exp_EPS_CVE20152545_RID2C5A : DEMO EXPLOIT FILE OFFICE {
-   meta:
-      description = "Detects EPS Word Exploit"
-      author = "Florian Roth"
-      reference = "Internal Research - ME"
-      date = "2017-07-19 09:45:31"
-      score = 90
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, EXPLOIT, FILE, OFFICE"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "word/media/image1.eps" ascii
-      $s2 = "-la;7(la+" ascii
-   condition: 
-      uint16 ( 0 ) == 0x4b50 and ( $s1 and #s2 > 20 )
 }
 
 rule Unspecified_Malware_Jul17_2C_RID316E : CHINA DEMO EXE FILE MAL T1047 {
@@ -32608,25 +32608,6 @@ rule WinPayloads_Payload_RID2EA5 : DEMO EXE FILE HKTL {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 10000KB and all of them )
 }
 
-rule Gen_Net_LocalGroup_Administrators_Add_Command_RID38C1 : DEMO EXE FILE GEN SUSP {
-   meta:
-      description = "Detects an executable that contains a command to add a user account to the local administrators group"
-      author = "Florian Roth"
-      reference = "Internal Research"
-      date = "2017-07-08 18:34:41"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, EXE, FILE, GEN, SUSP"
-      minimum_yara = "2.2.0"
-      
-   strings:
-      $x1 = /net localgroup administrators [a-zA-Z0-9]{1,16} \/add/ nocase ascii
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d and filesize < 400KB and 1 of them )
-}
-
 rule ZxShell_Related_Malware_CN_Group_Jul17_1_RID3601 : APT CHINA DEMO EXE FILE T1087_002 T1543_003 {
    meta:
       description = "Detects a ZxShell related sample from a CN threat group"
@@ -32732,6 +32713,25 @@ rule ZxShell_Jul17_RID2BCD : APT CHINA DEMO T1007 {
       ( filesize < 10000KB and 1 of them ) or 3 of them
 }
 
+rule Gen_Net_LocalGroup_Administrators_Add_Command_RID38C1 : DEMO EXE FILE GEN SUSP {
+   meta:
+      description = "Detects an executable that contains a command to add a user account to the local administrators group"
+      author = "Florian Roth"
+      reference = "Internal Research"
+      date = "2017-07-08 18:34:41"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, EXE, FILE, GEN, SUSP"
+      minimum_yara = "2.2.0"
+      
+   strings:
+      $x1 = /net localgroup administrators [a-zA-Z0-9]{1,16} \/add/ nocase ascii
+   condition: 
+      ( uint16 ( 0 ) == 0x5a4d and filesize < 400KB and 1 of them )
+}
+
 rule mimipenguin_1_RID2C43 : DEMO FILE HKTL {
    meta:
       description = "Detects Mimipenguin hack tool"
@@ -32775,87 +32775,6 @@ rule mimipenguin_2_RID2C44 : DEMO FILE HKTL {
       $x5 = "if [[ -n $(ps -eo pid,command | grep -v 'grep' | grep gnome-keyring) ]]; then" fullword ascii
    condition: 
       ( uint16 ( 0 ) == 0x2123 and filesize < 20KB and 1 of them )
-}
-
-rule HDRoot_Sample_Jul17_1_RID2E84 : DEMO EXE FILE MAL {
-   meta:
-      description = "Detects HDRoot samples"
-      author = "Florian Roth"
-      reference = "Winnti HDRoot VT"
-      date = "2017-07-07 11:17:51"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "6d2ad82f455becc8c830d000633a370857928c584246a7f41fe722cc46c0d113"
-      tags = "DEMO, EXE, FILE, MAL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "gleupdate.dll" fullword ascii
-      $s2 = "\\DosDevices\\%ws\\system32\\%ws" wide
-      $s3 = "l\\Driver\\nsiproxy" fullword wide
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d and filesize < 60KB and 3 of them )
-}
-
-rule HDRoot_Sample_Jul17_2_RID2E85 : DEMO EXE FILE MAL {
-   meta:
-      description = "Detects HDRoot samples"
-      author = "Florian Roth"
-      reference = "Winnti HDRoot VT"
-      date = "2017-07-07 11:18:01"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "1c302ed9786fc600073cc6f3ed2e50e7c23785c94a2908f74f92971d978b704b"
-      hash2 = "3b7cfa40e26fb6b079b55ec030aba244a6429e263a3d9832e32ab09e7a3c4a9c"
-      hash3 = "71eddf71a94c5fd04c9f3ff0ca1eb6b1770df1a3a8f29689fb8588427b5c9e8e"
-      tags = "DEMO, EXE, FILE, MAL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "http://microsoftcompanywork.htm" fullword ascii
-      $x2 = "compose.aspx?s=%4X%4X%4X%4X%4X%4X" fullword ascii
-      $t1 = "http://babelfish.yahoo.com/translate_url?" fullword ascii
-      $t2 = "http://translate.google.com/translate?prev=hp&hl=en&js=n&u=%s?%d&sl=es&tl=en" fullword ascii
-      $u1 = "User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident/4.0; SLCC1; .NET CLR 2.0.50727; InfoPath.2; .NET CLR 3.5." ascii
-      $u2 = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; Maxthon)" fullword ascii
-      $u3 = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; Maxthon; TERA:" fullword ascii
-      $s1 = "\\system32\\ntoskrnl.exe" ascii
-      $s2 = "Schedsvc.dll" fullword wide
-      $s3 = "dllserver64.dll" fullword ascii
-      $s4 = "C:\\TERA_SR.txt" fullword ascii
-      $s5 = "updatevnsc.dat" fullword wide
-      $s6 = "tera dll service global event" fullword ascii
-      $s7 = "Referer: http://%s/%s" fullword ascii
-      $s8 = "tera replace dll config" fullword ascii
-      $s9 = "SetupDll64.dll" fullword ascii
-      $s10 = "copy %%ComSpec%% \"%s\"" fullword ascii
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 300KB and ( 1 of ( $x* ) or all of ( $u* ) or 8 of them )
-}
-
-rule Unspecified_Malware_Jul17_1A_RID316B : DEMO EXE FILE MAL {
-   meta:
-      description = "Detects samples of an unspecified malware - July 2017"
-      author = "Florian Roth"
-      reference = "Winnti HDRoot VT"
-      date = "2017-07-07 13:21:41"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "e1c38142b6194237a4cd4603829aa6edb6436e7bba15e3e6b0c9e8c6b629b42b"
-      tags = "DEMO, EXE, FILE, MAL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "%SystemRoot%\\System32\\wuauserv.dll" fullword ascii
-      $s2 = "systemroot%\\system32\\wuauserv.dll" fullword ascii
-      $s3 = "ocgen.logIN" fullword wide
-      $s4 = "ocmsn.logIN" fullword wide
-      $s5 = "Install.log" fullword wide
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d and filesize < 900KB and all of them )
 }
 
 rule Molerats_Jul17_Sample_1_RID2F9B : APT DEMO EXE FILE G0021 {
@@ -32981,6 +32900,87 @@ rule Molerats_Jul17_Sample_Dropper_RID3246 : APT DEMO EXE FILE G0021 {
       $s3 = "attachment.hta" fullword ascii
    condition: 
       ( uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and all of them )
+}
+
+rule HDRoot_Sample_Jul17_1_RID2E84 : DEMO EXE FILE MAL {
+   meta:
+      description = "Detects HDRoot samples"
+      author = "Florian Roth"
+      reference = "Winnti HDRoot VT"
+      date = "2017-07-07 11:17:51"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "6d2ad82f455becc8c830d000633a370857928c584246a7f41fe722cc46c0d113"
+      tags = "DEMO, EXE, FILE, MAL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "gleupdate.dll" fullword ascii
+      $s2 = "\\DosDevices\\%ws\\system32\\%ws" wide
+      $s3 = "l\\Driver\\nsiproxy" fullword wide
+   condition: 
+      ( uint16 ( 0 ) == 0x5a4d and filesize < 60KB and 3 of them )
+}
+
+rule HDRoot_Sample_Jul17_2_RID2E85 : DEMO EXE FILE MAL {
+   meta:
+      description = "Detects HDRoot samples"
+      author = "Florian Roth"
+      reference = "Winnti HDRoot VT"
+      date = "2017-07-07 11:18:01"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "1c302ed9786fc600073cc6f3ed2e50e7c23785c94a2908f74f92971d978b704b"
+      hash2 = "3b7cfa40e26fb6b079b55ec030aba244a6429e263a3d9832e32ab09e7a3c4a9c"
+      hash3 = "71eddf71a94c5fd04c9f3ff0ca1eb6b1770df1a3a8f29689fb8588427b5c9e8e"
+      tags = "DEMO, EXE, FILE, MAL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "http://microsoftcompanywork.htm" fullword ascii
+      $x2 = "compose.aspx?s=%4X%4X%4X%4X%4X%4X" fullword ascii
+      $t1 = "http://babelfish.yahoo.com/translate_url?" fullword ascii
+      $t2 = "http://translate.google.com/translate?prev=hp&hl=en&js=n&u=%s?%d&sl=es&tl=en" fullword ascii
+      $u1 = "User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident/4.0; SLCC1; .NET CLR 2.0.50727; InfoPath.2; .NET CLR 3.5." ascii
+      $u2 = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; Maxthon)" fullword ascii
+      $u3 = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; Maxthon; TERA:" fullword ascii
+      $s1 = "\\system32\\ntoskrnl.exe" ascii
+      $s2 = "Schedsvc.dll" fullword wide
+      $s3 = "dllserver64.dll" fullword ascii
+      $s4 = "C:\\TERA_SR.txt" fullword ascii
+      $s5 = "updatevnsc.dat" fullword wide
+      $s6 = "tera dll service global event" fullword ascii
+      $s7 = "Referer: http://%s/%s" fullword ascii
+      $s8 = "tera replace dll config" fullword ascii
+      $s9 = "SetupDll64.dll" fullword ascii
+      $s10 = "copy %%ComSpec%% \"%s\"" fullword ascii
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 300KB and ( 1 of ( $x* ) or all of ( $u* ) or 8 of them )
+}
+
+rule Unspecified_Malware_Jul17_1A_RID316B : DEMO EXE FILE MAL {
+   meta:
+      description = "Detects samples of an unspecified malware - July 2017"
+      author = "Florian Roth"
+      reference = "Winnti HDRoot VT"
+      date = "2017-07-07 13:21:41"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "e1c38142b6194237a4cd4603829aa6edb6436e7bba15e3e6b0c9e8c6b629b42b"
+      tags = "DEMO, EXE, FILE, MAL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "%SystemRoot%\\System32\\wuauserv.dll" fullword ascii
+      $s2 = "systemroot%\\system32\\wuauserv.dll" fullword ascii
+      $s3 = "ocgen.logIN" fullword wide
+      $s4 = "ocmsn.logIN" fullword wide
+      $s5 = "Install.log" fullword wide
+   condition: 
+      ( uint16 ( 0 ) == 0x5a4d and filesize < 900KB and all of them )
 }
 
 rule Disclosed_0day_POCs_exploit_RID3190 : DEMO EXE EXPLOIT FILE HKTL {
@@ -33193,6 +33193,28 @@ rule Wordpress_Config_Webshell_Preprend_RID34C3 : DEMO FILE T1505_003 WEBSHELL {
       $fp1 = "iThemes Security Config" ascii
    condition: 
       uint32 ( 0 ) == 0x68703f3c and filesize < 400KB and $x1 and all of ( $s* ) and not $x1 in ( 0 .. 1000 ) and not 1 of ( $fp* )
+}
+
+rule PowerShell_ISESteroids_Obfuscation_RID347F : DEMO OBFUS SCRIPT T1059 T1059_001 {
+   meta:
+      description = "Detects PowerShell ISESteroids obfuscation"
+      author = "Florian Roth"
+      reference = "https://twitter.com/danielhbohannon/status/877953970437844993"
+      date = "2017-06-23 15:33:01"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, OBFUS, SCRIPT, T1059, T1059_001"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "/\\/===\\__" ascii
+      $x2 = "${__/\\/==" ascii
+      $x3 = "Catch { }" fullword ascii
+      $x4 = "\\_/=} ${_" ascii
+   condition: 
+      2 of them
 }
 
 rule Waterbear_1_Jun17_RID2D32 : DEMO EXE FILE MAL {
@@ -33503,28 +33525,6 @@ rule Waterbear_14_Jun17_RID2D66 : DEMO EXE FILE MAL {
       $s2 = "C:\\recycled" fullword ascii
    condition: 
       ( uint16 ( 0 ) == 0x5a4d and filesize < 8000KB and all of them )
-}
-
-rule PowerShell_ISESteroids_Obfuscation_RID347F : DEMO OBFUS SCRIPT T1059 T1059_001 {
-   meta:
-      description = "Detects PowerShell ISESteroids obfuscation"
-      author = "Florian Roth"
-      reference = "https://twitter.com/danielhbohannon/status/877953970437844993"
-      date = "2017-06-23 15:33:01"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, OBFUS, SCRIPT, T1059, T1059_001"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "/\\/===\\__" ascii
-      $x2 = "${__/\\/==" ascii
-      $x3 = "Catch { }" fullword ascii
-      $x4 = "\\_/=} ${_" ascii
-   condition: 
-      2 of them
 }
 
 rule BTC_Miner_lsass1_chrome_2_RID3068 : DEMO EXE FILE MAL {
@@ -33919,6 +33919,31 @@ rule Industroyer_Malware_5_RID2F75 : APT DEMO EXE FILE {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 400KB and ( 1 of ( $x* ) or 4 of them ) ) or ( all of them )
 }
 
+rule Beacon_K5om_RID2B14 : APT COBALTSTRIKE DEMO EXE FILE METASPLOIT T1105 {
+   meta:
+      description = "Detects Meterpreter Beacon - file K5om.dll"
+      author = "Florian Roth"
+      reference = "https://www.fireeye.com/blog/threat-research/2017/06/phished-at-the-request-of-counsel.html"
+      date = "2017-06-07 08:51:11"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "e3494fd2cc7e9e02cff76841630892e4baed34a3e1ef2b9ae4e2608f9a4d7be9"
+      tags = "APT, COBALTSTRIKE, DEMO, EXE, FILE, METASPLOIT, T1105"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "IEX (New-Object Net.Webclient).DownloadString('http://127.0.0.1:%u/'); %s" fullword ascii
+      $x2 = "powershell -nop -exec bypass -EncodedCommand \"%s\"" fullword ascii
+      $x3 = "%d is an x86 process (can't inject x64 content)" fullword ascii
+      $s1 = "Could not open process token: %d (%u)" fullword ascii
+      $s2 = "0fd00b.dll" fullword ascii
+      $s3 = "%s.4%08x%08x%08x%08x%08x.%08x%08x%08x%08x%08x%08x%08x.%08x%08x%08x%08x%08x%08x%08x.%08x%08x%08x%08x%08x%08x%08x.%x%x.%s" fullword ascii
+      $s4 = "Could not connect to pipe (%s): %d" fullword ascii
+   condition: 
+      ( uint16 ( 0 ) == 0x5a4d and filesize < 600KB and ( 1 of ( $x* ) or 3 of them ) )
+}
+
 rule CredentialStealer_Generic_Backdoor_RID347C : DEMO EXE FILE GEN MAL T1003 {
    meta:
       description = "Detects credential stealer byed on many strings that indicate password store access"
@@ -33945,31 +33970,6 @@ rule CredentialStealer_Generic_Backdoor_RID347C : DEMO EXE FILE GEN MAL T1003 {
       $s10 = "%s\\Opera\\Opera\\profile\\wand.dat" fullword ascii
    condition: 
       ( uint16 ( 0 ) == 0x5a4d and 4 of them )
-}
-
-rule Beacon_K5om_RID2B14 : APT COBALTSTRIKE DEMO EXE FILE METASPLOIT T1105 {
-   meta:
-      description = "Detects Meterpreter Beacon - file K5om.dll"
-      author = "Florian Roth"
-      reference = "https://www.fireeye.com/blog/threat-research/2017/06/phished-at-the-request-of-counsel.html"
-      date = "2017-06-07 08:51:11"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "e3494fd2cc7e9e02cff76841630892e4baed34a3e1ef2b9ae4e2608f9a4d7be9"
-      tags = "APT, COBALTSTRIKE, DEMO, EXE, FILE, METASPLOIT, T1105"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "IEX (New-Object Net.Webclient).DownloadString('http://127.0.0.1:%u/'); %s" fullword ascii
-      $x2 = "powershell -nop -exec bypass -EncodedCommand \"%s\"" fullword ascii
-      $x3 = "%d is an x86 process (can't inject x64 content)" fullword ascii
-      $s1 = "Could not open process token: %d (%u)" fullword ascii
-      $s2 = "0fd00b.dll" fullword ascii
-      $s3 = "%s.4%08x%08x%08x%08x%08x.%08x%08x%08x%08x%08x%08x%08x.%08x%08x%08x%08x%08x%08x%08x.%08x%08x%08x%08x%08x%08x%08x.%x%x.%s" fullword ascii
-      $s4 = "Could not connect to pipe (%s): %d" fullword ascii
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d and filesize < 600KB and ( 1 of ( $x* ) or 3 of them ) )
 }
 
 rule Backdoor_Redosdru_Jun17_RID2FD1 : DEMO EXE FILE HIGHVOL MAL {
@@ -38915,6 +38915,111 @@ rule EquationGroup__ftshell_RID3014 : APT DEMO FILE G0020 {
       ( uint16 ( 0 ) == 0x2123 and filesize < 100KB and 2 of them ) or ( all of them )
 }
 
+rule OpCloudHopper_WmiDLL_inMemory_RID324C : APT DEMO {
+   meta:
+      description = "Malware related to Operation Cloud Hopper - Page 25"
+      author = "Florian Roth"
+      reference = "https://www.pwc.co.uk/cyber-security/pdf/cloud-hopper-annex-b-final.pdf"
+      date = "2017-04-07 13:59:11"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "APT, DEMO"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "wmi.dll 2>&1" ascii
+   condition: 
+      all of them
+}
+
+rule OpCloudHopper_lockdown_RID2FF5 : APT DEMO EXE FILE {
+   meta:
+      description = "Tools related to Operation Cloud Hopper"
+      author = "Florian Roth"
+      reference = "https://github.com/maaaaz/impacket-examples-windows"
+      date = "2017-04-07 12:19:21"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "8ca61cef74573d9c1d19b8191c23cbd2b7a1195a74eaba037377e5ee232b1dc5"
+      tags = "APT, DEMO, EXE, FILE"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "lockdown.dll" fullword ascii
+      $s3 = "mfeann.exe" fullword ascii
+   condition: 
+      ( uint16 ( 0 ) == 0x5a4d and filesize < 300KB and all of them )
+}
+
+rule OpCloudHopper_WindowXarBot_RID315C : APT DEMO EXE FILE {
+   meta:
+      description = "Malware related to Operation Cloud Hopper"
+      author = "Florian Roth"
+      reference = "https://www.pwc.co.uk/cyber-security/pdf/cloud-hopper-annex-b-final.pdf"
+      date = "2017-04-07 13:19:11"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "APT, DEMO, EXE, FILE"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "\\Release\\WindowXarbot.pdb" ascii
+   condition: 
+      ( uint16 ( 0 ) == 0x5a4d and filesize < 2000KB and all of them )
+}
+
+rule VBS_WMIExec_Tool_Apr17_1_RID2F44 : APT DEMO SCRIPT {
+   meta:
+      description = "Tools related to Operation Cloud Hopper"
+      author = "Florian Roth"
+      reference = "https://github.com/maaaaz/impacket-examples-windows"
+      date = "2017-04-07 11:49:51"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "21bc328ed8ae81151e7537c27c0d6df6d47ba8909aebd61333e32155d01f3b11"
+      tags = "APT, DEMO, SCRIPT"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "strNetUse = \"cmd.exe /c net use \\\\\" & host" fullword ascii
+      $x2 = "localcmd = \"cmd.exe /c \" & command " ascii
+      $x3 = "& \" > \" & TempFile & \" 2>&1\"  '2>&1 err" fullword ascii
+      $x4 = "strExec = \"cmd.exe /c \" & cmd & \" >> \" & resultfile & \" 2>&1\"  '2>&1 err" fullword ascii
+      $x5 = "TempFile = objShell.ExpandEnvironmentStrings(\"%TEMP%\") & \"\\wmi.dll\"" fullword ascii
+      $a1 = "WMIEXEC ERROR: Command -> " ascii
+      $a2 = "WMIEXEC : Command result will output to" fullword ascii
+      $a3 = "WMIEXEC : Target ->" fullword ascii
+      $a4 = "WMIEXEC : Login -> OK" fullword ascii
+      $a5 = "WMIEXEC : Process created. PID:" fullword ascii
+   condition: 
+      ( filesize < 40KB and 1 of them ) or 3 of them
+}
+
+rule karmaSMB_RID29FF : DEMO EXE FILE HKTL {
+   meta:
+      description = "Compiled Impacket Tools"
+      author = "Florian Roth"
+      reference = "https://github.com/maaaaz/impacket-examples-windows"
+      date = "2017-04-07 02:50:01"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "d256d1e05695d62a86d9e76830fcbb856ba7bd578165a561edd43b9f7fdb18a3"
+      tags = "DEMO, EXE, FILE, HKTL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "bkarmaSMB_RID29FF.exe.manifest" fullword ascii
+   condition: 
+      ( uint16 ( 0 ) == 0x5a4d and filesize < 17000KB and all of them )
+}
+
 rule Quasar_RAT_1_RID2B54 : DEMO EXE FILE MAL {
    meta:
       description = "Detects Quasar RAT"
@@ -38989,111 +39094,6 @@ rule Malware_Floxif_mpsvc_dll_RID30C4 : DEMO EXE FILE HIGHVOL MAL {
       $op3 = { ff 03 8d 00 f9 ff ff 88 01 eb a1 } 
    condition: 
       ( uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and all of them )
-}
-
-rule OpCloudHopper_WmiDLL_inMemory_RID324C : APT DEMO {
-   meta:
-      description = "Malware related to Operation Cloud Hopper - Page 25"
-      author = "Florian Roth"
-      reference = "https://www.pwc.co.uk/cyber-security/pdf/cloud-hopper-annex-b-final.pdf"
-      date = "2017-04-07 13:59:11"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "APT, DEMO"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "wmi.dll 2>&1" ascii
-   condition: 
-      all of them
-}
-
-rule karmaSMB_RID29FF : DEMO EXE FILE HKTL {
-   meta:
-      description = "Compiled Impacket Tools"
-      author = "Florian Roth"
-      reference = "https://github.com/maaaaz/impacket-examples-windows"
-      date = "2017-04-07 02:50:01"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "d256d1e05695d62a86d9e76830fcbb856ba7bd578165a561edd43b9f7fdb18a3"
-      tags = "DEMO, EXE, FILE, HKTL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "bkarmaSMB_RID29FF.exe.manifest" fullword ascii
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d and filesize < 17000KB and all of them )
-}
-
-rule OpCloudHopper_lockdown_RID2FF5 : APT DEMO EXE FILE {
-   meta:
-      description = "Tools related to Operation Cloud Hopper"
-      author = "Florian Roth"
-      reference = "https://github.com/maaaaz/impacket-examples-windows"
-      date = "2017-04-07 12:19:21"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "8ca61cef74573d9c1d19b8191c23cbd2b7a1195a74eaba037377e5ee232b1dc5"
-      tags = "APT, DEMO, EXE, FILE"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "lockdown.dll" fullword ascii
-      $s3 = "mfeann.exe" fullword ascii
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d and filesize < 300KB and all of them )
-}
-
-rule OpCloudHopper_WindowXarBot_RID315C : APT DEMO EXE FILE {
-   meta:
-      description = "Malware related to Operation Cloud Hopper"
-      author = "Florian Roth"
-      reference = "https://www.pwc.co.uk/cyber-security/pdf/cloud-hopper-annex-b-final.pdf"
-      date = "2017-04-07 13:19:11"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "APT, DEMO, EXE, FILE"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "\\Release\\WindowXarbot.pdb" ascii
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d and filesize < 2000KB and all of them )
-}
-
-rule VBS_WMIExec_Tool_Apr17_1_RID2F44 : APT DEMO SCRIPT {
-   meta:
-      description = "Tools related to Operation Cloud Hopper"
-      author = "Florian Roth"
-      reference = "https://github.com/maaaaz/impacket-examples-windows"
-      date = "2017-04-07 11:49:51"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "21bc328ed8ae81151e7537c27c0d6df6d47ba8909aebd61333e32155d01f3b11"
-      tags = "APT, DEMO, SCRIPT"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "strNetUse = \"cmd.exe /c net use \\\\\" & host" fullword ascii
-      $x2 = "localcmd = \"cmd.exe /c \" & command " ascii
-      $x3 = "& \" > \" & TempFile & \" 2>&1\"  '2>&1 err" fullword ascii
-      $x4 = "strExec = \"cmd.exe /c \" & cmd & \" >> \" & resultfile & \" 2>&1\"  '2>&1 err" fullword ascii
-      $x5 = "TempFile = objShell.ExpandEnvironmentStrings(\"%TEMP%\") & \"\\wmi.dll\"" fullword ascii
-      $a1 = "WMIEXEC ERROR: Command -> " ascii
-      $a2 = "WMIEXEC : Command result will output to" fullword ascii
-      $a3 = "WMIEXEC : Target ->" fullword ascii
-      $a4 = "WMIEXEC : Login -> OK" fullword ascii
-      $a5 = "WMIEXEC : Process created. PID:" fullword ascii
-   condition: 
-      ( filesize < 40KB and 1 of them ) or 3 of them
 }
 
 rule Impacket_Tools_wmiexec_RID3000 : DEMO EXE FILE HKTL {
@@ -39840,25 +39840,6 @@ rule Mimipenguin_SH_RID2C8D : DEMO HKTL LINUX SCRIPT T1003 {
       1 of them
 }
 
-rule Malware_JS_powershell_obfuscated_RID33F9 : DEMO MAL OBFUS SCRIPT T1059_001 {
-   meta:
-      description = "Unspecified malware - file rechnung_3.js"
-      author = "Florian Roth"
-      reference = "Internal Research"
-      date = "2017-03-24 15:10:41"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "3af15a2d60f946e0c4338c84bd39880652f676dc884057a96a10d7f802215760"
-      tags = "DEMO, MAL, OBFUS, SCRIPT, T1059_001"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "po\" + \"wer\" + \"sh\" + \"e\" + \"ll\";" fullword ascii
-   condition: 
-      filesize < 30KB and 1 of them
-}
-
 rule WMImplant_RID2A8A : DEMO SCRIPT T1047 T1059 T1059_001 {
    meta:
       description = "Detects WMI implant- file WMImplant_RID2A8A.ps1"
@@ -39881,6 +39862,25 @@ rule WMImplant_RID2A8A : DEMO SCRIPT T1047 T1059 T1059_001 {
       $x6 = "Invoke-WMImplant_RID2A8A" fullword ascii
    condition: 
       1 of them
+}
+
+rule Malware_JS_powershell_obfuscated_RID33F9 : DEMO MAL OBFUS SCRIPT T1059_001 {
+   meta:
+      description = "Unspecified malware - file rechnung_3.js"
+      author = "Florian Roth"
+      reference = "Internal Research"
+      date = "2017-03-24 15:10:41"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "3af15a2d60f946e0c4338c84bd39880652f676dc884057a96a10d7f802215760"
+      tags = "DEMO, MAL, OBFUS, SCRIPT, T1059_001"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "po\" + \"wer\" + \"sh\" + \"e\" + \"ll\";" fullword ascii
+   condition: 
+      filesize < 30KB and 1 of them
 }
 
 rule BeyondExec_RemoteAccess_Tool_RID3211 : DEMO EXE FILE HKTL {
@@ -49935,6 +49935,163 @@ rule CheshireCat_Gen2_RID2CFF : APT DEMO EXE FILE {
       uint16 ( 0 ) == 0x5a4d and filesize < 200KB and 7 of ( $s* ) and 2 of ( $a* ) and 1 of ( $b* )
 }
 
+rule HttpBrowser_RAT_dropper_Gen1_RID31E0 : APT DEMO EXE FILE G0027 T1574_001 {
+   meta:
+      description = "Threat Group 3390 APT Sample - HttpBrowser RAT Dropper"
+      author = "Florian Roth"
+      reference = "http://snip.ly/giNB"
+      date = "2015-08-06 13:41:11"
+      score = 90
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "808de72f1eae29e3c1b2c32be1b84c5064865a235866edf5e790d2a7ba709907"
+      hash2 = "f6f966d605c5e79de462a65df437ddfca0ad4eb5faba94fc875aba51a4b894a7"
+      hash3 = "f424965a35477d822bbadb821125995616dc980d3d4f94a68c87d0cd9b291df9"
+      tags = "APT, DEMO, EXE, FILE, G0027, T1574_001"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "1001=cmd.exe" fullword ascii
+      $x2 = "1003=ShellExecuteA" fullword ascii
+      $x3 = "1002=/c del /q %s" fullword ascii
+      $x4 = "1004=SetThreadPriority" fullword ascii
+      $op0 = { e8 71 11 00 00 83 c4 10 ff 4d e4 8b f0 78 07 8b } 
+      $op1 = { e8 85 34 00 00 59 59 8b 86 b4 } 
+      $op2 = { 8b 45 0c 83 38 00 0f 84 97 } 
+      $op3 = { 8b 45 0c 83 38 00 0f 84 98 } 
+      $op4 = { 89 7e 0c ff 15 a0 50 40 00 59 8b d8 6a 20 59 8d } 
+      $op5 = { 56 8d 85 cd fc ff ff 53 50 88 9d cc fc ff ff e8 } 
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 400KB and all of ( $x* ) and 1 of ( $op* )
+}
+
+rule HttpBrowser_RAT_Sample1_RID2FCD : APT DEMO EXE FILE G0027 T1574_001 {
+   meta:
+      description = "Threat Group 3390 APT Sample - HttpBrowser RAT Sample update.hancominc.com"
+      author = "Florian Roth"
+      reference = "http://snip.ly/giNB"
+      date = "2015-08-06 12:12:41"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "be334d1f8fa65a723af65200a166c2bbdb06690c8b30fafe772600e4662fc68b"
+      hash2 = "1052ad7f4d49542e4da07fa8ea59c15c40bc09a4d726fad023daafdf05866ebb"
+      tags = "APT, DEMO, EXE, FILE, G0027, T1574_001"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "update.hancominc.com" fullword wide
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 100KB and $s0
+}
+
+rule HttpBrowser_RAT_Sample2_RID2FCE : APT DEMO EXE FILE G0027 T1574_001 {
+   meta:
+      description = "Threat Group 3390 APT Sample - HttpBrowser RAT Sample"
+      author = "Florian Roth"
+      reference = "http://snip.ly/giNB"
+      date = "2015-08-06 12:12:51"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "c57c5a2c322af2835ae136b75283eaaeeaa6aa911340470182a9983ae47b8992"
+      tags = "APT, DEMO, EXE, FILE, G0027, T1574_001"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "nKERNEL32.DLL" fullword wide
+      $s1 = "WUSER32.DLL" fullword wide
+      $s2 = "mscoree.dll" fullword wide
+      $s3 = "VPDN_LU.exeUT" fullword ascii
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 250KB and all of them
+}
+
+rule HttpBrowser_RAT_Gen_RID2E54 : APT DEMO EXE FILE G0027 GEN T1574_001 {
+   meta:
+      description = "Threat Group 3390 APT Sample - HttpBrowser RAT Generic"
+      author = "Florian Roth"
+      reference = "http://snip.ly/giNB"
+      date = "2015-08-06 11:09:51"
+      score = 90
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "0299493ccb175d452866f5e21d023d3e92cd8d28452517d1d19c0f05f2c5ca27"
+      hash2 = "065d055a90da59b4bdc88b97e537d6489602cb5dc894c5c16aff94d05c09abc7"
+      hash3 = "05c7291db880f94c675eea336ecd66338bd0b1d49ad239cc17f9df08106e6684"
+      tags = "APT, DEMO, EXE, FILE, G0027, GEN, T1574_001"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "%d|%s|%04d/%02d/%02d %02d:%02d:%02d|%ld|%d" fullword wide
+      $s1 = "HttpBrowser/1.0" fullword wide
+      $s2 = "set cmd : %s" ascii fullword
+      $s3 = "\\config.ini" wide fullword
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 45KB and filesize > 20KB and all of them
+}
+
+rule PlugX_NvSmartMax_Gen_RID2ECA : APT DEMO EXE FILE G0027 GEN {
+   meta:
+      description = "Threat Group 3390 APT Sample - PlugX NvSmartMax Generic"
+      author = "Florian Roth"
+      reference = "http://snip.ly/giNB"
+      date = "2015-08-06 11:29:31"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "718fc72942b9b706488575c0296017971170463f6f40fa19b08fc84b79bf0cef"
+      hash2 = "1c0379481d17fc80b3330f148f1b87ff613cfd2a6601d97920a0bcd808c718d0"
+      hash3 = "555952aa5bcca4fa5ad5a7269fece99b1a04816d104ecd8aefabaa1435f65fa5"
+      tags = "APT, DEMO, EXE, FILE, G0027, GEN"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "NvSmartMax.dll" fullword ascii
+      $s1 = "NvSmartMax.dll.url" fullword ascii
+      $s2 = "Nv.exe" fullword ascii
+      $s4 = "CryptProtectMemory failed" fullword ascii
+      $s5 = "CryptUnprotectMemory failed" fullword ascii
+      $s7 = "r%.*s(%d)%s" fullword wide
+      $s8 = " %s CRC " fullword wide
+      $op0 = { c6 05 26 49 42 00 01 eb 4a 8d 85 00 f8 ff ff 50 } 
+      $op1 = { 8d 85 c8 fe ff ff 50 8d 45 c8 50 c6 45 47 00 e8 } 
+      $op2 = { e8 e6 65 00 00 50 68 10 43 41 00 e8 56 84 00 00 } 
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 800KB and all of ( $s* ) and 1 of ( $op* )
+}
+
+rule HttpBrowser_RAT_dropper_Gen2_RID31E1 : APT DEMO EXE FILE G0027 T1574_001 {
+   meta:
+      description = "Threat Group 3390 APT Sample - HttpBrowser RAT Dropper"
+      author = "Florian Roth"
+      reference = "http://snip.ly/giNB"
+      date = "2015-08-06 13:41:21"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "c57c5a2c322af2835ae136b75283eaaeeaa6aa911340470182a9983ae47b8992"
+      hash2 = "dfa984174268a9f364d856fd47cfaca75804640f849624d69d81fcaca2b57166"
+      tags = "APT, DEMO, EXE, FILE, G0027, T1574_001"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "navlu.dll.urlUT" fullword ascii
+      $s2 = "VPDN_LU.exeUT" fullword ascii
+      $s3 = "pnipcn.dllUT" fullword ascii
+      $s4 = "\\ssonsvr.exe" ascii
+      $s5 = "/c del /q %s" fullword ascii
+      $s6 = "\\setup.exe" ascii
+      $s7 = "msi.dllUT" fullword ascii
+      $op0 = { 8b 45 0c 83 38 00 0f 84 98 } 
+      $op1 = { e8 dd 07 00 00 ff 35 d8 fb 40 00 8b 35 7c a0 40 } 
+      $op2 = { 83 fb 08 75 2c 8b 0d f8 af 40 00 89 4d dc 8b 0d } 
+      $op3 = { c7 43 18 8c 69 40 00 e9 da 01 00 00 83 7d f0 00 } 
+      $op4 = { 6a 01 e9 7c f8 ff ff bf 1a 40 00 96 1b 40 00 01 } 
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 400KB and 3 of ( $s* ) and 1 of ( $op* )
+}
+
 rule Empire_Invoke_BypassUAC_RID2FE8 : DEMO SCRIPT SUSP T1059_001 {
    meta:
       description = "Empire - a pure PowerShell post-exploitation agent - file Invoke-BypassUAC.ps1"
@@ -50146,163 +50303,6 @@ rule Empire_invoke_wmi_RID2E0A : DEMO SCRIPT SUSP T1059_001 {
       filesize < 20KB and 2 of them
 }
 
-rule HttpBrowser_RAT_dropper_Gen1_RID31E0 : APT DEMO EXE FILE G0027 T1574_001 {
-   meta:
-      description = "Threat Group 3390 APT Sample - HttpBrowser RAT Dropper"
-      author = "Florian Roth"
-      reference = "http://snip.ly/giNB"
-      date = "2015-08-06 13:41:11"
-      score = 90
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "808de72f1eae29e3c1b2c32be1b84c5064865a235866edf5e790d2a7ba709907"
-      hash2 = "f6f966d605c5e79de462a65df437ddfca0ad4eb5faba94fc875aba51a4b894a7"
-      hash3 = "f424965a35477d822bbadb821125995616dc980d3d4f94a68c87d0cd9b291df9"
-      tags = "APT, DEMO, EXE, FILE, G0027, T1574_001"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "1001=cmd.exe" fullword ascii
-      $x2 = "1003=ShellExecuteA" fullword ascii
-      $x3 = "1002=/c del /q %s" fullword ascii
-      $x4 = "1004=SetThreadPriority" fullword ascii
-      $op0 = { e8 71 11 00 00 83 c4 10 ff 4d e4 8b f0 78 07 8b } 
-      $op1 = { e8 85 34 00 00 59 59 8b 86 b4 } 
-      $op2 = { 8b 45 0c 83 38 00 0f 84 97 } 
-      $op3 = { 8b 45 0c 83 38 00 0f 84 98 } 
-      $op4 = { 89 7e 0c ff 15 a0 50 40 00 59 8b d8 6a 20 59 8d } 
-      $op5 = { 56 8d 85 cd fc ff ff 53 50 88 9d cc fc ff ff e8 } 
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 400KB and all of ( $x* ) and 1 of ( $op* )
-}
-
-rule HttpBrowser_RAT_Sample1_RID2FCD : APT DEMO EXE FILE G0027 T1574_001 {
-   meta:
-      description = "Threat Group 3390 APT Sample - HttpBrowser RAT Sample update.hancominc.com"
-      author = "Florian Roth"
-      reference = "http://snip.ly/giNB"
-      date = "2015-08-06 12:12:41"
-      score = 80
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "be334d1f8fa65a723af65200a166c2bbdb06690c8b30fafe772600e4662fc68b"
-      hash2 = "1052ad7f4d49542e4da07fa8ea59c15c40bc09a4d726fad023daafdf05866ebb"
-      tags = "APT, DEMO, EXE, FILE, G0027, T1574_001"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "update.hancominc.com" fullword wide
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 100KB and $s0
-}
-
-rule HttpBrowser_RAT_Sample2_RID2FCE : APT DEMO EXE FILE G0027 T1574_001 {
-   meta:
-      description = "Threat Group 3390 APT Sample - HttpBrowser RAT Sample"
-      author = "Florian Roth"
-      reference = "http://snip.ly/giNB"
-      date = "2015-08-06 12:12:51"
-      score = 80
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "c57c5a2c322af2835ae136b75283eaaeeaa6aa911340470182a9983ae47b8992"
-      tags = "APT, DEMO, EXE, FILE, G0027, T1574_001"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "nKERNEL32.DLL" fullword wide
-      $s1 = "WUSER32.DLL" fullword wide
-      $s2 = "mscoree.dll" fullword wide
-      $s3 = "VPDN_LU.exeUT" fullword ascii
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 250KB and all of them
-}
-
-rule HttpBrowser_RAT_Gen_RID2E54 : APT DEMO EXE FILE G0027 GEN T1574_001 {
-   meta:
-      description = "Threat Group 3390 APT Sample - HttpBrowser RAT Generic"
-      author = "Florian Roth"
-      reference = "http://snip.ly/giNB"
-      date = "2015-08-06 11:09:51"
-      score = 90
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "0299493ccb175d452866f5e21d023d3e92cd8d28452517d1d19c0f05f2c5ca27"
-      hash2 = "065d055a90da59b4bdc88b97e537d6489602cb5dc894c5c16aff94d05c09abc7"
-      hash3 = "05c7291db880f94c675eea336ecd66338bd0b1d49ad239cc17f9df08106e6684"
-      tags = "APT, DEMO, EXE, FILE, G0027, GEN, T1574_001"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "%d|%s|%04d/%02d/%02d %02d:%02d:%02d|%ld|%d" fullword wide
-      $s1 = "HttpBrowser/1.0" fullword wide
-      $s2 = "set cmd : %s" ascii fullword
-      $s3 = "\\config.ini" wide fullword
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 45KB and filesize > 20KB and all of them
-}
-
-rule PlugX_NvSmartMax_Gen_RID2ECA : APT DEMO EXE FILE G0027 GEN {
-   meta:
-      description = "Threat Group 3390 APT Sample - PlugX NvSmartMax Generic"
-      author = "Florian Roth"
-      reference = "http://snip.ly/giNB"
-      date = "2015-08-06 11:29:31"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "718fc72942b9b706488575c0296017971170463f6f40fa19b08fc84b79bf0cef"
-      hash2 = "1c0379481d17fc80b3330f148f1b87ff613cfd2a6601d97920a0bcd808c718d0"
-      hash3 = "555952aa5bcca4fa5ad5a7269fece99b1a04816d104ecd8aefabaa1435f65fa5"
-      tags = "APT, DEMO, EXE, FILE, G0027, GEN"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "NvSmartMax.dll" fullword ascii
-      $s1 = "NvSmartMax.dll.url" fullword ascii
-      $s2 = "Nv.exe" fullword ascii
-      $s4 = "CryptProtectMemory failed" fullword ascii
-      $s5 = "CryptUnprotectMemory failed" fullword ascii
-      $s7 = "r%.*s(%d)%s" fullword wide
-      $s8 = " %s CRC " fullword wide
-      $op0 = { c6 05 26 49 42 00 01 eb 4a 8d 85 00 f8 ff ff 50 } 
-      $op1 = { 8d 85 c8 fe ff ff 50 8d 45 c8 50 c6 45 47 00 e8 } 
-      $op2 = { e8 e6 65 00 00 50 68 10 43 41 00 e8 56 84 00 00 } 
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 800KB and all of ( $s* ) and 1 of ( $op* )
-}
-
-rule HttpBrowser_RAT_dropper_Gen2_RID31E1 : APT DEMO EXE FILE G0027 T1574_001 {
-   meta:
-      description = "Threat Group 3390 APT Sample - HttpBrowser RAT Dropper"
-      author = "Florian Roth"
-      reference = "http://snip.ly/giNB"
-      date = "2015-08-06 13:41:21"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "c57c5a2c322af2835ae136b75283eaaeeaa6aa911340470182a9983ae47b8992"
-      hash2 = "dfa984174268a9f364d856fd47cfaca75804640f849624d69d81fcaca2b57166"
-      tags = "APT, DEMO, EXE, FILE, G0027, T1574_001"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "navlu.dll.urlUT" fullword ascii
-      $s2 = "VPDN_LU.exeUT" fullword ascii
-      $s3 = "pnipcn.dllUT" fullword ascii
-      $s4 = "\\ssonsvr.exe" ascii
-      $s5 = "/c del /q %s" fullword ascii
-      $s6 = "\\setup.exe" ascii
-      $s7 = "msi.dllUT" fullword ascii
-      $op0 = { 8b 45 0c 83 38 00 0f 84 98 } 
-      $op1 = { e8 dd 07 00 00 ff 35 d8 fb 40 00 8b 35 7c a0 40 } 
-      $op2 = { 83 fb 08 75 2c 8b 0d f8 af 40 00 89 4d dc 8b 0d } 
-      $op3 = { c7 43 18 8c 69 40 00 e9 da 01 00 00 83 7d f0 00 } 
-      $op4 = { 6a 01 e9 7c f8 ff ff bf 1a 40 00 96 1b 40 00 01 } 
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 400KB and 3 of ( $s* ) and 1 of ( $op* )
-}
-
 rule Apolmy_Privesc_Trojan_RID2F8B : APT DEMO EXE FILE T1068 {
    meta:
       description = "Apolmy Privilege Escalation Trojan used in APT Terracotta"
@@ -50414,29 +50414,6 @@ rule LiuDoor_Malware_2_RID2D88 : APT DEMO EXE FILE {
       uint16 ( 0 ) == 0x5a4d and filesize < 100KB and all of them
 }
 
-rule MAL_MiniDionis_VBS_Dropped_RID30B4 : DEMO MAL SCRIPT {
-   meta:
-      description = "Dropped File - 1.vbs"
-      author = "Florian Roth"
-      reference = "https://malwr.com/analysis/ZDc4ZmIyZDI4MTVjNGY5NWI0YzE3YjIzNGFjZTcyYTY/"
-      date = "2015-07-21 12:51:11"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, MAL, SCRIPT"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "Wscript.Sleep 5000" ascii
-      $s2 = "Set FSO = CreateObject(\"Scripting.FileSystemObject\")" ascii
-      $s3 = "Set WshShell = CreateObject(\"WScript.Shell\")" ascii
-      $s4 = "If(FSO.FileExists(\"" ascii
-      $s5 = "then FSO.DeleteFile(\".\\" ascii
-   condition: 
-      filesize < 1KB and all of them and $s1 in ( 0 .. 40 )
-}
-
 rule Exploit_MS15_077_078_RID2D56 : DEMO EXE EXPLOIT FILE GEN T1189 {
    meta:
       description = "MS15-078 / MS15-077 exploit - generic signature"
@@ -50490,6 +50467,29 @@ rule Exploit_MS15_077_078_HackingTeam_RID31F1 : DEMO EXE EXPLOIT FILE T1189 {
       $s6 = "InternetOpenA coolio, trying open %s" fullword ascii
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 2500KB and 5 of them
+}
+
+rule MAL_MiniDionis_VBS_Dropped_RID30B4 : DEMO MAL SCRIPT {
+   meta:
+      description = "Dropped File - 1.vbs"
+      author = "Florian Roth"
+      reference = "https://malwr.com/analysis/ZDc4ZmIyZDI4MTVjNGY5NWI0YzE3YjIzNGFjZTcyYTY/"
+      date = "2015-07-21 12:51:11"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, MAL, SCRIPT"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "Wscript.Sleep 5000" ascii
+      $s2 = "Set FSO = CreateObject(\"Scripting.FileSystemObject\")" ascii
+      $s3 = "Set WshShell = CreateObject(\"WScript.Shell\")" ascii
+      $s4 = "If(FSO.FileExists(\"" ascii
+      $s5 = "then FSO.DeleteFile(\".\\" ascii
+   condition: 
+      filesize < 1KB and all of them and $s1 in ( 0 .. 40 )
 }
 
 rule MAL_Malicious_SFX1_Voicemail_RID3169 : DEMO FILE MAL {
@@ -56491,63 +56491,6 @@ rule Webshell_Txt_hello_RID2E59 : CHINA DEMO T1505_003 WEBSHELL {
       filesize < 25KB and all of them
 }
 
-rule Webshell_ChinaChopper_one_RID30FB : CHINA DEMO T1505_003 WEBSHELL {
-   meta:
-      description = "Chinese Hacktool Set - file one.asp"
-      author = "Florian Roth"
-      reference = "http://tools.zjqhr.com/"
-      date = "2015-06-13 13:03:01"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, T1505_003, WEBSHELL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "<%eval request(" ascii
-   condition: 
-      filesize < 50 and all of them
-}
-
-rule Webshell_ChinaChopper_temp_2_RID3200 : CHINA DEMO T1505_003 WEBSHELL {
-   meta:
-      description = "Chinese Hacktool Set - file temp.php"
-      author = "Florian Roth"
-      reference = "http://tools.zjqhr.com/"
-      date = "2015-06-13 13:46:31"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, T1505_003, WEBSHELL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "@eval($_POST[strtoupper(md5(gmdate(" ascii
-   condition: 
-      filesize < 150 and all of them
-}
-
-rule Webshell_templatr_RID2E0F : CHINA DEMO T1505_003 WEBSHELL {
-   meta:
-      description = "Chinese Hacktool Set - file templatr.php"
-      author = "Florian Roth"
-      reference = "http://tools.zjqhr.com/"
-      date = "2015-06-13 10:58:21"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, T1505_003, WEBSHELL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "eval(gzinflate(base64_decode('" ascii
-   condition: 
-      filesize < 70KB and all of them
-}
-
 rule CN_Tools_xbat_RID2C20 : APT CHINA DEMO FILE SCRIPT {
    meta:
       description = "Chinese Hacktool Set - file xbat.vbs"
@@ -56606,6 +56549,152 @@ rule dll_UnReg_RID2A8D : APT CHINA DEMO SCRIPT T1218_010 {
       $s1 = "del /F /Q C:\\windows\\system32\\PacketX.dll" fullword ascii
    condition: 
       filesize < 1KB and 1 of them
+}
+
+rule CN_Tools_Temp_RID2C07 : APT CHINA DEMO FILE {
+   meta:
+      description = "Chinese Hacktool Set - file Temp.war"
+      author = "Florian Roth"
+      reference = "http://tools.zjqhr.com/"
+      date = "2015-06-13 09:31:41"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "APT, CHINA, DEMO, FILE"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "META-INF/context.xml<?xml version=\"1.0\" encoding=\"UTF-8\"?>" fullword ascii
+      $s1 = "browser.jsp" fullword ascii
+      $s3 = "cmd.jsp" fullword ascii
+      $s4 = "index.jsp" fullword ascii
+   condition: 
+      uint16 ( 0 ) == 0x4b50 and filesize < 203KB and all of them
+}
+
+rule sbin_squid_RID2B42 : APT CHINA DEMO SCRIPT T1007 {
+   meta:
+      description = "Chinese Hacktool Set - file squid.bat"
+      author = "Florian Roth"
+      reference = "http://tools.zjqhr.com/"
+      date = "2015-06-13 08:58:51"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "APT, CHINA, DEMO, SCRIPT, T1007"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "del /s /f /q" fullword ascii
+      $s1 = "squid.exe -z" fullword ascii
+      $s2 = "net start Squid" fullword ascii
+      $s3 = "net stop Squid" fullword ascii
+   condition: 
+      filesize < 1KB and all of them
+}
+
+rule sql1433_creck_RID2B93 : APT CHINA DEMO FILE SCRIPT {
+   meta:
+      description = "Chinese Hacktool Set - file creck.bat"
+      author = "Florian Roth"
+      reference = "http://tools.zjqhr.com/"
+      date = "2015-06-13 09:12:21"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "APT, CHINA, DEMO, FILE, SCRIPT"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "start anhao3.exe -i S.txt -p  pass3.txt -o anhao.txt -l Them.txt -t 1000" fullword ascii
+      $s1 = "start anhao1.exe -i S.txt -p  pass1.txt -o anhao.txt -l Them.txt -t 1000" fullword ascii
+      $s2 = "start anhao2.exe -i S.txt -p  pass2.txt -o anhao.txt -l Them.txt -t 1000" fullword ascii
+   condition: 
+      uint16 ( 0 ) == 0x7473 and filesize < 1KB and 1 of them
+}
+
+rule sql1433_Start_RID2B99 : APT CHINA DEMO SCRIPT {
+   meta:
+      description = "Chinese Hacktool Set - file Start.bat"
+      author = "Florian Roth"
+      reference = "http://tools.zjqhr.com/"
+      date = "2015-06-13 09:13:21"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "APT, CHINA, DEMO, SCRIPT"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "for /f \"eol=- tokens=1 delims= \" %%i in (result.txt) do echo %%i>>s1.txt" fullword ascii
+      $s2 = "start creck.bat" fullword ascii
+      $s3 = "del s1.txt" fullword ascii
+      $s4 = "del Result.txt" fullword ascii
+      $s5 = "del s.TXT" fullword ascii
+      $s6 = "mode con cols=48 lines=20" fullword ascii
+   condition: 
+      filesize < 1KB and 2 of them
+}
+
+rule Webshell_ChinaChopper_one_RID30FB : CHINA DEMO T1505_003 WEBSHELL {
+   meta:
+      description = "Chinese Hacktool Set - file one.asp"
+      author = "Florian Roth"
+      reference = "http://tools.zjqhr.com/"
+      date = "2015-06-13 13:03:01"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "<%eval request(" ascii
+   condition: 
+      filesize < 50 and all of them
+}
+
+rule Webshell_ChinaChopper_temp_2_RID3200 : CHINA DEMO T1505_003 WEBSHELL {
+   meta:
+      description = "Chinese Hacktool Set - file temp.php"
+      author = "Florian Roth"
+      reference = "http://tools.zjqhr.com/"
+      date = "2015-06-13 13:46:31"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "@eval($_POST[strtoupper(md5(gmdate(" ascii
+   condition: 
+      filesize < 150 and all of them
+}
+
+rule Webshell_templatr_RID2E0F : CHINA DEMO T1505_003 WEBSHELL {
+   meta:
+      description = "Chinese Hacktool Set - file templatr.php"
+      author = "Florian Roth"
+      reference = "http://tools.zjqhr.com/"
+      date = "2015-06-13 10:58:21"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "eval(gzinflate(base64_decode('" ascii
+   condition: 
+      filesize < 70KB and all of them
 }
 
 rule Pc_pc2015_RID29BE : CHINA DEMO EXE FILE HKTL {
@@ -57201,95 +57290,6 @@ rule Webshell_ChinaChopper_temp_3_RID3201 : CHINA DEMO FILE T1505_003 WEBSHELL {
       $s1 = "\"],\"unsafe\");%>" ascii
    condition: 
       uint16 ( 0 ) == 0x253c and filesize < 150 and all of them
-}
-
-rule CN_Tools_Temp_RID2C07 : APT CHINA DEMO FILE {
-   meta:
-      description = "Chinese Hacktool Set - file Temp.war"
-      author = "Florian Roth"
-      reference = "http://tools.zjqhr.com/"
-      date = "2015-06-13 09:31:41"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "APT, CHINA, DEMO, FILE"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "META-INF/context.xml<?xml version=\"1.0\" encoding=\"UTF-8\"?>" fullword ascii
-      $s1 = "browser.jsp" fullword ascii
-      $s3 = "cmd.jsp" fullword ascii
-      $s4 = "index.jsp" fullword ascii
-   condition: 
-      uint16 ( 0 ) == 0x4b50 and filesize < 203KB and all of them
-}
-
-rule sbin_squid_RID2B42 : APT CHINA DEMO SCRIPT T1007 {
-   meta:
-      description = "Chinese Hacktool Set - file squid.bat"
-      author = "Florian Roth"
-      reference = "http://tools.zjqhr.com/"
-      date = "2015-06-13 08:58:51"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "APT, CHINA, DEMO, SCRIPT, T1007"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "del /s /f /q" fullword ascii
-      $s1 = "squid.exe -z" fullword ascii
-      $s2 = "net start Squid" fullword ascii
-      $s3 = "net stop Squid" fullword ascii
-   condition: 
-      filesize < 1KB and all of them
-}
-
-rule sql1433_creck_RID2B93 : APT CHINA DEMO FILE SCRIPT {
-   meta:
-      description = "Chinese Hacktool Set - file creck.bat"
-      author = "Florian Roth"
-      reference = "http://tools.zjqhr.com/"
-      date = "2015-06-13 09:12:21"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "APT, CHINA, DEMO, FILE, SCRIPT"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "start anhao3.exe -i S.txt -p  pass3.txt -o anhao.txt -l Them.txt -t 1000" fullword ascii
-      $s1 = "start anhao1.exe -i S.txt -p  pass1.txt -o anhao.txt -l Them.txt -t 1000" fullword ascii
-      $s2 = "start anhao2.exe -i S.txt -p  pass2.txt -o anhao.txt -l Them.txt -t 1000" fullword ascii
-   condition: 
-      uint16 ( 0 ) == 0x7473 and filesize < 1KB and 1 of them
-}
-
-rule sql1433_Start_RID2B99 : APT CHINA DEMO SCRIPT {
-   meta:
-      description = "Chinese Hacktool Set - file Start.bat"
-      author = "Florian Roth"
-      reference = "http://tools.zjqhr.com/"
-      date = "2015-06-13 09:13:21"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "APT, CHINA, DEMO, SCRIPT"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "for /f \"eol=- tokens=1 delims= \" %%i in (result.txt) do echo %%i>>s1.txt" fullword ascii
-      $s2 = "start creck.bat" fullword ascii
-      $s3 = "del s1.txt" fullword ascii
-      $s4 = "del Result.txt" fullword ascii
-      $s5 = "del s.TXT" fullword ascii
-      $s6 = "mode con cols=48 lines=20" fullword ascii
-   condition: 
-      filesize < 1KB and 2 of them
 }
 
 rule mswin_check_lm_group_RID2F60 : CHINA DEMO EXE FILE HKTL {
@@ -60444,6 +60444,27 @@ rule APT28_SourFace_Malware3_RID2F32 : APT DEMO EXE FILE G0007 RUSSIA {
       uint16 ( 0 ) == 0x5a4d and filesize < 550KB and all of them
 }
 
+rule SVG_LoadURL_RID2AD3 : DEMO EXPLOIT {
+   meta:
+      description = "Detects a tiny SVG file that loads an URL (as seen in CryptoWall malware infections)"
+      author = "Florian Roth"
+      reference = "https://www.appriver.com/resources/blog"
+      date = "2015-05-24 08:43:21"
+      score = 50
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2024-07-19"
+      tags = "DEMO, EXPLOIT"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "</svg>" nocase
+      $s2 = "<script>" nocase
+      $s3 = "location.href='http" nocase
+   condition: 
+      all of ( $s* ) and filesize < 600
+}
+
 rule DarkEYEv3_Cryptor_RID2D71 : DEMO EXE FILE SUSP {
    meta:
       description = "Rule to detect DarkEYEv3 encrypted executables (often malware)"
@@ -60465,25 +60486,33 @@ rule DarkEYEv3_Cryptor_RID2D71 : DEMO EXE FILE SUSP {
       uint16 ( 0 ) == 0x5a4d and $s0
 }
 
-rule SVG_LoadURL_RID2AD3 : DEMO EXPLOIT {
+rule APT17_Sample_FXSST_DLL_RID2E51 : APT DEMO EXE FILE G0025 {
    meta:
-      description = "Detects a tiny SVG file that loads an URL (as seen in CryptoWall malware infections)"
+      description = "Detects Samples related to APT17 activity - file FXSST.DLL"
       author = "Florian Roth"
-      reference = "https://www.appriver.com/resources/blog"
-      date = "2015-05-24 08:43:21"
-      score = 50
+      reference = "https://www.fireeye.com/blog/threat-research/2015/05/hiding_in_plain_sigh.html"
+      date = "2015-05-14 11:09:21"
+      score = 75
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2024-07-19"
-      tags = "DEMO, EXPLOIT"
+      tags = "APT, DEMO, EXE, FILE, G0025"
       minimum_yara = "1.7"
       
    strings:
-      $s1 = "</svg>" nocase
-      $s2 = "<script>" nocase
-      $s3 = "location.href='http" nocase
+      $x1 = "Microsoft? Windows? Operating System" fullword wide
+      $x2 = "fxsst.dll" fullword ascii
+      $y1 = "DllRegisterServer" fullword ascii
+      $y2 = ".cSV" fullword ascii
+      $s1 = "GetLastActivePopup" 
+      $s2 = "Sleep" 
+      $s3 = "GetModuleFileName" 
+      $s4 = "VirtualProtect" 
+      $s5 = "HeapAlloc" 
+      $s6 = "GetProcessHeap" 
+      $s7 = "GetCommandLine" 
    condition: 
-      all of ( $s* ) and filesize < 600
+      uint16 ( 0 ) == 0x5a4d and filesize < 800KB and ( all of ( $x* ) or all of ( $y* ) ) and all of ( $s* )
 }
 
 rule MAL_PoisonIvy_Generic_3_RID2FA8 : DEMO EXE FILE GEN MAL {
@@ -60516,35 +60545,6 @@ rule MAL_PoisonIvy_Generic_3_RID2FA8 : DEMO EXE FILE GEN MAL {
       $h6 = "upload.asp" 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 500KB and ( $k1 or all of ( $s* ) or all of ( $h* ) )
-}
-
-rule APT17_Sample_FXSST_DLL_RID2E51 : APT DEMO EXE FILE G0025 {
-   meta:
-      description = "Detects Samples related to APT17 activity - file FXSST.DLL"
-      author = "Florian Roth"
-      reference = "https://www.fireeye.com/blog/threat-research/2015/05/hiding_in_plain_sigh.html"
-      date = "2015-05-14 11:09:21"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2024-07-19"
-      tags = "APT, DEMO, EXE, FILE, G0025"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "Microsoft? Windows? Operating System" fullword wide
-      $x2 = "fxsst.dll" fullword ascii
-      $y1 = "DllRegisterServer" fullword ascii
-      $y2 = ".cSV" fullword ascii
-      $s1 = "GetLastActivePopup" 
-      $s2 = "Sleep" 
-      $s3 = "GetModuleFileName" 
-      $s4 = "VirtualProtect" 
-      $s5 = "HeapAlloc" 
-      $s6 = "GetProcessHeap" 
-      $s7 = "GetCommandLine" 
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 800KB and ( all of ( $x* ) or all of ( $y* ) ) and all of ( $s* )
 }
 
 rule custom_ssh_backdoor_server_RID31F3 : DEMO HKTL SCRIPT T1021_004 T1059_006 {
@@ -64146,27 +64146,6 @@ rule Hacktools_CN_Burst_Start_RID3085 : CHINA DEMO SCRIPT SUSP {
       5 of them
 }
 
-rule Powershell_Netcat_RID2DF4 : DEMO SCRIPT T1059 T1059_001 {
-   meta:
-      description = "Detects a Powershell version of the Netcat network hacking tool"
-      author = "Florian Roth"
-      reference = "-"
-      date = "2014-10-10 10:53:51"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, SCRIPT, T1059, T1059_001"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "[ValidateRange(1, 65535)]" fullword
-      $s1 = "$Client = New-Object -TypeName System.Net.Sockets.TcpClient" fullword
-      $s2 = "$Buffer = New-Object -TypeName System.Byte[] -ArgumentList $Client.ReceiveBufferSize" fullword
-   condition: 
-      all of them
-}
-
 rule Webshell_and_Exploit_CN_APT_HK_RID3243 : APT CHINA DEMO EXPLOIT T1505_003 WEBSHELL Webshell {
    meta:
       description = "Webshell and Exploit Code in relation with APT against Honk Kong protesters"
@@ -64206,6 +64185,27 @@ rule JSP_Browser_APT_webshell_RID303A : APT DEMO SCRIPT T1505_003 WEBSHELL {
       $a1b = "cmd\", \"/C\"}; // Dos,Windows" ascii
       $a2 = "Process ls_proc = Runtime.getRuntime().exec(comm, null, new File(dir));" ascii
       $a3 = "ret.append(\"!!!! Process has timed out, destroyed !!!!!\");" ascii
+   condition: 
+      all of them
+}
+
+rule Powershell_Netcat_RID2DF4 : DEMO SCRIPT T1059 T1059_001 {
+   meta:
+      description = "Detects a Powershell version of the Netcat network hacking tool"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2014-10-10 10:53:51"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, SCRIPT, T1059, T1059_001"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "[ValidateRange(1, 65535)]" fullword
+      $s1 = "$Client = New-Object -TypeName System.Net.Sockets.TcpClient" fullword
+      $s2 = "$Buffer = New-Object -TypeName System.Byte[] -ArgumentList $Client.ReceiveBufferSize" fullword
    condition: 
       all of them
 }
@@ -74712,4 +74712,37 @@ rule HKTL_Amplia_Security_Tool_RID30AB : DEMO EXE HKTL SUSP T1003 {
       $f = "PPWDUMP_DATA" 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 3000KB and ( 2 of them ) or 3 of them
+}// Custom config, append this file to the updated file from download_yara_rules.py
+
+rule M_AES_Encrypted_payload {
+   meta:
+      author = "MAS"
+      reference = "https://www.mandiant.com/"
+      description = "This rule is desgined to detect on events that exhibits indicators of utilizing AES encryption for payload obfuscation."
+      target_entity = "Process"
+  strings:
+    $a = /(\$\w+\.Key(\s|)=((\s|)(\w+|));|\$\w+\.Key(\s|)=(\s|)\w+\('\w+'\);)/
+    $b = /\$\w+\.IV/
+    $c = /System\.Security\.Cryptography\.(AesManaged|Aes)/
+  condition:
+    all of them
+}
+
+rule M_Downloader_PEAKLIGHT_1 {
+   meta:
+      author = "MAS"
+      reference = "https://www.mandiant.com/"
+      description = "This rule is designed to detect events related to Peaklight. PEAKLIGHT is an obfuscated PowerShell-based downloader which checks for the presence of hard-coded filenames and downloads files from a remote CDN if the files are not present."
+      category = "Malware"
+   strings:
+      $str1 = /function\s{1,16}\w{1,32}\(\$\w{1,32},\s{1,4}\$\w{1,32}\)\{\[IO\.File\]::WriteAllBytes\(\$\w{1,32},\s{1,4}\$\w{1,32}\)\}/ ascii wide 
+      $str2 = /Expand-Archive\s{1,16}-Path\s{1,16}\$\w{1,32}\s{1,16}-DestinationPath/ ascii wide
+      $str3 = /\(\w{1,32}\s{1,4}@\((\d{3,6},){3,12}/ ascii wide
+      $str4 = ".DownloadData(" ascii wide
+      $str5 = "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::TLS12" ascii wide
+      $str6 = /\.EndsWith\(((["']\.zip["'])|(\(\w{1,32}\s{1,16}@\((\d{3,6},){3}\d{3,6}\)\)))/ ascii wide
+      $str7 = "Add -Type -Assembly System.IO.Compression.FileSystem" ascii wide
+     $str8 = "[IO.Compression.ZipFile]::OpenRead"
+   condition:
+     4 of them and filesize < 10KB         
 }
