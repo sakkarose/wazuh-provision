@@ -36,6 +36,7 @@ Current version: v4.11.1
 - Shuffle example workflows.
 - Grafana provisioning (Haven't decided between OpenSearch dashboard and Grafana).
 - Malware hash sample CDB lists automatic update
+- Remove debug snippet on Github Action
 
 ## How-to
 
