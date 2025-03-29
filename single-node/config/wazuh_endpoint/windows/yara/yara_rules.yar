@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-03-28 21:18
+    Retrieved: 2025-03-29 21:17
     Generated for User: demo
-    Number of Rules: 3209
+    Number of Rules: 3212
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "math"
 import "pe"
+import "math"
 
 rule SUSP_SVG_JS_Payload_Mar25_RID2FB6 : DEMO GEN SUSP {
    meta:
@@ -17864,30 +17864,6 @@ rule APT_MAL_LNX_RedMenshen_BPFDoor_Controller_May22_1_RID3890 : APT DEMO LINUX 
       $op4 = { c6 80 01 01 00 00 00 48 8b 45 c8 0f b6 90 01 01 00 00 48 8b 45 c8 88 90 00 01 00 00 c6 45 ef 00 0f b6 45 ef 88 45 ee } 
    condition: 
       uint16 ( 0 ) == 0x457f and filesize < 80KB and 2 of them or 5 of them
-}
-
-rule SUSP_EXPL_POC_VMWare_Workspace_ONE_CVE_2022_22954_Apr22_RID38C2 : CVE_2022_22954 DEMO EXPLOIT SUSP T1087_001 T1221 {
-   meta:
-      description = "Detects payload as seen in PoC code to exploit Workspace ONE Access freemarker server-side template injection CVE-2022-22954"
-      author = "Florian Roth"
-      reference = "https://github.com/sherlocksecurity/VMware-CVE-2022-22954"
-      date = "2022-04-08 18:34:51"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2023-04-28"
-      tags = "CVE_2022_22954, DEMO, EXPLOIT, SUSP, T1087_001, T1221"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "66%72%65%65%6d%61%72%6b%65%72%2e%74%65%6d%70%6c%61%74%65%2e%75%74%69%6c%69%74%79%2e%45%78%65%63%75%74%65%22%3f%6e%65%77%28%29%28" ascii
-      $x2 = "${\"freemarker.template.utility.Execute\"?new()(" 
-      $x3 = "cat /etc/passwd\")).(#execute=#instancemanager.newInstance(\"freemarker.template.utility.Execute" 
-      $x4 = "cat /etc/passwd\\\")).(#execute=#instancemanager.newInstance(\\\"freemarker.template.utility.Execute" 
-      $x5 = "cat /etc/shadow\")).(#execute=#instancemanager.newInstance(\"freemarker.template.utility.Execute" 
-      $x6 = "cat /etc/shadow\\\")).(#execute=#instancemanager.newInstance(\\\"freemarker.template.utility.Execute" 
-   condition: 
-      1 of them
 }
 
 rule EXPL_POC_SpringCore_0day_Indicators_Mar22_1_RID3695 : DEMO EXPLOIT SCRIPT T1033 {
@@ -39838,6 +39814,28 @@ rule Mimipenguin_SH_RID2C8D : DEMO HKTL LINUX SCRIPT T1003 {
       $s3 = "MimiPenguin Results:" ascii
    condition: 
       1 of them
+}
+
+rule Invoke_OSiRis_RID2C15 : DEMO SCRIPT T1059 T1059_001 {
+   meta:
+      description = "Osiris Device Guard Bypass - file Invoke-OSiRis.ps1"
+      author = "Florian Roth"
+      reference = "Internal Research"
+      date = "2017-03-27 09:34:01"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2025-03-21"
+      hash1 = "19e4a8b07f85c3d4c396d0c4e839495c9fba9405c06a631d57af588032d2416e"
+      tags = "DEMO, SCRIPT, T1059, T1059_001"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "$null = Iwmi Win32_Process -EnableA -Impers 3 -AuthenPacketprivacy -Name Create -Arg $ObfusK -Computer $Target" ascii wide
+      $x3 = "-Arg@{Name=$VarName;VariableValue=$OSiRis;UserName=$env:Username}" ascii wide
+      $x4 = "Device Guard Bypass Command Execution" ascii wide
+   condition: 
+      filesize < 8MB and 1 of them
 }
 
 rule WMImplant_RID2A8A : DEMO SCRIPT T1047 T1059 T1059_001 {
@@ -66616,6 +66614,28 @@ rule WebShell_b374k_php_RID2D98 : DEMO T1505_003 WEBSHELL {
       3 of them
 }
 
+rule WEBSHELL_H4ntu_Shell_Powered_Tsoi_2_RID33B4 : DEMO SCRIPT T1033 T1505_003 WEBSHELL {
+   meta:
+      description = "PHP Webshells Github Archive - file h4ntu shell [powered by tsoi].php"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2014-04-06 14:59:11"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2025-03-21"
+      tags = "DEMO, SCRIPT, T1033, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "<title>h4ntu shell [powered by tsoi]</title>" fullword
+      $s2 = "$uname = posix_uname( );" fullword
+      $s3 = "if(!$whoami)$whoami=exec(\"whoami\");" fullword
+      $s4 = "echo \"<p><font size=2 face=Verdana><b>This Is The Server Information</b></font>" 
+   condition: 
+      filesize < 2MB and 2 of them
+}
+
 rule WebShell_php_webshells_MyShell_RID3313 : DEMO T1505_003 WEBSHELL {
    meta:
       description = "PHP Webshells Github Archive - file MyShell.php"
@@ -69426,6 +69446,26 @@ rule Webshell_cmdjsp_jsp_RID2ED3 : DEMO T1505_003 WEBSHELL {
       $s3 = "michaeldaw.org" fullword
    condition: 
       2 of them
+}
+
+rule WEBSHELL_H4ntu_Shell_Powered_Tsoi_RID3323 : DEMO SCRIPT T1505_003 WEBSHELL {
+   meta:
+      description = "Semi-Auto-generated - file h4ntu shell [powered by tsoi].txt"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2014-03-29 14:35:01"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2025-03-21"
+      tags = "DEMO, SCRIPT, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "<title>h4ntu shell" 
+      $x2 = "system(\"$cmd 1> /tmp/cmdtemp 2>&1; cat /tmp/cmdtemp; rm /tmp/cmdtemp\");" 
+   condition: 
+      filesize < 100KB and 1 of them
 }
 
 rule Webshell_MySQL_Web_Interface_Version_0_8_php_RID37DB : DEMO T1505_003 WEBSHELL {
@@ -72924,6 +72964,27 @@ rule Webshell_asp_Ajan_RID2DC3 : DEMO SCRIPT T1505_003 WEBSHELL {
       $s3 = "entrika.write \"BinaryStream.SaveToFile \"\"c:\\downloaded.zip\"\", adSaveCreate" 
    condition: 
       all of them
+}
+
+rule WEBSHELL_H4ntu_Shell_Powered_Tsoi_3_RID33B5 : DEMO SCRIPT T1505_003 WEBSHELL {
+   meta:
+      description = "Web Shell - file h4ntu shell powered by tsoi.php"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2014-01-28 14:59:21"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2025-03-21"
+      tags = "DEMO, SCRIPT, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "  <TD><DIV STYLE=\"font-family: verdana; font-size: 10px;\"><b>Server Adress:</b" 
+      $s3 = "  <TD><DIV STYLE=\"font-family: verdana; font-size: 10px;\"><b>User Info:</b> ui" 
+      $s4 = "    <TD><DIV STYLE=\"font-family: verdana; font-size: 10px;\"><?= $info ?>: <?= " 
+   condition: 
+      2 of them
 }
 
 rule Webshell_PHP_a_RID2C4E : DEMO SCRIPT T1505_003 WEBSHELL {
