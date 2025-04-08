@@ -3,7 +3,7 @@ version: '3.7'
 
 services:
   wazuh.manager:
-    image: wazuh/wazuh-manager:4.11.1
+    image: wazuh/wazuh-manager:4.11.2
     hostname: wazuh.manager
     restart: always
     ulimits:
@@ -51,7 +51,7 @@ services:
 #     - ./config/wazuh_endpoint/linux/agent_config:/var/ossec/etc/shared/linux
 
   wazuh.indexer:
-    image: wazuh/wazuh-indexer:4.11.1
+    image: wazuh/wazuh-indexer:4.11.2
     hostname: wazuh.indexer
     restart: always
     ports:
@@ -76,7 +76,7 @@ services:
       - ./config/wazuh_indexer/internal_users.yml:/usr/share/wazuh-indexer/opensearch-security/internal_users.yml
 
   wazuh.dashboard:
-    image: wazuh/wazuh-dashboard:4.11.1
+    image: wazuh/wazuh-dashboard:4.11.2
     hostname: wazuh.dashboard
     restart: always
     ports:
