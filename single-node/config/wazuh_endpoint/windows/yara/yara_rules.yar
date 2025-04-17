@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-04-16 21:18
+    Retrieved: 2025-04-17 21:19
     Generated for User: demo
-    Number of Rules: 3211
+    Number of Rules: 3210
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "pe"
 import "math"
+import "pe"
 
 rule SUSP_SVG_JS_Payload_Mar25_RID2FB6 : DEMO GEN SUSP {
    meta:
@@ -15533,28 +15533,6 @@ rule APT_MAL_UNC4841_SEASPY_LUA_Jun23_1_RID313B : APT DEMO MAL SCRIPT {
       $xe2 = "log.debug(\"--- opening archive [%s], mimetype [%s]\", tmpfile" ascii base64
    condition: 
       filesize < 500KB and 1 of them
-}
-
-rule APT_HKTL_Proxy_Tool_Jun23_1_RID3087 : APT DEMO EXE FILE HKTL T1090 {
-   meta:
-      description = "Detects agent used as proxy tool in UNC4841 intrusions - possibly Alchemist C2 framework implant"
-      author = "Florian Roth"
-      reference = "https://www.mandiant.com/resources/blog/barracuda-esg-exploited-globally"
-      date = "2023-06-16 12:43:41"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "ca72fa64ed0a9c22d341a557c6e7c1b6a7264b0c4de0b6f717dd44bddf550bca"
-      hash2 = "57e4b180fd559f15b59c43fb3335bd59435d4d76c4676e51a06c6b257ce67fb2"
-      tags = "APT, DEMO, EXE, FILE, HKTL, T1090"
-      minimum_yara = "3.2.0"
-      
-   strings:
-      $a2 = "/src/runtime/panic.go" 
-      $s1 = "main.handleClientRequest" ascii fullword
-      $s2 = "main.sockIP.toAddr" ascii fullword
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d or uint32be ( 0 ) == 0x7f454c46 or uint16 ( 0 ) == 0xfeca or uint16 ( 0 ) == 0xfacf or uint32 ( 0 ) == 0xbebafeca or uint32 ( 0 ) == 0xbebafeca ) and filesize < 10MB and all of them
 }
 
 rule MAL_Compromised_Cert_DuckTail_Stealer_Jun23_RID3749 : DEMO EXE FILE MAL {
