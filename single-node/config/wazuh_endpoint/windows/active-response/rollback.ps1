@@ -49,6 +49,9 @@ try {
     # Extract the shadow copy volume path using Select-String
     $ShadowCopyVolumes = C:\Windows\SysNative\WindowsPowerShell\v1.0\powershell.exe -c "Get-WmiObject -Query 'SELECT * FROM Win32_ShadowCopy' | Select-Object -ExpandProperty DeviceObject"
 
+    # In case of manually active the script
+    #$ShadowCopyVolumes = cmd /c vssadmin list shadows | Select-String -Pattern 'Shadow Copy Volume:\s*(.+)' | ForEach-Object { $_.Matches.Groups[1].Value.Trim() }
+
     if ($ShadowCopyVolumes.Count -gt 0) {
         $ShadowCopyVolume = $ShadowCopyVolumes[-1]  # Select the last shadow copy volume
         Log-Message "Latest Shadow Copy Volume found: $ShadowCopyVolume"
