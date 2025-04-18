@@ -37,6 +37,7 @@ Current version: v4.11.2
 - Grafana provisioning (Haven't decided between OpenSearch dashboard and Grafana).
 - Malware hash sample CDB lists automatic update
 - Remove debug snippet on Github Action
+- Velociraptor integration with SIGMA rules
 
 ## How-to
 

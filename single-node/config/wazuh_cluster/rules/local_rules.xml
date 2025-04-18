@@ -12,7 +12,6 @@
     <field name="file" type="pcre2">(?i)C:\\Users.+Downloads</field>
     <description>File modified in the Downloads folder.</description>
   </rule>
-
 <!-- File modified in the Downloads folder -->
   <rule id="100011" level="7">
     <if_sid>554</if_sid>
@@ -27,8 +26,6 @@
     <decoded_as>yara_decoder</decoded_as>
     <description>Yara grouping rule</description>
   </rule>
-
-
 <!--  YARA scan detects a positive match -->
   <rule id="100013" level="7">
     <if_sid>100012</if_sid>
@@ -40,12 +37,11 @@
     <match type="pcre2">wazuh-yara: INFO - Successfully deleted: </match>
     <description>Active Response: Successfully removed "$(yara_scanned_file)". YARA rule: $(yara_rule)</description>
   </rule>
-
 <!--  Wazuh encounters an error when deleting malware with a positive match -->
   <rule id="100015" level="12">
     <if_sid>100012</if_sid>
     <match type="pcre2">wazuh-yara: INFO - Error removing threat: </match>
-<description>Active Response: Error removing "$(yara_scanned_file)". YARA rule: $(yara_rule)</description>
+    <description>Active Response: Error removing "$(yara_scanned_file)". YARA rule: $(yara_rule)</description>
   </rule>
 </group>
 
@@ -54,5 +50,51 @@
   <rule id="100105" level="5">
     <field name="rollback_status">completed</field>
     <description>Wazuh_Ransomware_Protection: Files restored successfully.</description>
+  </rule>
+</group>
+
+<!--  Sosano Backdoor -->
+<group name="sosano,">
+  <rule id="110111" level="13">
+    <if_sid>554, 550</if_sid>
+    <list field="sha256" lookup="match_key">etc/lists/malware-hashes</list>
+    <description>A known Sosano backdoor malware hash detected: $(file)</description>
+    <mitre>
+      <id>T1204.002</id>
+    </mitre>
+  </rule>
+  <rule id="110112" level="12">
+    <if_sid>657</if_sid>
+      <match>Successfully removed threat</match>
+      <description>$(parameters.program): Successfully removed threat $(parameters.alert.syscheck.path) whose hash appears in a malware blacklist.</description>
+  </rule>
+  <rule id="110113" level="12">
+    <if_sid>657</if_sid>
+      <match>Error removing threat</match>
+      <description>$(parameters.program): Error removing threat $(parameters.alert.syscheck.path) whose hash appears in a malware blacklist.</description>
+  </rule>
+</group>
+
+<!-- Impacket Scripts -->
+<group name="impacket,">
+  <rule id="110010" level="12">
+    <if_sid>92069,92052</if_sid>
+    <field name="win.eventdata.parentimage" type="pcre2">(?i)\\wmiprvse\.exe$|\\mmc\.exe$|\\explorer\.exe$|\\services\.exe$</field>
+    <field name="win.eventdata.commandline" type="pcre2">(?i)cmd\.exe \/Q \/c</field>
+    <description>Suspicious remote command execution via $(win.eventdata.parentimage).</description>
+    <mitre>
+      <id>T1047</id>
+      <id>T1021.003</id>
+    </mitre>
+  </rule>
+
+  <rule id="110011" level="8">
+    <if_sid>61613</if_sid>
+    <field name="win.eventdata.image" type="pcre2">(?i)\\svchost\.exe$</field>
+    <field name="win.eventdata.targetfilename" type="pcre2">(?i)\\Windows\\\\*System32\\\\*\w{8}\.tmp$|\\Windows\\\\*temp\\\\*\w{8}\.tmp$</field>
+    <description>Possible attempt to dump credentials. svchost.exe created a temporary file $(win.eventdata.targetfilename).</description>
+    <mitre>
+      <id>T1003</id>
+    </mitre>
   </rule>
 </group>
