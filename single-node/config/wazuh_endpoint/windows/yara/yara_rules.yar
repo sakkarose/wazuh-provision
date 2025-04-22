@@ -1,6 +1,6 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-04-21 21:18
+    Retrieved: 2025-04-22 21:18
     Generated for User: demo
     Number of Rules: 3210
     
@@ -24460,7 +24460,7 @@ rule APT_RANCOR_DDKONG_Malware_Exports_RID32AC : APT DEMO EXE FILE G0075 {
       uint16 ( 0 ) == 0x5a4d and pe.exports ( "ServiceMain" ) and pe.exports ( "Rundll32Call" ) and pe.exports ( "DllEntryPoint" ) and pe.number_of_exports == 3
 }
 
-rule APT_Thrip_Sample_Jun18_1_RID2FA2 : APT DEMO EXE FILE G0076 {
+rule APT_Thrip_Sample_Jun18_1_RID2FA2 : APT DEMO EXE FILE G0030 G0076 {
    meta:
       description = "Detects sample found in Thrip report by Symantec "
       author = "Florian Roth"
@@ -24470,7 +24470,7 @@ rule APT_Thrip_Sample_Jun18_1_RID2FA2 : APT DEMO EXE FILE G0076 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "59509a17d516813350fe1683ca6b9727bd96dd81ce3435484a5a53b472ff4ae9"
-      tags = "APT, DEMO, EXE, FILE, G0076"
+      tags = "APT, DEMO, EXE, FILE, G0030, G0076"
       minimum_yara = "1.7"
       
    strings:
@@ -24482,7 +24482,7 @@ rule APT_Thrip_Sample_Jun18_1_RID2FA2 : APT DEMO EXE FILE G0076 {
       uint16 ( 0 ) == 0x5a4d and filesize < 200KB and all of them
 }
 
-rule APT_Thrip_Sample_Jun18_2_RID2FA3 : APT DEMO EXE FILE G0076 {
+rule APT_Thrip_Sample_Jun18_2_RID2FA3 : APT DEMO EXE FILE G0030 G0076 {
    meta:
       description = "Detects sample found in Thrip report by Symantec "
       author = "Florian Roth"
@@ -24492,7 +24492,7 @@ rule APT_Thrip_Sample_Jun18_2_RID2FA3 : APT DEMO EXE FILE G0076 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "1fc9f7065856cd8dc99b6f46cf0953adf90e2c42a3b65374bf7b50274fb200cc"
-      tags = "APT, DEMO, EXE, FILE, G0076"
+      tags = "APT, DEMO, EXE, FILE, G0030, G0076"
       minimum_yara = "1.7"
       
    strings:
@@ -24503,7 +24503,7 @@ rule APT_Thrip_Sample_Jun18_2_RID2FA3 : APT DEMO EXE FILE G0076 {
       uint16 ( 0 ) == 0x5a4d and filesize < 60KB and all of them
 }
 
-rule APT_Thrip_Sample_Jun18_3_RID2FA4 : APT DEMO EXE FILE G0076 {
+rule APT_Thrip_Sample_Jun18_3_RID2FA4 : APT DEMO EXE FILE G0030 G0076 {
    meta:
       description = "Detects sample found in Thrip report by Symantec "
       author = "Florian Roth"
@@ -24513,7 +24513,7 @@ rule APT_Thrip_Sample_Jun18_3_RID2FA4 : APT DEMO EXE FILE G0076 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "0d2abdcaad99e102fdf6574b3dc90f17cb9d060c20e6ac4ff378875d3b91a840"
-      tags = "APT, DEMO, EXE, FILE, G0076"
+      tags = "APT, DEMO, EXE, FILE, G0030, G0076"
       minimum_yara = "1.7"
       
    strings:
@@ -24523,7 +24523,7 @@ rule APT_Thrip_Sample_Jun18_3_RID2FA4 : APT DEMO EXE FILE G0076 {
       uint16 ( 0 ) == 0x5a4d and filesize < 60KB and all of them
 }
 
-rule APT_Thrip_Sample_Jun18_4_RID2FA5 : APT DEMO EXE FILE G0076 {
+rule APT_Thrip_Sample_Jun18_4_RID2FA5 : APT DEMO EXE FILE G0030 G0076 {
    meta:
       description = "Detects sample found in Thrip report by Symantec "
       author = "Florian Roth"
@@ -24533,7 +24533,7 @@ rule APT_Thrip_Sample_Jun18_4_RID2FA5 : APT DEMO EXE FILE G0076 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "6b236d3fc54d36e6dc2a26299f6ded597058fed7c9099f1a37716c5e4b162abc"
-      tags = "APT, DEMO, EXE, FILE, G0076"
+      tags = "APT, DEMO, EXE, FILE, G0030, G0076"
       minimum_yara = "1.7"
       
    strings:
@@ -24550,7 +24550,7 @@ rule APT_Thrip_Sample_Jun18_4_RID2FA5 : APT DEMO EXE FILE G0076 {
       uint16 ( 0 ) == 0x5a4d and filesize < 400KB and 5 of them
 }
 
-rule APT_Thrip_Sample_Jun18_5_RID2FA6 : APT DEMO EXE FILE G0076 {
+rule APT_Thrip_Sample_Jun18_5_RID2FA6 : APT DEMO EXE FILE G0030 G0076 {
    meta:
       description = "Detects sample found in Thrip report by Symantec "
       author = "Florian Roth"
@@ -24560,7 +24560,7 @@ rule APT_Thrip_Sample_Jun18_5_RID2FA6 : APT DEMO EXE FILE G0076 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "32889639a27961497d53176765b3addf9fff27f1c8cc41634a365085d6d55920"
-      tags = "APT, DEMO, EXE, FILE, G0076"
+      tags = "APT, DEMO, EXE, FILE, G0030, G0076"
       minimum_yara = "1.7"
       
    strings:
@@ -24570,7 +24570,7 @@ rule APT_Thrip_Sample_Jun18_5_RID2FA6 : APT DEMO EXE FILE G0076 {
       uint16 ( 0 ) == 0x5a4d and filesize < 200KB and all of them
 }
 
-rule APT_Thrip_Sample_Jun18_6_RID2FA7 : APT DEMO EXE FILE G0076 {
+rule APT_Thrip_Sample_Jun18_6_RID2FA7 : APT DEMO EXE FILE G0030 G0076 {
    meta:
       description = "Detects sample found in Thrip report by Symantec "
       author = "Florian Roth"
@@ -24580,7 +24580,7 @@ rule APT_Thrip_Sample_Jun18_6_RID2FA7 : APT DEMO EXE FILE G0076 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "44f58496578e55623713c4290abb256d03103e78e99939daeec059776bd79ee2"
-      tags = "APT, DEMO, EXE, FILE, G0076"
+      tags = "APT, DEMO, EXE, FILE, G0030, G0076"
       minimum_yara = "1.7"
       
    strings:
@@ -24589,7 +24589,7 @@ rule APT_Thrip_Sample_Jun18_6_RID2FA7 : APT DEMO EXE FILE G0076 {
       uint16 ( 0 ) == 0x5a4d and filesize < 100KB and 1 of them
 }
 
-rule APT_Thrip_Sample_Jun18_7_RID2FA8 : APT DEMO EXE FILE G0076 {
+rule APT_Thrip_Sample_Jun18_7_RID2FA8 : APT DEMO EXE FILE G0030 G0076 {
    meta:
       description = "Detects sample found in Thrip report by Symantec "
       author = "Florian Roth"
@@ -24599,7 +24599,7 @@ rule APT_Thrip_Sample_Jun18_7_RID2FA8 : APT DEMO EXE FILE G0076 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "6b714dc1c7e58589374200d2c7f3d820798473faeb26855e53101b8f3c701e3f"
-      tags = "APT, DEMO, EXE, FILE, G0076"
+      tags = "APT, DEMO, EXE, FILE, G0030, G0076"
       minimum_yara = "1.7"
       
    strings:
@@ -24608,7 +24608,7 @@ rule APT_Thrip_Sample_Jun18_7_RID2FA8 : APT DEMO EXE FILE G0076 {
       uint16 ( 0 ) == 0x5a4d and filesize < 60KB and 1 of them
 }
 
-rule APT_Thrip_Sample_Jun18_8_RID2FA9 : APT DEMO G0076 {
+rule APT_Thrip_Sample_Jun18_8_RID2FA9 : APT DEMO G0030 G0076 {
    meta:
       description = "Detects sample found in Thrip report by Symantec "
       author = "Florian Roth"
@@ -24618,7 +24618,7 @@ rule APT_Thrip_Sample_Jun18_8_RID2FA9 : APT DEMO G0076 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "0f2d09b1ad0694f9e71eeebec5b2d137665375bf1e76cb4ae4d7f20487394ed3"
-      tags = "APT, DEMO, G0076"
+      tags = "APT, DEMO, G0030, G0076"
       minimum_yara = "1.7"
       
    strings:
@@ -24629,7 +24629,7 @@ rule APT_Thrip_Sample_Jun18_8_RID2FA9 : APT DEMO G0076 {
       filesize < 10KB and 1 of ( $x* )
 }
 
-rule APT_Thrip_Sample_Jun18_9_RID2FAA : APT DEMO EXE FILE G0076 {
+rule APT_Thrip_Sample_Jun18_9_RID2FAA : APT DEMO EXE FILE G0030 G0076 {
    meta:
       description = "Detects sample found in Thrip report by Symantec "
       author = "Florian Roth"
@@ -24641,7 +24641,7 @@ rule APT_Thrip_Sample_Jun18_9_RID2FAA : APT DEMO EXE FILE G0076 {
       hash1 = "8e6682bcc51643f02a864b042f7223b157823f3d890fe21d38caeb43500d923e"
       hash2 = "0c8ca0fd0ec246ef207b96a3aac5e94c9c368504905b0a033f11eef8c62fa14c"
       hash3 = "6d0a2c822e2bc37cc0cec35f040d3fec5090ef2775df658d3823e47a93a5fef3"
-      tags = "APT, DEMO, EXE, FILE, G0076"
+      tags = "APT, DEMO, EXE, FILE, G0030, G0076"
       required_modules = "pe"
       minimum_yara = "3.2.0"
       
@@ -24649,7 +24649,7 @@ rule APT_Thrip_Sample_Jun18_9_RID2FAA : APT DEMO EXE FILE G0076 {
       uint16 ( 0 ) == 0x5a4d and filesize < 100KB and ( pe.imphash ( ) == "a7f0714e82b3105031fa7bc89dfe7664" or pe.imphash ( ) == "8812ff21aeb160e8800257140acae54b" or pe.imphash ( ) == "44a1e904763fe2d0837c747c7061b010" or pe.imphash ( ) == "51a854d285aa12eb82e76e6e1be01573" or pe.imphash ( ) == "a1f457c8c549c5c430556bfe5887a4e6" )
 }
 
-rule APT_Thrip_Sample_Jun18_11_RID2FD3 : APT DEMO EXE FILE G0076 {
+rule APT_Thrip_Sample_Jun18_11_RID2FD3 : APT DEMO EXE FILE G0030 G0076 {
    meta:
       description = "Detects sample found in Thrip report by Symantec "
       author = "Florian Roth"
@@ -24659,7 +24659,7 @@ rule APT_Thrip_Sample_Jun18_11_RID2FD3 : APT DEMO EXE FILE G0076 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "590a6796b97469f8e6977832a63c0964464901f075a9651f7f1b4578e55bd8c8"
-      tags = "APT, DEMO, EXE, FILE, G0076"
+      tags = "APT, DEMO, EXE, FILE, G0030, G0076"
       required_modules = "pe"
       minimum_yara = "3.2.0"
       
@@ -24674,7 +24674,7 @@ rule APT_Thrip_Sample_Jun18_11_RID2FD3 : APT DEMO EXE FILE G0076 {
       uint16 ( 0 ) == 0x5a4d and filesize < 100KB and ( pe.imphash ( ) == "6eef4394490378f32d134ab3bf4bf194" or all of them )
 }
 
-rule APT_Thrip_Sample_Jun18_13_RID2FD5 : APT DEMO EXE FILE G0076 {
+rule APT_Thrip_Sample_Jun18_13_RID2FD5 : APT DEMO EXE FILE G0030 G0076 {
    meta:
       description = "Detects sample found in Thrip report by Symantec "
       author = "Florian Roth"
@@ -24684,7 +24684,7 @@ rule APT_Thrip_Sample_Jun18_13_RID2FD5 : APT DEMO EXE FILE G0076 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "780620521c92aab3d592b3dc149cbf58751ea285cfdaa50510002b441796b312"
-      tags = "APT, DEMO, EXE, FILE, G0076"
+      tags = "APT, DEMO, EXE, FILE, G0030, G0076"
       required_modules = "pe"
       minimum_yara = "3.2.0"
       
@@ -24698,7 +24698,7 @@ rule APT_Thrip_Sample_Jun18_13_RID2FD5 : APT DEMO EXE FILE G0076 {
       uint16 ( 0 ) == 0x5a4d and filesize < 500KB and ( pe.imphash ( ) == "3dfad33b2fb66c083c99dc10341908b7" or 4 of them )
 }
 
-rule APT_Thrip_Sample_Jun18_14_RID2FD6 : APT DEMO EXE FILE G0076 {
+rule APT_Thrip_Sample_Jun18_14_RID2FD6 : APT DEMO EXE FILE G0030 G0076 {
    meta:
       description = "Detects sample found in Thrip report by Symantec "
       author = "Florian Roth"
@@ -24708,7 +24708,7 @@ rule APT_Thrip_Sample_Jun18_14_RID2FD6 : APT DEMO EXE FILE G0076 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "67dd44a8fbf6de94c4589cf08aa5757b785b26e49e29488e9748189e13d90fb3"
-      tags = "APT, DEMO, EXE, FILE, G0076"
+      tags = "APT, DEMO, EXE, FILE, G0030, G0076"
       required_modules = "pe"
       minimum_yara = "3.0.0"
       
@@ -24722,7 +24722,7 @@ rule APT_Thrip_Sample_Jun18_14_RID2FD6 : APT DEMO EXE FILE G0076 {
       uint16 ( 0 ) == 0x5a4d and filesize < 200KB and ( ( pe.exports ( "InstallA" ) and pe.exports ( "InstallB" ) and pe.exports ( "InstallC" ) ) or all of them )
 }
 
-rule APT_Thrip_Sample_Jun18_10_RID2FD2 : APT DEMO EXE FILE G0076 {
+rule APT_Thrip_Sample_Jun18_10_RID2FD2 : APT DEMO EXE FILE G0030 G0076 {
    meta:
       description = "Detects sample found in Thrip report by Symantec "
       author = "Florian Roth"
@@ -24732,7 +24732,7 @@ rule APT_Thrip_Sample_Jun18_10_RID2FD2 : APT DEMO EXE FILE G0076 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "350d2a6f8e6a4969ffbf75d9f9aae99e7b3a8cd8708fd66f977e07d7fbf842e3"
-      tags = "APT, DEMO, EXE, FILE, G0076"
+      tags = "APT, DEMO, EXE, FILE, G0030, G0076"
       minimum_yara = "1.7"
       
    strings:
@@ -24744,7 +24744,7 @@ rule APT_Thrip_Sample_Jun18_10_RID2FD2 : APT DEMO EXE FILE G0076 {
       uint16 ( 0 ) == 0x5a4d and filesize < 200KB and ( $x1 or 2 of them )
 }
 
-rule APT_Thrip_Sample_Jun18_16_RID2FD8 : APT DEMO EXE FILE G0076 {
+rule APT_Thrip_Sample_Jun18_16_RID2FD8 : APT DEMO EXE FILE G0030 G0076 {
    meta:
       description = "Detects sample found in Thrip report by Symantec "
       author = "Florian Roth"
@@ -24754,7 +24754,7 @@ rule APT_Thrip_Sample_Jun18_16_RID2FD8 : APT DEMO EXE FILE G0076 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "2b1c1c6d82837dbbccd171a0413c1d761b1f7c3668a21c63ca06143e731f030e"
-      tags = "APT, DEMO, EXE, FILE, G0076"
+      tags = "APT, DEMO, EXE, FILE, G0030, G0076"
       required_modules = "pe"
       minimum_yara = "3.2.0"
       
@@ -24766,7 +24766,7 @@ rule APT_Thrip_Sample_Jun18_16_RID2FD8 : APT DEMO EXE FILE G0076 {
       uint16 ( 0 ) == 0x5a4d and filesize < 200KB and ( all of them or pe.imphash ( ) == "c6a4c95d868a3327a62c9c45f5e15bbf" )
 }
 
-rule APT_Thrip_Sample_Jun18_17_RID2FD9 : APT DEMO EXE FILE G0076 {
+rule APT_Thrip_Sample_Jun18_17_RID2FD9 : APT DEMO EXE FILE G0030 G0076 {
    meta:
       description = "Detects sample found in Thrip report by Symantec "
       author = "Florian Roth"
@@ -24778,7 +24778,7 @@ rule APT_Thrip_Sample_Jun18_17_RID2FD9 : APT DEMO EXE FILE G0076 {
       hash1 = "05036de73c695f59adf818d3c669c48ce8626139d463b8a7e869d8155e5c0d85"
       hash2 = "08d8c610e1ec4a02364cb53ba44e3ca5d46e8a177a0ecd50a1ef7b5db252701d"
       hash3 = "14535607d9a7853f13e8bf63b629e3a19246ed9db6b4d2de2ca85ec7a7bee140"
-      tags = "APT, DEMO, EXE, FILE, G0076"
+      tags = "APT, DEMO, EXE, FILE, G0030, G0076"
       minimum_yara = "1.7"
       
    strings:
@@ -24795,7 +24795,7 @@ rule APT_Thrip_Sample_Jun18_17_RID2FD9 : APT DEMO EXE FILE G0076 {
       uint16 ( 0 ) == 0x5a4d and filesize < 20KB and ( 1 of ( $x* ) and 1 of ( $s* ) )
 }
 
-rule APT_Thrip_Sample_Jun18_18_RID2FDA : APT DEMO EXE FILE G0076 {
+rule APT_Thrip_Sample_Jun18_18_RID2FDA : APT DEMO EXE FILE G0030 G0076 {
    meta:
       description = "Detects sample found in Thrip report by Symantec "
       author = "Florian Roth"
@@ -24807,7 +24807,7 @@ rule APT_Thrip_Sample_Jun18_18_RID2FDA : APT DEMO EXE FILE G0076 {
       hash1 = "33029f5364209e05481cfb2a4172c6dc157b0070f51c05dd34485b8e8da6e820"
       hash2 = "263c01a3b822722dc288a5ac138d953630d8c548a0bee080ae3979b7d364cecb"
       hash3 = "52d190a8d20b4845551b8765cbd12cfbe04cf23e6812e238e5a5023c34ee9b37"
-      tags = "APT, DEMO, EXE, FILE, G0076"
+      tags = "APT, DEMO, EXE, FILE, G0030, G0076"
       minimum_yara = "1.7"
       
    strings:
