@@ -7,8 +7,8 @@
 # License (version 2) as published by the FSF - Free Software
 # Foundation
 policy:
-  id: "Snake_keylogger"
-  file: "snake_keylogger_check.yml"
+  id: "Snake_trojan"
+  file: "trojan_snake.yml"
   name: "Snake keylogger Windows OS check"
   description: "Detecting Snake keylogger"
 
