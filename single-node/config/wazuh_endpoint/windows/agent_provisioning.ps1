@@ -53,7 +53,7 @@ if (-Not (Test-Path -Path "$sysmonPath")) {
 Copy-Item -Path "$PSScriptRoot\Sysmon64.exe" -Destination "$sysmonPath\Sysmon64.exe"
 
 # Copy configuration file
-Copy-Item -Path "$PSScriptRoot\sysmonconfig.xml" -Destination "$sysmonPath\sysmonconfig.xml"
+Copy-Item -Path "$PSScriptRoot\sysmon\sysmonconfig.xml" -Destination "$sysmonPath\sysmonconfig.xml"
 
 # Start Sysmon with configuration
 Start-Process -FilePath "$sysmonPath\Sysmon64.exe" -ArgumentList "/accepteula -i $sysmonPath\sysmonconfig.xml" -NoNewWindow -Wait
