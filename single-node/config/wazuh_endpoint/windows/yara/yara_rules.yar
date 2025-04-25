@@ -1,6 +1,6 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-04-24 21:19
+    Retrieved: 2025-04-25 21:19
     Generated for User: demo
     Number of Rules: 3210
     
@@ -74837,4 +74837,39 @@ rule BLX_Stealer_rule {
     condition:
         (all of ($str*) or any of ($blx_stealer_network*) or any of ($blx_stealer_hash*))
 
+}
+
+/* Medusa ransomware */
+
+rule Medusa_ransomware {
+   meta:
+      description = "Medusa Ransomware"
+      author = "Obinna Uchubilo"
+      reference = "https://github.com/Neo23x0/yarGen"
+      date = "2025-04-16"
+      hash1 = "3a6d5694eec724726efa3327a50fad3efdc623c08d647b51e51cd578bddda3da"
+   strings:
+      $s1 = "api-ms-win-core-synch-l1-2-0.dll" fullword wide /* reversed goodware string 'lld.0-2-1l-hcnys-eroc-niw-sm-ipa' */
+      $s2 = "powershell -executionpolicy bypass -File %s" fullword ascii
+      $s3 = "powershell -Command \"& {%s}\"" fullword ascii
+      $s4 = "cmd /c ping localhost -n 3 > nul & del %s" fullword ascii
+      $s5 = "AppPolicyGetProcessTerminationMethod" fullword ascii
+      $s6 = "preprocess" fullword ascii
+      $s7 = "G:\\Medusa\\Release\\gaze.pdb" fullword ascii
+      $s8 = "kill_processes %s" fullword ascii
+      $s9 = "        <requestedExecutionLevel level='asInvoker' uiAccess='false' />" fullword ascii
+      $s10 = "load_encryption_key:File open error" fullword ascii
+      $s11 = "kill_services processes" fullword ascii
+      $s12 = ":do not use preprocess" fullword ascii
+      $s13 = "encrypt system" fullword ascii
+      $s14 = "VVVQVP" fullword ascii /* reversed goodware string 'PVQVVV' */
+      $s15 = ": option requires an argument -- " fullword ascii
+      $s16 = "File is already encrypted." fullword ascii
+      $s17 = ": illegal option -- " fullword ascii
+      $s18 = "AppPolicyGetThreadInitializationType" fullword ascii
+      $s19 = "encrypt %d %ls %ld" fullword wide
+      $s20 = "KVK.xKKOCmOZOBAI}XM.clk@J^AG@ZoIK@Z.c}}" fullword ascii
+   condition:
+      uint16(0) == 0x5a4d and filesize < 2000KB and
+      8 of them
 }
