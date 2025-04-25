@@ -22,6 +22,7 @@ Current version: v4.11.2
     - CDB lists
     - Decoders
     - Rules
+    - SCA Policies
 - Windows agent provisioning.
     - Setup Sysmon
     - Setup YARA & rules
