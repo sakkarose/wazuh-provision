@@ -32,6 +32,7 @@ Current version: v4.11.2
 ### To-do
 
 - Provisioning for AIO setup
+- API setup script
 - Shuffle worker provisioning.
 - Shuffle example workflows.
 - Grafana provisioning (Haven't decided between OpenSearch dashboard and Grafana).
