@@ -1,6 +1,7 @@
 $ossecPath = "C:\Program Files (x86)\ossec-agent"
 $sysmonPath = "$ossecPath\sysmon"
 $yaraPath = "$ossecPath\active-response\bin\yara"
+$scaPath = "C:\Program Files (x86)\wazuh_sca"
 
 $sysmonUrl = "https://download.sysinternals.com/files/Sysmon.zip"
 $yaraUrl = "https://github.com/VirusTotal/yara/releases/download/v4.5.2/yara-v4.5.2-2326-win64.zip"
@@ -87,6 +88,14 @@ Enable-PSLogging
 
 # Active-response provisioning
 Copy-Item -Path "$PSScriptRoot\active-response\*" -Destination "$ossecPath\active-response\bin\" -Recurse
+
+# Create the SCA rules directory
+if (-Not (Test-Path -Path "$scaPath")) {
+    New-Item -ItemType Directory -Path "$scaPath"
+}
+
+# Copy the SCA rules to the new directory
+Copy-Item -Path "$PSScriptRoot\policies\*" -Destination "$scaPath" -Recurse
 
 # Print a message asking the user to restart the computer
 Write-Host "Provisioning completed. Please restart your computer to apply all changes."
