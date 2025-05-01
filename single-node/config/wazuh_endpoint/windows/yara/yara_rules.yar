@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-04-30 21:18
+    Retrieved: 2025-05-01 21:18
     Generated for User: demo
     Number of Rules: 3213
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "math"
 import "pe"
+import "math"
 
 rule APT_SAP_NetWeaver_Exploitation_Activity_Apr25_1_RID38AD : APT CVE_2025_31324 DEMO SCRIPT {
    meta:
