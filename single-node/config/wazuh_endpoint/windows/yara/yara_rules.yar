@@ -1,6 +1,6 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-05-01 21:18
+    Retrieved: 2025-05-02 21:19
     Generated for User: demo
     Number of Rules: 3213
     
@@ -10,17 +10,17 @@
 import "pe"
 import "math"
 
-rule APT_SAP_NetWeaver_Exploitation_Activity_Apr25_1_RID38AD : APT CVE_2025_31324 DEMO SCRIPT {
+rule LOG_APT_SAP_NetWeaver_Exploitation_Activity_Apr25_1_RID39EE : APT CVE_2025_31324 DEMO LOG {
    meta:
       description = "Detects forensic artefacts related to exploitation activity of SAP NetWeaver CVE-2025-31324"
       author = "Florian Roth"
       reference = "https://reliaquest.com/blog/threat-spotlight-reliaquest-uncovers-vulnerability-behind-sap-netweaver-compromise/"
-      date = "2025-04-25 18:31:21"
+      date = "2025-04-25 19:24:51"
       score = 70
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "APT, CVE_2025_31324, DEMO, SCRIPT"
+      modified = "2025-04-29"
+      tags = "APT, CVE_2025_31324, DEMO, LOG"
       minimum_yara = "1.7"
       
    strings:
