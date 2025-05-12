@@ -32,6 +32,7 @@ Current version: v4.12.0
 
 ### To-do
 
+- Provisioning Sysmon for Linux
 - Provisioning for AIO setup
 - API setup script
 - Shuffle worker provisioning.
