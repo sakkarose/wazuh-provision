@@ -1,8 +1,8 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-05-14 21:16
+    Retrieved: 2025-05-15 21:19
     Generated for User: demo
-    Number of Rules: 3213
+    Number of Rules: 3212
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
@@ -47,25 +47,6 @@ rule APT_SAP_NetWeaver_Exploitation_Activity_Apr25_2_RID38AE : APT CVE_2025_3132
       $x03 = "MSBuild.exe c:\\programdata\\" ascii wide
    condition: 
       filesize < 20MB and 1 of them
-}
-
-rule LOG_SUSP_WEBSHELL_Cmd_Indicator_Apr25_RID33AA : DEMO LOG SCRIPT SUSP T1505_003 WEBSHELL {
-   meta:
-      description = "Detects a pattern which is often related to web shell activity"
-      author = "Florian Roth"
-      reference = "https://regex101.com/r/N6oZ2h/2"
-      date = "2025-04-25 14:57:31"
-      score = 50
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, LOG, SCRIPT, SUSP, T1505_003, WEBSHELL"
-      minimum_yara = "2.2.0"
-      
-   strings:
-      $xr01 = /\.(asp|aspx|jsp|php)\?cmd=[a-z0-9%+\-]{3,20} HTTP\/1\.[01]["']? 200/ 
-   condition: 
-      1 of them
 }
 
 rule SUSP_SVG_JS_Payload_Mar25_RID2FB6 : DEMO GEN SUSP {
@@ -181,7 +162,7 @@ rule SUSP_LNK_Suspicious_Folders_Jan25_RID3343 : DEMO FILE SUSP T1210 T1547_009 
 rule SUSP_LNX_ByteEncoder_Jan25_RID303F : DEMO FILE LINUX SUSP {
    meta:
       description = "Detects Linux binaries that encode bytes by splitting them into upper and lower nibbles and mapping them to custom lookup tables, seen being used by SEASPY and Bluez backdoors"
-      author = "MalGamy (Nextron System)"
+      author = "MalGamy (Nextron Systems)"
       reference = "https://www.securityweek.com/newly-discovered-turla-malware-targets-linux-systems/"
       date = "2025-01-23 12:31:41"
       score = 75
@@ -201,7 +182,7 @@ rule SUSP_LNX_ByteEncoder_Jan25_RID303F : DEMO FILE LINUX SUSP {
 rule SUSP_LNX_StackString_Technique_Jan25_RID345D : DEMO FILE LINUX SUSP {
    meta:
       description = "Detects Linux binaries using stack-based string manipulation techniques, which are often used to generate PTY (pseudo-terminal) device names for stealth or persistence, seen being used by SEASPY and Bluez backdoors"
-      author = "MalGamy (Nextron System)"
+      author = "MalGamy (Nextron Systems)"
       reference = "https://www.securityweek.com/newly-discovered-turla-malware-targets-linux-systems/"
       date = "2025-01-23 15:27:21"
       score = 75
