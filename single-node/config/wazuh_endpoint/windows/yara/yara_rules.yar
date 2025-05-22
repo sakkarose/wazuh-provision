@@ -1,14 +1,35 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-05-21 21:19
+    Retrieved: 2025-05-22 21:19
     Generated for User: demo
-    Number of Rules: 3213
+    Number of Rules: 3214
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
 import "math"
 import "pe"
+
+rule HKTL_EXPL_WIN_PS1_BadSuccessor_May25_RID3369 : DEMO EXPLOIT HKTL SCRIPT T1059_001 {
+   meta:
+      description = "Detects PowerShell tool called Get-BadSuccessorOUPermissions.ps1 that helps exploit a vulnerability in Active Directory. Lists every principal that can perform a BadSuccessor attack and the OUs where it holds the required permissions."
+      author = "Florian Roth"
+      reference = "https://www.akamai.com/blog/security-research/abusing-dmsa-for-privilege-escalation-in-active-directory"
+      date = "2025-05-22 14:46:41"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, EXPLOIT, HKTL, SCRIPT, T1059_001"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "function Get-BadSuccessorOUPermissions" ascii wide
+      $x2 = "\"0feb936f-47b3-49f2-9386-1dedc2c23765\"=\"msDS-DelegatedManagedServiceAccount\"" ascii wide
+      $x3 = "CreateChild|GenericAll|WriteDACL|WriteOwner" ascii wide
+   condition: 
+      filesize < 20MB and 1 of them
+}
 
 rule LOG_APT_SAP_NetWeaver_Exploitation_Activity_Apr25_1_RID39EE : APT CVE_2025_31324 DEMO LOG {
    meta:
