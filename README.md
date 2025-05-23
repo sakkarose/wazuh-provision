@@ -29,6 +29,7 @@ Current version: v4.12.0
     - Enable PowerShell logs gathering
     - Provision ransomware active responses (through YARA, CDB lists & VirusTotal)
 - YARA rule update thourgh Github Action.
+- Environment file for credentials.
 
 ### To-do
 
