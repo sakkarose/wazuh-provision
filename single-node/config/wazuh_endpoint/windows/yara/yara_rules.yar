@@ -1,8 +1,8 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-05-22 21:19
+    Retrieved: 2025-05-23 21:17
     Generated for User: demo
-    Number of Rules: 3214
+    Number of Rules: 3216
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
@@ -29,6 +29,52 @@ rule HKTL_EXPL_WIN_PS1_BadSuccessor_May25_RID3369 : DEMO EXPLOIT HKTL SCRIPT T10
       $x3 = "CreateChild|GenericAll|WriteDACL|WriteOwner" ascii wide
    condition: 
       filesize < 20MB and 1 of them
+}
+
+rule MAL_NET_Katz_Stealer_Loader_May25_RID32FC : DEMO MAL {
+   meta:
+      description = "Detects .NET based Katz stealer loader"
+      author = "Jonathan Peters (cod3nym)"
+      reference = "Internal Research"
+      date = "2025-05-21 14:28:31"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, MAL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x = "ExecutarMetodoVAI" ascii
+      $s1 = "VirtualMachineDetector" ascii
+      $s2 = "Wow64SetThreadContext_API" ascii
+      $s3 = "nomedoarquivo" ascii
+      $s4 = { 65 78 74 65 6E C3 A7 61 6F 00 } 
+      $s5 = "payloadBuffer" ascii
+      $s6 = "caminhovbs" ascii
+   condition: 
+      $x or 3 of ( $s* )
+}
+
+rule MAL_NET_UAC_Bypass_May25_RID2F27 : DEMO EXE FILE MAL T1218_003 T1548_002 {
+   meta:
+      description = "Detects .NET based tool abusing legitimate Windows utility cmstp.exe to bypass UAC (User-Admin-Controls)"
+      author = "Jonathan Peters (cod3nym)"
+      reference = "Internal Research"
+      date = "2025-05-21 11:45:01"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, EXE, FILE, MAL, T1218_003, T1548_002"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "CmstpBypass" ascii
+      $x2 = { 52 00 45 00 50 00 4C 00 41 00 43 00 45 00 5F 00 43 00 4F 00 4D 00 4D 00 41 00 4E 00 44 00 5F 00 4C 00 49 00 4E 00 45 00 00 13 63 00 6D 00 73 00 74 00 70 00 2E 00 65 00 78 00 65 00 00 33 63 00 6D 00 73 00 74 00 70 00 2E 00 65 00 78 00 65 } 
+      $x3 = { 52 00 45 00 50 00 4C 00 41 00 43 00 45 00 5F 00 43 00 4F 00 4D 00 4D 00 41 00 4E 00 44 00 5F 00 4C 00 49 00 4E 00 45 00 0D 00 0A 00 74 00 61 00 73 00 6B 00 6B 00 69 00 6C 00 6C 00 20 00 2F 00 49 00 4D 00 20 00 63 00 6D 00 73 00 74 00 70 00 2E 00 65 00 78 00 65 } 
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and $x1 or 1 of ( $x2 , $x3 )
 }
 
 rule LOG_APT_SAP_NetWeaver_Exploitation_Activity_Apr25_1_RID39EE : APT CVE_2025_31324 DEMO LOG {
