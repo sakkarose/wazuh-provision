@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-05-24 21:17
+    Retrieved: 2025-05-25 21:18
     Generated for User: demo
     Number of Rules: 3220
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "pe"
 import "math"
+import "pe"
 
 rule HKTL_EXPL_WIN_PS1_BadSuccessor_May25_RID3369 : DEMO EXPLOIT HKTL SCRIPT T1059_001 {
    meta:
