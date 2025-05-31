@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-05-30 21:18
+    Retrieved: 2025-05-31 21:18
     Generated for User: demo
-    Number of Rules: 3219
+    Number of Rules: 3218
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "pe"
 import "math"
+import "pe"
 
 rule MAL_NET_Katz_Stealer_Loader_May25_RID32FC : DEMO MAL {
    meta:
@@ -122,26 +122,6 @@ rule MAL_Katz_Stealer_May25_RID2F00 : DEMO EXE FILE MAL {
       $s6 = "%s\\Microsoft\\Windows Live Mail" ascii
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 300KB and 4 of them
-}
-
-rule LOG_APT_SAP_NetWeaver_Exploitation_Activity_Apr25_1_RID39EE : APT CVE_2025_31324 DEMO LOG {
-   meta:
-      description = "Detects forensic artefacts related to exploitation activity of SAP NetWeaver CVE-2025-31324"
-      author = "Florian Roth"
-      reference = "https://reliaquest.com/blog/threat-spotlight-reliaquest-uncovers-vulnerability-behind-sap-netweaver-compromise/"
-      date = "2025-04-25 19:24:51"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2025-04-29"
-      tags = "APT, CVE_2025_31324, DEMO, LOG"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x01 = "/helper.jsp?cmd=" ascii wide
-      $x02 = "/cache.jsp?cmd=" ascii wide
-   condition: 
-      filesize < 20MB and 1 of them
 }
 
 rule APT_SAP_NetWeaver_Exploitation_Activity_Apr25_2_RID38AE : APT CVE_2025_31324 DEMO SCRIPT T1127_001 {
