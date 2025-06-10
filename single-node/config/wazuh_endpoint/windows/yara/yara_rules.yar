@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-06-09 21:20
+    Retrieved: 2025-06-10 21:20
     Generated for User: demo
-    Number of Rules: 3217
+    Number of Rules: 3216
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "pe"
 import "math"
+import "pe"
 
 rule MAL_NET_Katz_Stealer_Loader_May25_RID32FC : DEMO MAL {
    meta:
@@ -40454,47 +40454,6 @@ rule WordDoc_PowerShell_URLDownloadToFile_RID34F4 : DEMO FILE MAL OFFICE SCRIPT 
       $p2 = "URLDownloadToFile" fullword ascii
    condition: 
       ( uint16 ( 0 ) == 0xcfd0 and 1 of ( $w* ) and all of ( $p* ) )
-}
-
-rule Suspicious_PowerShell_WebDownload_1_RID34F1 : DEMO FILE HIGHVOL SCRIPT T1059 T1059_001 T1105 {
-   meta:
-      description = "Detects suspicious PowerShell code that downloads from web sites"
-      author = "Florian Roth"
-      reference = "Internal Research"
-      date = "2017-02-22 15:52:01"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2024-04-03"
-      tags = "DEMO, FILE, HIGHVOL, SCRIPT, T1059, T1059_001, T1105"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "System.Net.WebClient).DownloadString(\"http" ascii nocase
-      $s2 = "System.Net.WebClient).DownloadString('http" ascii nocase
-      $s3 = "system.net.webclient).downloadfile('http" ascii nocase
-      $s4 = "system.net.webclient).downloadfile(\"http" ascii nocase
-      $s5 = "GetString([Convert]::FromBase64String(" ascii nocase
-      $fp1 = "NuGet.exe" ascii fullword
-      $fp2 = "chocolatey.org" ascii
-      $fp3 = " GET /" 
-      $fp4 = " POST /" 
-      $fp5 = ".DownloadFile('https://aka.ms/installazurecliwindows', 'AzureCLI.msi')" ascii
-      $fp6 = " 404 " 
-      $fp7 = "# RemoteSSHConfigurationScript" ascii
-      $fp8 = "<helpItems" ascii fullword
-      $fp9 = "DownloadFile(\"https://codecov.io/bash" ascii
-      $fp10 = "DownloadFile('https://get.golang.org/installer.exe" ascii
-      $fpg1 = "All Rights" 
-      $fpg2 = "<html" 
-      $fpg3 = "<HTML" 
-      $fpg4 = "Copyright" 
-      $fpg5 = "License" 
-      $fpg6 = "<?xml" 
-      $fpg7 = "Help" fullword
-      $fpg8 = "COPYRIGHT" fullword
-   condition: 
-      1 of ( $s* ) and not 1 of ( $fp* )
 }
 
 rule APT_PupyRAT_PY_RID2BF2 : APT DEMO EXE FILE SCRIPT {
