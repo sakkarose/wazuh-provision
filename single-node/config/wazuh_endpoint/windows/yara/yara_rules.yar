@@ -1,6 +1,6 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-06-12 21:20
+    Retrieved: 2025-06-13 21:19
     Generated for User: demo
     Number of Rules: 3216
     
