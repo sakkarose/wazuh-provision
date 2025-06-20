@@ -16,7 +16,7 @@ admin:
   description: "Default admin user"
 
 readonly:
-  hash: "$2y$12$lSs1lgI9CXMRc7/zll93lexsppxdFgBGPsV9gQwu0oB.Q27DLKcHO"
+  hash: "$2y$12$9haAqyBJHf1m.Ieul0gWNu6WhDC1RAahpCWRpdH9LpP9XmCtaRHw2"
   reserved: false
   backend_roles:
   - "readall"
