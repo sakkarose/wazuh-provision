@@ -1,14 +1,56 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-06-22 21:18
+    Retrieved: 2025-06-23 21:20
     Generated for User: demo
-    Number of Rules: 3216
+    Number of Rules: 3218
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
 import "pe"
 import "math"
+
+rule MAL_WIPER_Unknown_Jun25_RID2F13 : DEMO EXE FILE MAL {
+   meta:
+      description = "Detects unknown disk wiper first spotted in June 2025 and uploaded from Israel"
+      author = "Florian Roth"
+      reference = "https://x.com/cyb3rops/status/1935707307805134975"
+      date = "2025-06-19 11:41:41"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "12c39f052f030a77c0cd531df86ad3477f46d1287b8b98b625d1dcf89385d721"
+      tags = "DEMO, EXE, FILE, MAL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "\\CWipeNew\\Release\\" ascii fullword
+      $s1 = "Failed to get disk geometry: " wide fullword
+      $s2 = "--- Working on " wide fullword
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 200KB and ( 1 of ( $x* ) or all of ( $s* ) )
+}
+
+rule SUSP_LNX_SH_Disk_Wiper_Script_Jun25_RID33BE : DEMO FILE LINUX SCRIPT SUSP {
+   meta:
+      description = "Detects unknown disk wiper script for Linux systems"
+      author = "Florian Roth"
+      reference = "Internal Research"
+      date = "2025-06-19 15:00:51"
+      score = 65
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "f662f69fc7f4240cd8c00661db9484e76b5d02f903590140b4086fefcf9d9331"
+      tags = "DEMO, FILE, LINUX, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "THIS SCRIPT IS LIVE AND ARMED!" ascii fullword
+      $s2 = "FAIR WARNING!" ascii fullword
+      $s3 = "lists devices" ascii fullword
+   condition: 
+      uint16 ( 0 ) == 0x2123 and filesize < 2KB and all of them
+}
 
 rule MAL_NET_Katz_Stealer_Loader_May25_RID32FC : DEMO MAL {
    meta:
