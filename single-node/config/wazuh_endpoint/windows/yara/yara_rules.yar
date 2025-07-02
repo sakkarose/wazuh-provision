@@ -1,8 +1,8 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-07-01 21:20
+    Retrieved: 2025-07-02 21:20
     Generated for User: demo
-    Number of Rules: 3218
+    Number of Rules: 3216
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
@@ -16622,36 +16622,6 @@ rule MAL_3CXDesktopApp_MacOS_UpdateAgent_Mar23_RID35BA : DEMO MACOS MAL {
       uint16 ( 0 ) == 0xfeca and filesize < 6MB and ( 1 of ( $x* ) or ( $a1 and all of ( $s* ) ) ) or all of them
 }
 
-rule APT_MAL_NK_3CX_Malicious_Samples_Mar23_1_RID3501 : APT DEMO EXE FILE MAL NK {
-   meta:
-      description = "Detects malicious DLLs related to 3CX compromise"
-      author = "X__Junior, Florian Roth (Nextron Systems)"
-      reference = "https://www.reddit.com/r/crowdstrike/comments/125r3uu/20230329_situational_awareness_crowdstrike/"
-      date = "2023-03-29 15:54:41"
-      score = 85
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2023-04-20"
-      hash1 = "7986bbaee8940da11ce089383521ab420c443ab7b15ed42aed91fd31ce833896"
-      hash2 = "c485674ee63ec8d4e8fde9800788175a8b02d3f9416d0e763360fff7f8eb4e02"
-      hash3 = "cc4eedb7b1f77f02b962f4b05278fa7f8082708b5a12cacf928118520762b5e2"
-      tags = "APT, DEMO, EXE, FILE, MAL, NK"
-      required_modules = "pe"
-      minimum_yara = "3.0.0"
-      
-   strings:
-      $opa1 = { 4C 89 F1 4C 89 EA 41 B8 40 00 00 00 FF 15 ?? ?? ?? ?? 85 C0 74 ?? 4C 89 F0 FF 15 ?? ?? ?? ?? 4C 8D 4C 24 ?? 45 8B 01 4C 89 F1 4C 89 EA FF 15 } 
-      $opa2 = { 48 C7 44 24 ?? 00 00 00 00 4C 8D 7C 24 ?? 48 89 F9 48 89 C2 41 89 E8 4D 89 F9 FF 15 ?? ?? ?? ?? 41 83 3F 00 0F 84 ?? ?? ?? ?? 0F B7 03 3D 4D 5A 00 00} 
-      $opa3 = { 41 80 7C 00 ?? FE 75 ?? 41 80 7C 00 ?? ED 75 ?? 41 80 7C 00 ?? FA 75 ?? 41 80 3C 00 CE} 
-      $opa4 = { 44 0F B6 CD 46 8A 8C 0C ?? ?? ?? ?? 45 30 0C 0E 48 FF C1} 
-      $opb1 = { 41 B8 40 00 00 00 49 8B D5 49 8B CC FF 15 ?? ?? ?? ?? 85 C0 74 ?? 41 FF D4 44 8B 45 ?? 4C 8D 4D ?? 49 8B D5 49 8B CC FF 15 } 
-      $opb2 = { 44 8B C3 48 89 44 24 ?? 48 8B 5C 24 ?? 4C 8D 4D ?? 48 8B CB 48 89 74 24 ?? 48 8B D0 4C 8B F8 FF 15 } 
-      $opb3 = { 80 78 ?? FE 75 ?? 80 78 ?? ED 75 ?? 80 38 FA 75 ?? 80 78 ?? CE } 
-      $opb4 = { 49 63 C1 44 0F B6 44 05 ?? 44 88 5C 05 ?? 44 88 02 0F B6 54 05 ?? 49 03 D0 0F B6 C2 0F B6 54 05 ?? 41 30 12} 
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 5MB and pe.characteristics & pe.DLL and ( 2 of ( $opa* ) or 2 of ( $opb* ) )
-}
-
 rule APT_MAL_NK_3CX_Malicious_Samples_Mar23_2_RID3502 : APT DEMO EXE MAL NK {
    meta:
       description = "Detects malicious DLLs related to 3CX compromise (decrypted payload)"
@@ -22989,31 +22959,6 @@ rule MAL_CrypRAT_Jan19_1_RID2D41 : DEMO EXE FILE MAL {
       $x1 = "Cryp_RAT" fullword wide
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 600KB and ( pe.imphash ( ) == "2524e5e9fe04d7bfe5efb3a5e400fe4b" or 1 of them )
-}
-
-rule SUSP_Putty_Unnormal_Size_RID3086 : ANOMALY DEMO EXE FILE SUSP T1021_004 T1572 {
-   meta:
-      description = "Detects a putty version with a size different than the one provided by Simon Tatham (could be caused by an additional signature or malware)"
-      author = "Florian Roth"
-      reference = "Internal Research"
-      date = "2019-01-07 12:43:31"
-      score = 50
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2022-06-30"
-      hash1 = "e5e89bdff733d6db1cffe8b3527e823c32a78076f8eadc2f9fd486b74a0e9d88"
-      hash2 = "ce4c1b718b54973291aefdd63d1cca4e4d8d4f5353a2be7f139a290206d0c170"
-      hash3 = "adb72ea4eab7b2efc2da6e72256b5a3bb388e9cdd4da4d3ff42a9fec080aa96f"
-      tags = "ANOMALY, DEMO, EXE, FILE, SUSP, T1021_004, T1572"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "SSH, Telnet and Rlogin client" fullword wide
-      $v1 = "Release 0.6" wide
-      $v2 = "Release 0.70" wide
-      $fp1 = "KiTTY fork" fullword wide
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and $s1 and 1 of ( $v* ) and not 1 of ( $fp* ) and filesize != 524288 and filesize != 495616 and filesize != 483328 and filesize != 524288 and filesize != 712176 and filesize != 828400 and filesize != 569328 and filesize != 454656 and filesize != 531368 and filesize != 524288 and filesize != 483328 and filesize != 713592 and filesize != 829304 and filesize != 571256 and filesize != 774200 and filesize != 854072 and filesize != 665144 and filesize != 774200 and filesize != 854072 and filesize != 665144 and filesize != 640000 and filesize != 650720 and filesize != 662808 and filesize != 651256 and filesize != 664432
 }
 
 rule SUSP_JAVA_Class_with_VBS_Content_RID32D1 : DEMO FILE SCRIPT SUSP {
