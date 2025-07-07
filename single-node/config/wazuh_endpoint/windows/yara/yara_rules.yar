@@ -1,6 +1,6 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-07-06 21:19
+    Retrieved: 2025-07-07 21:19
     Generated for User: demo
     Number of Rules: 3216
     
@@ -68244,27 +68244,6 @@ rule Webshell_phpjackal_php_RID2FFB : DEMO T1505_003 WEBSHELL {
       1 of them
 }
 
-rule Webshell_sql_php_php_RID2F44 : DEMO T1505_003 WEBSHELL {
-   meta:
-      description = "Semi-Auto-generated - file sql.php.php.txt"
-      author = "Florian Roth"
-      reference = "-"
-      date = "2014-03-29 11:49:51"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, T1505_003, WEBSHELL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "fputs ($fp, \"# RST MySQL tools\\r\\n# Home page: http://rst.void.ru\\r\\n#" 
-      $s2 = "http://rst.void.ru" 
-      $s3 = "print \"<a href=\\\"$_SERVER[PHP_SELF]?s=$s&login=$login&passwd=$passwd&" 
-   condition: 
-      1 of them
-}
-
 rule Webshell_telnetd_pl_RID2ED1 : DEMO T1505_003 WEBSHELL {
    meta:
       description = "Semi-Auto-generated - file telnetd.pl.txt"
@@ -69367,6 +69346,27 @@ rule Webshell_phpbackdoor15_php_RID3140 : DEMO T1505_003 WEBSHELL {
       $s3 = "echo \"Cliquez sur un nom de fichier pour lancer son telechargement. Cliquez s" 
    condition: 
       1 of them
+}
+
+rule Webshell_sql_php_php_RID2F44 : DEMO FILE T1505_003 WEBSHELL {
+   meta:
+      description = "Semi-Auto-generated - file sql.php.php.txt"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2014-03-29 11:49:51"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2025-07-04"
+      tags = "DEMO, FILE, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "fputs ($fp, \"# RST MySQL tools\\r\\n# Home page: http://rst.void.ru\\r\\n#" 
+      $s2 = "http://rst.void.ru" 
+      $s3 = "print \"<a href=\\\"$_SERVER[PHP_SELF]?s=$s&login=$login&passwd=$passwd&" 
+   condition: 
+      1 of them and not uint32 ( 0 ) == 0x6D783F3C
 }
 
 rule Webshell_cgi_python_py_RID3022 : DEMO SCRIPT T1059_006 T1505_003 WEBSHELL {
