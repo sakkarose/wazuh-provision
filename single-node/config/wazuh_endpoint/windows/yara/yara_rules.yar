@@ -1,8 +1,8 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-07-10 21:21
+    Retrieved: 2025-07-11 21:20
     Generated for User: demo
-    Number of Rules: 3215
+    Number of Rules: 3210
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
@@ -17644,30 +17644,6 @@ rule VULN_Confluence_Questions_Plugin_CVE_2022_26138_Jul22_1_RID39F2 : CVE_2022_
       1 of ( $x* ) or ( $jar_marker and 1 of ( $jar_size* ) )
 }
 
-rule SUSP_ZIP_ISO_PhishAttachment_Pattern_Jun22_1_RID3719 : DEMO SUSP T1132_001 T1203 T1566_001 {
-   meta:
-      description = "Detects suspicious small base64 encoded ZIP files (MIME email attachments) with .iso files as content as often used in phishing attacks"
-      author = "Florian Roth"
-      reference = "Internal Research"
-      date = "2022-06-23 17:24:01"
-      score = 65
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, SUSP, T1132_001, T1203, T1566_001"
-      minimum_yara = "1.7"
-      
-   strings:
-      $pkzip_base64_1 = { 0A 55 45 73 44 42 } 
-      $pkzip_base64_2 = { 0A 55 45 73 44 42 } 
-      $pkzip_base64_3 = { 0A 55 45 73 48 43 } 
-      $iso_1 = "Lmlzb1BL" 
-      $iso_2 = "5pc29QS" 
-      $iso_3 = "uaXNvUE" 
-   condition: 
-      filesize < 2000KB and 1 of ( $pk* ) and 1 of ( $iso* )
-}
-
 rule SUSP_LNK_Follina_Jun22_RID2EB4 : CVE_2022_30190 DEMO FILE SUSP T1210 T1547_009 {
    meta:
       description = "Detects LNK files with suspicious Follina / CVE-2022-30190 strings"
@@ -18472,26 +18448,6 @@ rule EXPL_GitLab_CE_RCE_CVE_2021_22205_RID30B7 : CVE_2021_22205 DEMO EXPLOIT {
       $sc3 = "1c2VyLnNhdmUh" ascii
    condition: 
       1 of ( $sa* ) and 1 of ( $sb* ) and 1 of ( $sc* )
-}
-
-rule EXPL_GitLab_CE_RCE_Malformed_JPG_CVE_2021_22204_RID35EC : CVE_2021_22204 CVE_2021_22205 DEMO EXPLOIT {
-   meta:
-      description = "Detects malformed JPG files exploting EXIF vulnerability CVE-2021-22204 and used in the exploitation of GitLab vulnerability CVE-2021-22205"
-      author = "Florian Roth"
-      reference = "https://attackerkb.com/topics/D41jRUXCiJ/cve-2021-22205/rapid7-analysis?referrer=blog"
-      date = "2021-10-26 16:33:51"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CVE_2021_22204, CVE_2021_22205, DEMO, EXPLOIT"
-      minimum_yara = "2.2.0"
-      
-   strings:
-      $h1 = { 41 54 26 54 46 4F 52 4D } 
-      $sr1 = /\(metadata[\s]{0,3}\([A-Za-z]{1,20} "\\/ 
-   condition: 
-      filesize < 10KB and $h1 and $sr1
 }
 
 rule SUSP_PE_Discord_Attachment_Oct21_1_RID3357 : DEMO EXE FILE SUSP {
@@ -21180,32 +21136,6 @@ rule MAL_ME_RawDisk_Agent_Jan20_1_RID30A8 : DEMO EXE FILE MAL MIDDLE_EAST {
       $op2 = { 0f b6 0c 01 88 48 34 48 8b 8d a8 } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize <= 2000KB and ( 1 of ( $x* ) or 4 of them )
-}
-
-rule SUSP_VHD_Suspicious_Small_Size_RID3285 : DEMO EXE FILE SUSP {
-   meta:
-      description = "Detects suspicious VHD files"
-      author = "Florian Roth"
-      reference = "https://twitter.com/MeltX0R/status/1208095892877774850"
-      date = "2019-12-21 14:08:41"
-      score = 50
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2023-01-24"
-      hash1 = "3382a75bd959d2194c4b1a8885df93e8770f4ebaeaff441a5180ceadf1656cd9"
-      tags = "DEMO, EXE, FILE, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $hc1 = { 63 6F 6E 65 63 74 69 78 } 
-      $hc2a = { 49 6E 76 61 6C 69 64 20 70 61 72 74 69 74 69 6F
-               6E 20 74 61 62 6C 65 00 45 72 72 6F 72 20 6C 6F
-               61 64 69 6E 67 20 6F 70 65 72 61 74 69 6E 67 20
-               73 79 73 74 65 6D 00 4D 69 73 73 69 6E 67 20 6F
-               70 65 72 61 74 69 6E 67 20 73 79 73 74 65 6D } 
-      $hc2b = "connectix" 
-   condition: 
-      not uint16 ( 0 ) == 0x5a4d and filesize > 1KB and filesize <= 4000KB and ( $hc1 at 0 or all of ( $hc2* ) )
 }
 
 rule SUSP_RAR_NtdsDIT_RID2C79 : DEMO FILE SUSP {
@@ -29061,37 +28991,6 @@ rule Universal_Exploit_Strings_RID3157 : DEMO EXPLOIT SUSP {
       $s4 = "bindshell" 
    condition: 
       ( filesize < 2KB and 3 of them )
-}
-
-rule UBootRAT_RID29E1 : APT DEMO EXE FILE {
-   meta:
-      description = "Detects UBoot RAT Samples"
-      author = "Florian Roth"
-      reference = "https://researchcenter.paloaltonetworks.com/2017/11/unit42-uboatrat-navigates-east-asia/"
-      date = "2017-11-29 02:00:01"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "04873dbd63279228a0a4bb1184933b64adb880e874bd3d14078161d06e232c9b"
-      hash2 = "7b32f401e2ad577e8398b2975ecb5c5ce68c5b07717b1e0d762f90a6fbd8add1"
-      hash3 = "42d8a84cd49ff3afacf3d549fbab1fa80d5eda0c8625938b6d32e18004b0edac"
-      tags = "APT, DEMO, EXE, FILE"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "URLDownloadToFileA" ascii
-      $s2 = "GetModuleFileNameW" ascii
-      $s4 = "WININET.dll" ascii
-      $s5 = "urlmon.dll" ascii
-      $s6 = "WTSAPI32.dll" ascii
-      $s7 = "IPHLPAPI.DLL" ascii
-      $op1 = { 0E 1F BA 0E 00 B4 09 CD 21 B8 01 4C CD 21 54 68
-               69 73 20 70 72 6F 67 72 61 6D 20 63 61 6E 6E 6F
-               74 20 62 65 20 72 75 6E 20 69 6E 20 44 4F 53 20
-               6D 6F 64 65 2E 0D 0D 0A 24 00 00 00 00 00 00 00 } 
-      $vprotect = { 2E 76 6D 70 30 } 
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and uint32 ( uint32 ( 0x3c ) ) == 0x4550 and filesize < 1400KB and filesize > 800KB and ( all of ( $s* ) and $op1 at 64 and uint16 ( uint32 ( 0x3c ) + 11 ) == 0x59 and $vprotect in ( 600 .. 700 ) )
 }
 
 rule UBootRAT_Dropper_RID2D1C : APT DEMO EXE FILE {
@@ -64777,6 +64676,48 @@ rule Webshell_PHP_shell_RID2E05 : DEMO SCRIPT T1505_003 WEBSHELL {
       all of them
 }
 
+rule Simple_PHP_BackDooR_RID2E06 : DEMO T1505_003 WEBSHELL {
+   meta:
+      description = "Webshells Auto-generated - file Simple_PHP_BackDooR_RID2E06.php"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2014-04-07 10:56:51"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "<hr>to browse go to http://<? echo $SERVER_NAME.$REQUEST_URI; ?>?d=[directory he" 
+      $s6 = "if(!move_uploaded_file($HTTP_POST_FILES['file_name']['tmp_name'], $dir.$fn" 
+      $s9 = "// a simple php backdoor" 
+   condition: 
+      1 of them
+}
+
+rule Webshell_HYTop_DevPack_2005Red_RID31B8 : DEMO T1505_003 WEBSHELL {
+   meta:
+      description = "Webshells Auto-generated - file 2005Red.asp"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2014-04-07 13:34:31"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "scrollbar-darkshadow-color:#FF9DBB;" 
+      $s3 = "echo \"&nbsp;<a href=\"\"/\"&encodeForUrl(theHref,false)&\"\"\" target=_blank>\"&replace" 
+      $s9 = "theHref=mid(replace(lcase(list.path),lcase(server.mapPath(\"/\")),\"\"),2)" 
+   condition: 
+      all of them
+}
+
 rule HKTL_hxdef100_RID2B43 : DEMO HKTL T1505_003 T1543_003 WEBSHELL {
    meta:
       description = "Webshells Auto-generated - file hxdef100.exe"
@@ -64835,87 +64776,6 @@ rule HKTL_hxdef100_2_RID2BD4 : DEMO HKTL T1505_003 T1543_003 WEBSHELL {
       $s0 = "\\\\.\\mailslot\\hxdef-rkc000" 
       $s2 = "Shared Components\\On Access Scanner\\BehaviourBlo" 
       $s6 = "SYSTEM\\CurrentControlSet\\Control\\SafeBoot\\" 
-   condition: 
-      all of them
-}
-
-rule Webshell_webadmin_RID2DED : DEMO T1505_003 WEBSHELL {
-   meta:
-      description = "Webshells Auto-generated - file webadmin.php"
-      author = "Florian Roth"
-      reference = "-"
-      date = "2014-04-07 10:52:41"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, T1505_003, WEBSHELL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "<input name=\\\"editfilename\\\" type=\\\"text\\\" class=\\\"style1\\\" value='\".$this->inpu" 
-   condition: 
-      all of them
-}
-
-rule Webshell_ASP_commands_RID2F3B : DEMO T1505_003 WEBSHELL {
-   meta:
-      description = "Webshells Auto-generated - file commands.asp"
-      author = "Florian Roth"
-      reference = "-"
-      date = "2014-04-07 11:48:21"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, T1505_003, WEBSHELL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "If CheckRecord(\"SELECT COUNT(ID) FROM VictimDetail WHERE VictimID = \" & VictimID" 
-      $s2 = "proxyArr = Array (\"HTTP_X_FORWARDED_FOR\",\"HTTP_VIA\",\"HTTP_CACHE_CONTROL\",\"HTTP_F" 
-   condition: 
-      all of them
-}
-
-rule Simple_PHP_BackDooR_RID2E06 : DEMO T1505_003 WEBSHELL {
-   meta:
-      description = "Webshells Auto-generated - file Simple_PHP_BackDooR_RID2E06.php"
-      author = "Florian Roth"
-      reference = "-"
-      date = "2014-04-07 10:56:51"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, T1505_003, WEBSHELL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "<hr>to browse go to http://<? echo $SERVER_NAME.$REQUEST_URI; ?>?d=[directory he" 
-      $s6 = "if(!move_uploaded_file($HTTP_POST_FILES['file_name']['tmp_name'], $dir.$fn" 
-      $s9 = "// a simple php backdoor" 
-   condition: 
-      1 of them
-}
-
-rule Webshell_HYTop_DevPack_2005Red_RID31B8 : DEMO T1505_003 WEBSHELL {
-   meta:
-      description = "Webshells Auto-generated - file 2005Red.asp"
-      author = "Florian Roth"
-      reference = "-"
-      date = "2014-04-07 13:34:31"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, T1505_003, WEBSHELL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "scrollbar-darkshadow-color:#FF9DBB;" 
-      $s3 = "echo \"&nbsp;<a href=\"\"/\"&encodeForUrl(theHref,false)&\"\"\" target=_blank>\"&replace" 
-      $s9 = "theHref=mid(replace(lcase(list.path),lcase(server.mapPath(\"/\")),\"\"),2)" 
    condition: 
       all of them
 }
@@ -64983,6 +64843,99 @@ rule Webshell_FeliksPack3___PHP_Shells_2005_RID34AB : DEMO T1505_003 WEBSHELL {
    strings:
       $s0 = "window.open(\"\"&url&\"?id=edit&path=\"+sfile+\"&op=copy&attrib=\"+attrib+\"&dpath=\"+lp" 
       $s3 = "<input name=\"dbname\" type=\"hidden\" id=\"dbname\" value=\"<%=request(\"dbname\")%>\">" 
+   condition: 
+      all of them
+}
+
+rule HKTL_Mithril_tool_RID2D99 : DEMO HKTL T1505_003 WEBSHELL {
+   meta:
+      description = "Webshells Auto-generated - file Mithril.exe"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2014-04-07 10:38:41"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, HKTL, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "OpenProcess error!" 
+      $s1 = "WriteProcessMemory error!" 
+      $s4 = "GetProcAddress error!" 
+      $s5 = "HHt`HHt\\" 
+      $s6 = "Cmaudi0" 
+      $s7 = "CreateRemoteThread error!" 
+      $s8 = "Kernel32" 
+      $s9 = "VirtualAllocEx error!" 
+   condition: 
+      all of them
+}
+
+rule HKTL_Release_dllTest_RID2E9F : DEMO HKTL T1505_003 WEBSHELL {
+   meta:
+      description = "Webshells Auto-generated - file dllTest.dll"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2014-04-07 11:22:21"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, HKTL, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = ";;;Y;`;d;h;l;p;t;x;|;" 
+      $s1 = "0 0&00060K0R0X0f0l0q0w0" 
+      $s2 = ": :$:(:,:0:4:8:D:`=d=" 
+      $s3 = "4@5P5T5\\5T7\\7d7l7t7|7" 
+      $s4 = "1,121>1C1K1Q1X1^1e1k1s1y1" 
+      $s5 = "9 9$9(9,9P9X9\\9`9d9h9l9p9t9x9|9" 
+      $s6 = "0)0O0\\0a0o0\"1E1P1q1" 
+      $s7 = "<.<I<d<h<l<p<t<x<|<" 
+      $s8 = "3&31383>3F3Q3X3`3f3w3|3" 
+      $s9 = "8@;D;H;L;P;T;X;\\;a;9=W=z=" 
+   condition: 
+      all of them
+}
+
+rule Webshell_webadmin_RID2DED : DEMO T1505_003 WEBSHELL {
+   meta:
+      description = "Webshells Auto-generated - file webadmin.php"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2014-04-07 10:52:41"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "<input name=\\\"editfilename\\\" type=\\\"text\\\" class=\\\"style1\\\" value='\".$this->inpu" 
+   condition: 
+      all of them
+}
+
+rule Webshell_ASP_commands_RID2F3B : DEMO T1505_003 WEBSHELL {
+   meta:
+      description = "Webshells Auto-generated - file commands.asp"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2014-04-07 11:48:21"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "If CheckRecord(\"SELECT COUNT(ID) FROM VictimDetail WHERE VictimID = \" & VictimID" 
+      $s2 = "proxyArr = Array (\"HTTP_X_FORWARDED_FOR\",\"HTTP_VIA\",\"HTTP_CACHE_CONTROL\",\"HTTP_F" 
    condition: 
       all of them
 }
@@ -65062,60 +65015,6 @@ rule HKTL_dbgiis6cli_RID2C83 : DEMO HKTL T1505_003 WEBSHELL {
    strings:
       $s0 = "User-Agent: Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)" 
       $s5 = "###command:(NO more than 100 bytes!)" 
-   condition: 
-      all of them
-}
-
-rule HKTL_Mithril_tool_RID2D99 : DEMO HKTL T1505_003 WEBSHELL {
-   meta:
-      description = "Webshells Auto-generated - file Mithril.exe"
-      author = "Florian Roth"
-      reference = "-"
-      date = "2014-04-07 10:38:41"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, HKTL, T1505_003, WEBSHELL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "OpenProcess error!" 
-      $s1 = "WriteProcessMemory error!" 
-      $s4 = "GetProcAddress error!" 
-      $s5 = "HHt`HHt\\" 
-      $s6 = "Cmaudi0" 
-      $s7 = "CreateRemoteThread error!" 
-      $s8 = "Kernel32" 
-      $s9 = "VirtualAllocEx error!" 
-   condition: 
-      all of them
-}
-
-rule HKTL_Release_dllTest_RID2E9F : DEMO HKTL T1505_003 WEBSHELL {
-   meta:
-      description = "Webshells Auto-generated - file dllTest.dll"
-      author = "Florian Roth"
-      reference = "-"
-      date = "2014-04-07 11:22:21"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, HKTL, T1505_003, WEBSHELL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = ";;;Y;`;d;h;l;p;t;x;|;" 
-      $s1 = "0 0&00060K0R0X0f0l0q0w0" 
-      $s2 = ": :$:(:,:0:4:8:D:`=d=" 
-      $s3 = "4@5P5T5\\5T7\\7d7l7t7|7" 
-      $s4 = "1,121>1C1K1Q1X1^1e1k1s1y1" 
-      $s5 = "9 9$9(9,9P9X9\\9`9d9h9l9p9t9x9|9" 
-      $s6 = "0)0O0\\0a0o0\"1E1P1q1" 
-      $s7 = "<.<I<d<h<l<p<t<x<|<" 
-      $s8 = "3&31383>3F3Q3X3`3f3w3|3" 
-      $s9 = "8@;D;H;L;P;T;X;\\;a;9=W=z=" 
    condition: 
       all of them
 }
@@ -65278,6 +65177,25 @@ rule Webshell_FeliksPack3___PHP_Shells_usr_RID353E : DEMO T1505_003 WEBSHELL {
       all of them
 }
 
+rule Webshell_FSO_s_phpinj_RID2F48 : DEMO T1505_003 WEBSHELL {
+   meta:
+      description = "Webshells Auto-generated - file phpinj.php"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2014-04-07 11:50:31"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s4 = "echo '<a href='.$expurl.'> Click Here to Exploit </a> <br />';" 
+   condition: 
+      all of them
+}
+
 rule HKTL_adjustcr_RID2C03 : DEMO HKTL T1505_003 WEBSHELL {
    meta:
       description = "Webshells Auto-generated - file adjustcr.exe"
@@ -65296,25 +65214,6 @@ rule HKTL_adjustcr_RID2C03 : DEMO HKTL T1505_003 WEBSHELL {
       $s2 = "$License: NRV for UPX is distributed under special license $" 
       $s6 = "AdjustCR Carr" 
       $s7 = "ION\\System\\FloatingPo" 
-   condition: 
-      all of them
-}
-
-rule Webshell_FSO_s_phpinj_RID2F48 : DEMO T1505_003 WEBSHELL {
-   meta:
-      description = "Webshells Auto-generated - file phpinj.php"
-      author = "Florian Roth"
-      reference = "-"
-      date = "2014-04-07 11:50:31"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, T1505_003, WEBSHELL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s4 = "echo '<a href='.$expurl.'> Click Here to Exploit </a> <br />';" 
    condition: 
       all of them
 }
@@ -65496,6 +65395,26 @@ rule Webshell_connector_ASP_RID2FB4 : DEMO T1505_003 WEBSHELL {
       all of them
 }
 
+rule HKTL_shelltools_g0t_root_HideRun_RID3387 : DEMO HKTL T1505_003 WEBSHELL {
+   meta:
+      description = "Webshells Auto-generated - file HideRun.exe"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2014-04-07 14:51:41"
+      score = 90
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, HKTL, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "Usage -- hiderun [AppName]" 
+      $s7 = "PVAX SW, Alexey A. Popoff, Moscow, 1997." 
+   condition: 
+      all of them
+}
+
 rule HKTL_peek_a_boo_RID2CA7 : DEMO HKTL T1505_003 WEBSHELL {
    meta:
       description = "Webshells Auto-generated - file peek-a-boo.exe"
@@ -65516,26 +65435,6 @@ rule HKTL_peek_a_boo_RID2CA7 : DEMO HKTL T1505_003 WEBSHELL {
       $s3 = "__vbaExceptHandler" 
       $s4 = "EVENT_SINK_Release" 
       $s8 = "__vbaErrorOverflow" 
-   condition: 
-      all of them
-}
-
-rule HKTL_shelltools_g0t_root_HideRun_RID3387 : DEMO HKTL T1505_003 WEBSHELL {
-   meta:
-      description = "Webshells Auto-generated - file HideRun.exe"
-      author = "Florian Roth"
-      reference = "-"
-      date = "2014-04-07 14:51:41"
-      score = 90
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, HKTL, T1505_003, WEBSHELL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "Usage -- hiderun [AppName]" 
-      $s7 = "PVAX SW, Alexey A. Popoff, Moscow, 1997." 
    condition: 
       all of them
 }
@@ -67225,30 +67124,6 @@ rule WebShell_Generic_PHP_9_RID2F22 : DEMO GEN SCRIPT T1505_003 WEBSHELL {
       $ = { 69 66 20 28 69 73 73 65 74 28 24 5f 50 4f 53 54 5b 27 77 71 27 5d 29 20 26 26 20 24 5f 50 4f 53 54 5b 27 77 71 27 5d 3c 3e 22 22 29 20 7b } 
       $ = { 70 61 73 73 74 68 72 75 28 24 5f 50 4f 53 54 5b 27 63 27 5d 29 3b } 
       $ = { 3c 69 6e 70 75 74 20 74 79 70 65 3d 22 72 61 64 69 6f 22 20 6e 61 6d 65 3d 22 74 61 63 22 20 76 61 6c 75 65 3d 22 31 22 3e 42 36 34 20 44 65 63 6f 64 65 3c 62 72 3e } 
-   condition: 
-      1 of them
-}
-
-rule WebShell_Generic_PHP_1_RID2F1A : DEMO GEN SCRIPT T1505_003 WEBSHELL {
-   meta:
-      description = "PHP Webshells Github Archive - from files Dive Shell 1.0"
-      author = "Florian Roth"
-      reference = "-"
-      date = "2014-04-06 11:42:51"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2022-12-06"
-      hash1 = "2558e728184b8efcdb57cfab918d95b06d45de04"
-      hash2 = "203a8021192531d454efbc98a3bbb8cabe09c85c"
-      hash3 = "b79709eb7801a28d02919c41cc75ac695884db27"
-      tags = "DEMO, GEN, SCRIPT, T1505_003, WEBSHELL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $ = { 76 61 72 20 63 6f 6d 6d 61 6e 64 5f 68 69 73 74 20 3d 20 6e 65 77 20 41 72 72 61 79 28 3c 3f 70 68 70 20 65 63 68 6f 20 24 6a 73 5f 63 6f 6d 6d 61 6e 64 5f 68 69 73 74 20 3f 3e 29 3b } 
-      $ = { 69 66 20 28 65 6d 70 74 79 28 24 5f 53 45 53 53 49 4f 4e 5b 27 63 77 64 27 5d 29 20 7c 7c 20 21 65 6d 70 74 79 28 24 5f 52 45 51 55 45 53 54 5b 27 72 65 73 65 74 27 5d 29 29 20 7b } 
-      $ = { 69 66 20 28 65 2e 6b 65 79 43 6f 64 65 20 3d 3d 20 33 38 20 26 26 20 63 75 72 72 65 6e 74 5f 6c 69 6e 65 20 3c 20 63 6f 6d 6d 61 6e 64 5f 68 69 73 74 2e 6c 65 6e 67 74 68 2d 31 29 20 7b } 
    condition: 
       1 of them
 }
