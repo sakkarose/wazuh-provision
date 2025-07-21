@@ -1,14 +1,81 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-07-20 21:20
+    Retrieved: 2025-07-21 21:21
     Generated for User: demo
-    Number of Rules: 2681
+    Number of Rules: 2684
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "math"
 import "pe"
+import "math"
+
+rule WEBSHELL_ASPX_Sharepoint_Drop_CVE_2025_53770_Jul25_RID372D : CVE_2025_53770 DEMO SCRIPT T1505_003 WEBSHELL {
+   meta:
+      description = "Detects ASPX web shell dropped during the exploitation of SharePoint RCE vulnerability CVE-2025-53770"
+      author = "Florian Roth"
+      reference = "https://research.eye.security/sharepoint-under-siege/"
+      date = "2025-07-20 17:27:21"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CVE_2025_53770, DEMO, SCRIPT, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "var sy = System.Reflection.Assembly.Load(" ascii
+      $x2 = "Response.Write(cg.ValidationKey+" ascii
+      $s1 = "<script runat=\"server\" language=\"c#\" CODEPAGE=\"65001\">" ascii fullword
+   condition: 
+      filesize < 4KB and 1 of ( $x* ) or all of them
+}
+
+rule WEBSHELL_ASPX_Compiled_Sharepoint_Drop_CVE_2025_53770_Jul25_2_RID3B4A : CVE_2025_53770 DEMO EXE SCRIPT T1505_003 WEBSHELL {
+   meta:
+      description = "Detects compiled ASPX web shell dropped during the exploitation of SharePoint RCE vulnerability CVE-2025-53770"
+      author = "Florian Roth"
+      reference = "https://research.eye.security/sharepoint-under-siege/"
+      date = "2025-07-20 20:22:51"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CVE_2025_53770, DEMO, EXE, SCRIPT, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "App_Web_spinstall0.aspx" wide
+      $x2 = "spinstall0_aspx" ascii
+      $x3 = "/_layouts/15/spinstall0.aspx" wide
+      $s1 = "System.Web.Configuration.MachineKeySection" wide
+      $s2 = "Page_load" ascii fullword
+      $s3 = "GetApplicationConfig" wide fullword
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 20KB and ( 1 of ( $x* ) or all of ( $s* ) ) or 2 of ( $x* ) or 4 of them
+}
+
+rule APT_EXPL_Sharepoint_CVE_2025_53770_ForensicArtefact_Jul25_1_RID3B17 : APT CVE_2025_53770 DEMO EXPLOIT {
+   meta:
+      description = "Detects URIs accessed during the exploitation of SharePoint RCE vulnerability CVE-2025-53770"
+      author = "Florian Roth"
+      reference = "https://research.eye.security/sharepoint-under-siege/"
+      date = "2025-07-20 20:14:21"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "APT, CVE_2025_53770, DEMO, EXPLOIT"
+      minimum_yara = "1.7"
+      
+   strings:
+      $sa1 = "POST /_layouts/15/ToolPane.aspx" ascii wide
+      $sa2 = "DisplayMode=Edit&a=/ToolPane.aspx" ascii wide
+      $sb1 = "GET /_layouts/15/spinstall0.aspx" ascii wide
+      $sb2 = "/_layouts/SignOut.aspx 200" ascii wide
+   condition: 
+      ( @sa2 - @sa1 ) < 700 or ( @sb2 - @sb1 ) < 700
+}
 
 rule MAL_WIPER_Unknown_Jun25_RID2F13 : DEMO EXE FILE MAL {
    meta:
@@ -997,16 +1064,16 @@ rule EXPL_PaloAlto_CVE_2024_3400_Apr24_1_RID31C7 : CVE_2024_3400 DEMO EXPLOIT {
       1 of ( $x* ) or ( 1 of ( $sa* ) and $sb2 )
 }
 
-rule SUSP_OBFUSC_SH_Indicators_Mar24_1_RID325B : DEMO FILE OBFUS SCRIPT SUSP T1027 {
+rule SUSP_OBFUSC_SH_Indicators_Apr24_1_RID325E : DEMO FILE OBFUS SCRIPT SUSP T1027 {
    meta:
       description = "Detects characteristics found in obfuscated script (used in the backdoored XZ package, but could match on others, too)"
       author = "Florian Roth"
       reference = "https://www.openwall.com/lists/oss-security/2024/03/29/4/1"
-      date = "2024-04-06 14:01:41"
+      date = "2024-04-06 14:02:11"
       score = 60
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
+      modified = "2025-07-18"
       tags = "DEMO, FILE, OBFUS, SCRIPT, SUSP, T1027"
       minimum_yara = "1.7"
       
@@ -1357,16 +1424,16 @@ rule EXPL_CVE_2024_21413_Microsoft_Outlook_RCE_Feb24_RID3674 : CVE_2024_21413 DE
       filesize < 1000KB and all of ( $a* ) and 1 of ( $xr* )
 }
 
-rule PUA_AnyDesk_Compromised_Certificate_Revoked_Jan24_RID39B5 : DEMO EXE FILE {
+rule PUA_AnyDesk_Compromised_Certificate_Revoked_Feb24_RID39A9 : DEMO EXE FILE {
    meta:
       description = "Detects binaries signed with a compromised signing certificate of AnyDesk (philandro Software GmbH, 0DBF152DEAF0B981A8A938D53F769DB8) after it was revoked. This is not a threat detection. It detects an outdated version of AnyDesk that was signed with a certificate that has been revoked."
       author = "Florian Roth"
       reference = "https://anydesk.com/en/public-statement"
-      date = "2024-02-05 19:15:21"
+      date = "2024-02-05 19:13:21"
       score = 50
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
+      modified = "2025-07-18"
       tags = "DEMO, EXE, FILE"
       required_modules = "pe"
       minimum_yara = "3.0.0"
@@ -1743,7 +1810,7 @@ rule HKTL_EXPL_POC_PY_SharePoint_CVE_2023_29357_Sep23_1_RID36C9 : CVE_2023_29357
       description = "Detects a Python POC to exploit CVE-2023-29357 on Microsoft SharePoint servers"
       author = "Florian Roth"
       reference = "https://github.com/Chocapikk/CVE-2023-29357"
-      date = "2023-10-01 17:10:41"
+      date = "2023-09-30 17:10:41"
       score = 80
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
@@ -1762,7 +1829,7 @@ rule HKTL_EXPL_POC_NET_SharePoint_CVE_2023_29357_Sep23_1_RID3707 : CVE_2023_2935
       description = "Detects a C# POC to exploit CVE-2023-29357 on Microsoft SharePoint servers"
       author = "Florian Roth"
       reference = "https://github.com/LuemmelSec/CVE-2023-29357"
-      date = "2023-10-01 17:21:01"
+      date = "2023-09-30 17:21:01"
       score = 80
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
