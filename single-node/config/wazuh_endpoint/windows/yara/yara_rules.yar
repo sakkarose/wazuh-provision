@@ -1,8 +1,8 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-07-22 21:21
+    Retrieved: 2025-07-23 21:22
     Generated for User: demo
-    Number of Rules: 2683
+    Number of Rules: 2682
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
@@ -29,30 +29,6 @@ rule WEBSHELL_ASPX_Sharepoint_Drop_CVE_2025_53770_Jul25_RID372D : CVE_2025_53770
       $s1 = "<script runat=\"server\" language=\"c#\" CODEPAGE=\"65001\">" ascii fullword
    condition: 
       filesize < 4KB and 1 of ( $x* ) or all of them
-}
-
-rule APT_EXPL_Sharepoint_CVE_2025_53770_ForensicArtefact_Jul25_2_RID3B18 : APT CVE_2025_53770 DEMO EXPLOIT {
-   meta:
-      description = "Detects URIs accessed during the exploitation of SharePoint RCE vulnerability CVE-2025-53770"
-      author = "Florian Roth"
-      reference = "https://research.eye.security/sharepoint-under-siege/"
-      date = "2025-07-20 20:14:31"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2025-07-21"
-      tags = "APT, CVE_2025_53770, DEMO, EXPLOIT"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "-EncodedCommand JABiAGEAcwBlADYANABTAHQAcgBpAG4AZwAgAD0" ascii wide
-      $x2 = "TEMPLATE\\LAYOUTS\\spinstall0.aspx" ascii wide
-      $x3 = "Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64;+rv:120.0)+Gecko/20100101+Firefox/120.0 /_layouts/SignOut.aspx" ascii wide
-      $xe1 = "TQBJAEMAUgBPAFMAfgAxAFwAVwBFAEIAUwBFAFIAfgAxAFwAMQA2AFwAVABFAE0AUABMAEEAVABFAFwATABBAFkATwBVAFQAUwBcA" 
-      $xe2 = "0ASQBDAFIATwBTAH4AMQBcAFcARQBCAFMARQBSAH4AMQBcADEANgBcAFQARQBNAFAATABBAFQARQBcAEwAQQBZAE8AVQBUAFMAXA" 
-      $xe3 = "NAEkAQwBSAE8AUwB+ADEAXABXAEUAQgBTAEUAUgB+ADEAXAAxADYAXABUAEUATQBQAEwAQQBUAEUAXABMAEEAWQBPAFUAVABTAFwA" 
-   condition: 
-      1 of them
 }
 
 rule MAL_WIPER_Unknown_Jun25_RID2F13 : DEMO EXE FILE MAL {
@@ -1885,12 +1861,7 @@ rule SUSP_Qakbot_Uninstaller_File_Aug23_RID33CD : DEMO METARULE QAKBOT SUSP {
       minimum_yara = "1.7"
       
    strings:
-      $xc1 = {
-         E8 00 00 00 00 58 55 89 E5 89 C2 68 03 00 00 00
-         68 00 2C 00 00 05 20 0A 00 00 50 E8 05 00 00 00
-         83 C4 04 C9 C3 81 EC 08 01 00 00 53 55 56 57 6A
-         6B 58 6A 65 5B 6A 72 66 89 84 24 D4 00 00 00 33
-      } 
+      $xc1 = { E8 00 00 00 00 58 55 89 E5 89 C2 68 03 00 00 00 68 00 2C 00 00 05 20 0A 00 00 50 E8 05 00 00 00 83 C4 04 C9 C3 81 EC 08 01 00 00 53 55 56 57 6A 6B 58 6A 65 5B 6A 72 66 89 84 24 D4 00 00 00 33 } 
    condition: 
       $xc1
 }
@@ -2448,25 +2419,8 @@ rule SUSP_HxD_Icon_Anomaly_May23_1_RID3152 : ANOMALY DEMO EXE FILE SUSP {
       minimum_yara = "3.5.0"
       
    strings:
-      $ac1 = {
-         99 00 77 0D DD 09 99 80 99 00 77 0D DD 09 99 80
-         99 00 77 0D DD 09 99 80 99 00 77 0D DD 09 99 80
-         99 00 77 0D DD 09 99 80 99 00 77 0D DD 09 99 80
-         99 00 77 0D DD 09 99 80 99 00 77 0D DD 09 99 80
-         99 00 77 0D DD 09 99 80 99 00 77 0D D0 99 98 09
-         99 99 00 0D D0 99 98 09 99 99 00 0D D0 99 98 09
-         99 99 00 0D D0 99 98 0F F9 99 00 0D D0 99 98 09
-         9F 99 00 0D D0 99 98 09 FF 99 00 0D D0 99 98 09
-         FF 99 00 0D D0 99 98 09 99 99 00 0D D0 99 98 0F
-         F9 99 00 0D D0 99 98 09 99 99 00 0D 09 99 80 9F
-         F9 99 99 00 09 99 80 99 F9 99 99 00 09 99 80 FF
-      } 
-      $ac2 = {
-         FF FF FF FF FF FF FF FF FF FF FF FF FF FF B9 DE
-         FA 68 B8 F4 39 A2 F1 39 A2 F1 39 A2 F1 39 A2 F1
-         39 A2 F1 39 A2 F1 68 B8 F4 B9 DE FA FF FF FF FF
-         FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF
-      } 
+      $ac1 = { 99 00 77 0D DD 09 99 80 99 00 77 0D DD 09 99 80 99 00 77 0D DD 09 99 80 99 00 77 0D DD 09 99 80 99 00 77 0D DD 09 99 80 99 00 77 0D DD 09 99 80 99 00 77 0D DD 09 99 80 99 00 77 0D DD 09 99 80 99 00 77 0D DD 09 99 80 99 00 77 0D D0 99 98 09 99 99 00 0D D0 99 98 09 99 99 00 0D D0 99 98 09 99 99 00 0D D0 99 98 0F F9 99 00 0D D0 99 98 09 9F 99 00 0D D0 99 98 09 FF 99 00 0D D0 99 98 09 FF 99 00 0D D0 99 98 09 99 99 00 0D D0 99 98 0F F9 99 00 0D D0 99 98 09 99 99 00 0D 09 99 80 9F F9 99 99 00 09 99 80 99 F9 99 99 00 09 99 80 FF } 
+      $ac2 = { FF FF FF FF FF FF FF FF FF FF FF FF FF FF B9 DE FA 68 B8 F4 39 A2 F1 39 A2 F1 39 A2 F1 39 A2 F1 39 A2 F1 39 A2 F1 68 B8 F4 B9 DE FA FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF } 
       $s1 = { 00 4D 00 61 00 EB 00 6C 00 20 00 48 00 F6 00 72 00 7A } 
       $s2 = "mh-nexus.de" ascii wide
       $upx1 = "UPX0" ascii fullword
@@ -2934,16 +2888,7 @@ rule APT_MAL_MacOS_NK_3CX_DYLIB_Mar23_1_RID31AD : APT DEMO MACOS MAL NK {
       minimum_yara = "1.7"
       
    strings:
-      $xc1 = {
-         37 15 00 13 16 16 1B 55 4F 54 4A 5A 52 2D 13 14
-         1E 15 0D 09 5A 34 2E 5A 4B 4A 54 4A 41 5A 2D 13
-         14 4C 4E 41 5A 02 4C 4E 53 5A 3B 0A 0A 16 1F 2D
-         1F 18 31 13 0E 55 4F 49 4D 54 49 4C 5A 52 31 32
-         2E 37 36 56 5A 16 13 11 1F 5A 3D 1F 19 11 15 53
-         5A 39 12 08 15 17 1F 55 4B 4A 42 54 4A 54 4F 49
-         4F 43 54 4B 48 42 5A 29 1B 1C 1B 08 13 55 4F 49
-         4D 54 49 4C 7A
-      } 
+      $xc1 = { 37 15 00 13 16 16 1B 55 4F 54 4A 5A 52 2D 13 14 1E 15 0D 09 5A 34 2E 5A 4B 4A 54 4A 41 5A 2D 13 14 4C 4E 41 5A 02 4C 4E 53 5A 3B 0A 0A 16 1F 2D 1F 18 31 13 0E 55 4F 49 4D 54 49 4C 5A 52 31 32 2E 37 36 56 5A 16 13 11 1F 5A 3D 1F 19 11 15 53 5A 39 12 08 15 17 1F 55 4B 4A 42 54 4A 54 4F 49 4F 43 54 4B 48 42 5A 29 1B 1C 1B 08 13 55 4F 49 4D 54 49 4C 7A } 
       $xc2 = { 41 49 19 02 25 1b 0f 0e 12 25 0e 15 11 1f 14 25 19 15 14 0e 1f 14 0e 47 5f 09 41 25 25 0e 0f 0e 17 1b 47 } 
       $xc3 = { 55 29 03 09 0e 1f 17 55 36 13 18 08 1b 08 03 55 39 15 08 1f 29 1f 08 0c 13 19 1f 09 55 29 03 09 0e 1f 17 2c 1f 08 09 13 15 14 54 0a 16 13 09 0e } 
    condition: 
@@ -3365,56 +3310,16 @@ rule SUSP_OneNote_Embedded_FileDataStoreObject_Type_Jan23_1_RID3B07 : DEMO SUSP 
       minimum_yara = "1.7"
       
    strings:
-      $x1 = {
-         e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac
-         ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??
-         ?? ?? ?? ?? 4d 5a
-      } 
-      $x2 = {
-         e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac
-         ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??
-         ?? ?? ?? ?? [0-4] 40 65 63 68 6f
-      } 
-      $x3 = {
-         e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac
-         ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??
-         ?? ?? ?? ?? [0-4] 40 45 43 48 4f
-      } 
-      $x4 = {
-         e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac
-         ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??
-         ?? ?? ?? ?? [0-4] 4F 6E 20 45
-      } 
-      $x5 = {
-         e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac
-         ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??
-         ?? ?? ?? ?? [0-4] 6F 6E 20 65
-      } 
-      $x6 = {
-         e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac
-         ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??
-         ?? ?? ?? ?? 4c 00 00 00
-      } 
-      $x7 = {
-         e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac
-         ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??
-         ?? ?? ?? ?? 49 54 53 46
-      } 
-      $x8 = {
-         e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac
-         ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??
-         ?? ?? ?? ?? [6-200] 3C 68 74 61 3A
-      } 
-      $x9 = {
-         e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac
-         ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??
-         ?? ?? ?? ?? [6-200] 3C 48 54 41 3A
-      } 
-      $x10 = {
-         e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac
-         ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??
-         ?? ?? ?? ?? [6-200] 3C 6A 6F 62 20
-      } 
+      $x1 = { e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 4d 5a } 
+      $x2 = { e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? [0-4] 40 65 63 68 6f } 
+      $x3 = { e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? [0-4] 40 45 43 48 4f } 
+      $x4 = { e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? [0-4] 4F 6E 20 45 } 
+      $x5 = { e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? [0-4] 6F 6E 20 65 } 
+      $x6 = { e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 4c 00 00 00 } 
+      $x7 = { e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 49 54 53 46 } 
+      $x8 = { e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? [6-200] 3C 68 74 61 3A } 
+      $x9 = { e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? [6-200] 3C 48 54 41 3A } 
+      $x10 = { e7 16 e3 bd 65 26 11 45 a4 c4 8d 4d 0b 7a 9e ac ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? [6-200] 3C 6A 6F 62 20 } 
    condition: 
       filesize < 10MB and 1 of them
 }
@@ -4016,17 +3921,7 @@ rule VULN_PUA_GIGABYTE_Driver_Jul22_1_RID318F : DEMO VULN {
       minimum_yara = "1.7"
       
    strings:
-      $xc1 = {
-         00 46 00 69 00 6C 00 65 00 56 00 65 00 72 00 73
-         00 69 00 6F 00 6E 00 00 00 00 00 35 00 2E 00 32
-         00 2E 00 33 00 37 00 39 00 30 00 2E 00 31 00 38
-         00 33 00 30 00 20 00 62 00 75 00 69 00 6C 00 74
-         00 20 00 62 00 79 00 3A 00 20 00 57 00 69 00 6E
-         00 44 00 44 00 4B 00 00 00 00 00 32 00 09 00 01
-         00 49 00 6E 00 74 00 65 00 72 00 6E 00 61 00 6C
-         00 4E 00 61 00 6D 00 65 00 00 00 67 00 64 00 72
-         00 76 00 2E 00 73 00 79 00 73
-      } 
+      $xc1 = { 00 46 00 69 00 6C 00 65 00 56 00 65 00 72 00 73 00 69 00 6F 00 6E 00 00 00 00 00 35 00 2E 00 32 00 2E 00 33 00 37 00 39 00 30 00 2E 00 31 00 38 00 33 00 30 00 20 00 62 00 75 00 69 00 6C 00 74 00 20 00 62 00 79 00 3A 00 20 00 57 00 69 00 6E 00 44 00 44 00 4B 00 00 00 00 00 32 00 09 00 01 00 49 00 6E 00 74 00 65 00 72 00 6E 00 61 00 6C 00 4E 00 61 00 6D 00 65 00 00 00 67 00 64 00 72 00 76 00 2E 00 73 00 79 00 73 } 
       $x1 = "AEYAaQBsAGUAVgBlAHIAcwBpAG8AbgAAAAAANQAuADIALgAzADcAOQAwAC4AMQA4ADMAMAAgAGIAdQBpAGwAdAAgAGIAeQA6ACAAVwBpAG4ARABEAEsAAAAAADIACQABAEkAbgB0AGUAcgBuAGEAbABOAGEAbQBlAAAAZwBkAHIAdgAuAHMAeQBz" 
       $x2 = "BGAGkAbABlAFYAZQByAHMAaQBvAG4AAAAAADUALgAyAC4AMwA3ADkAMAAuADEAOAAzADAAIABiAHUAaQBsAHQAIABiAHkAOgAgAFcAaQBuAEQARABLAAAAAAAyAAkAAQBJAG4AdABlAHIAbgBhAGwATgBhAG0AZQAAAGcAZAByAHYALgBzAHkAc" 
       $x3 = "ARgBpAGwAZQBWAGUAcgBzAGkAbwBuAAAAAAA1AC4AMgAuADMANwA5ADAALgAxADgAMwAwACAAYgB1AGkAbAB0ACAAYgB5ADoAIABXAGkAbgBEAEQASwAAAAAAMgAJAAEASQBuAHQAZQByAG4AYQBsAE4AYQBtAGUAAABnAGQAcgB2AC4AcwB5AH" 
@@ -4050,16 +3945,8 @@ rule VULN_Confluence_Questions_Plugin_CVE_2022_26138_Jul22_1_RID39F2 : CVE_2022_
    strings:
       $x_plain_1 = "predefined.user.password=disabled1system1user6708" 
       $jar_marker = "/confluence/plugins/questions/" 
-      $jar_size_1 = {
-         00 CC ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??
-         /*    here starts default.properties v                          */
-         ?? ?? ?? ?? ?? ?? 00 64 65 66 61 75 6C 74 2E 70
-         72 6F 70 65 72 74 69 65 73 50 4B
-      } 
-      $jar_size_2 = {
-         00 CC 00 ?? ?? ?? ?? ?? 00 64 65 66 61 75 6C 74
-         2E 70 72 6F 70 65 72 74 69 65 73
-      } 
+      $jar_size_1 = { 00 CC ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? /* here starts default.properties v */ ?? ?? ?? ?? ?? ?? 00 64 65 66 61 75 6C 74 2E 70 72 6F 70 65 72 74 69 65 73 50 4B } 
+      $jar_size_2 = { 00 CC 00 ?? ?? ?? ?? ?? 00 64 65 66 61 75 6C 74 2E 70 72 6F 70 65 72 74 69 65 73 } 
    condition: 
       1 of ( $x* ) or ( $jar_marker and 1 of ( $jar_size* ) )
 }
@@ -4557,16 +4444,8 @@ rule MAL_OBFUSC_Unknown_Jan22_1_RID2FC7 : DEMO EXE FILE MAL OBFUS T1027 {
       minimum_yara = "1.7"
       
    strings:
-      $xc1 = {
-         37 00 63 00 38 00 63 00 62 00 35 00 35 00 39 00
-         38 00 65 00 37 00 32 00 34 00 64 00 33 00 34 00
-         33 00 38 00 34 00 63 00 63 00 65 00 37 00 34 00
-         30 00 32 00 62 00 31 00 31 00 66 00 30 00 65
-      } 
-      $xc2 = {
-         4D 61 69 6E 00 43 6C 61 73 73 4C 69 62 72 61 72
-         79 31 00 70 63 31 65
-      } 
+      $xc1 = { 37 00 63 00 38 00 63 00 62 00 35 00 35 00 39 00 38 00 65 00 37 00 32 00 34 00 64 00 33 00 34 00 33 00 38 00 34 00 63 00 63 00 65 00 37 00 34 00 30 00 32 00 62 00 31 00 31 00 66 00 30 00 65 } 
+      $xc2 = { 4D 61 69 6E 00 43 6C 61 73 73 4C 69 62 72 61 72 79 31 00 70 63 31 65 } 
       $s1 = ".dll" wide
       $s2 = "%&%,%s%" ascii fullword
       $op1 = { a2 87 fa b1 44 a5 f5 12 da a7 49 11 5c 8c 26 d4 75 } 
@@ -4610,11 +4489,7 @@ rule APT_HKTL_Wiper_WhisperGate_Jan22_1_RID331C : APT DEMO EXE HKTL {
       minimum_yara = "1.7"
       
    strings:
-      $xc1 = {
-         41 41 41 41 41 00 59 6F 75 72 20 68 61 72 64 20
-         64 72 69 76 65 20 68 61 73 20 62 65 65 6E 20 63
-         6F 72 72 75 70 74 65 64
-      } 
+      $xc1 = { 41 41 41 41 41 00 59 6F 75 72 20 68 61 72 64 20 64 72 69 76 65 20 68 61 73 20 62 65 65 6E 20 63 6F 72 72 75 70 74 65 64 } 
       $op1 = { 89 34 24 e8 3f ff ff ff 50 8d 65 f4 31 c0 59 5e 5f } 
       $op2 = { 8d bd e8 df ff ff e8 04 de ff ff b9 00 08 00 00 f3 a5 c7 44 24 18 00 00 00 00 c7 44 24 14 00 00 00 00 c7 44 24 10 03 00 00 00 c7 44 24 0c 00 00 00 00 } 
       $op3 = { c7 44 24 0c 00 00 00 00 c7 44 24 08 00 02 00 00 89 44 24 04 e8 aa fe ff ff 83 ec 14 89 34 24 e8 3f ff ff ff 50 } 
@@ -4636,16 +4511,8 @@ rule APT_HKTL_Wiper_WhisperGate_Jan22_2_RID331D : APT DEMO EXE HKTL {
       minimum_yara = "1.7"
       
    strings:
-      $sc1 = {
-         70 00 6F 00 77 00 65 00 72 00 73 00 68 00 65 00
-         6C 00 6C 00 00 27 2D 00 65 00 6E 00 63 00 20 00
-         55 00 77 00 42 00 30 00 41 00 47 00 45 00 41 00
-         63 00 67 00 42 00 30 00 41 00 43
-      } 
-      $sc2 = {
-         59 00 6C 00 66 00 77 00 64 00 77 00 67 00 6D 00
-         70 00 69 00 6C 00 7A 00 79 00 61 00 70 00 68
-      } 
+      $sc1 = { 70 00 6F 00 77 00 65 00 72 00 73 00 68 00 65 00 6C 00 6C 00 00 27 2D 00 65 00 6E 00 63 00 20 00 55 00 77 00 42 00 30 00 41 00 47 00 45 00 41 00 63 00 67 00 42 00 30 00 41 00 43 } 
+      $sc2 = { 59 00 6C 00 66 00 77 00 64 00 77 00 67 00 6D 00 70 00 69 00 6C 00 7A 00 79 00 61 00 70 00 68 } 
       $s1 = "xownxloxadDxatxxax" wide
       $s2 = "0AUwBsAGUAZQBwACAALQBzACAAMQAwAA==" wide
       $s3 = "https://cdn.discordapp.com/attachments/" wide
@@ -5094,10 +4961,7 @@ rule APT_FIN7_MsDoc_Sep21_1_RID2E18 : APT DEMO FILE G0046 RUSSIA {
       minimum_yara = "1.7"
       
    strings:
-      $xc1 = {
-         00 4A 00 6F 00 68 00 6E 00 0B 00 57 00 31 00 30
-         00 50 00 72 00 6F 00 4F 00 66 00 66 00 31 00 36
-      } 
+      $xc1 = { 00 4A 00 6F 00 68 00 6E 00 0B 00 57 00 31 00 30 00 50 00 72 00 6F 00 4F 00 66 00 66 00 31 00 36 } 
       $s1 = "word_data.bin" ascii fullword
       $s2 = "V:\\DOC\\For_JS" ascii
       $s3 = "HomeCompany" ascii
@@ -5489,12 +5353,7 @@ rule APT_APT29_NOBELIUM_Malware_May21_3_RID3202 : APT DEMO G0016 G0118 RUSSIA {
       $op1 = { 59 c3 6a 08 68 70 5e 01 10 e8 d2 8c ff ff 8b 7d 08 8b c7 c1 f8 05 } 
       $op2 = { 8d 4d f0 e8 c4 12 00 00 68 64 5b 01 10 8d 45 f0 c7 45 f0 6c 01 01 10 50 e8 ea 13 00 00 cc } 
       $op4 = { 40 c3 8b 65 e8 e8 a6 86 ff ff cc 6a 0c 68 88 60 01 10 e8 b0 4d ff ff } 
-      $xc1 = {
-         25 73 25 73 00 00 00 00 2F 65 2C 20 00 00 00 00
-         43 00 3A 00 5C 00 77 00 69 00 6E 00 64 00 6F 00
-         77 00 73 00 5C 00 65 00 78 00 70 00 6C 00 6F 00
-         72 00 65 00 72 00 2E 00 65 00 78 00 65
-      } 
+      $xc1 = { 25 73 25 73 00 00 00 00 2F 65 2C 20 00 00 00 00 43 00 3A 00 5C 00 77 00 69 00 6E 00 64 00 6F 00 77 00 73 00 5C 00 65 00 78 00 70 00 6C 00 6F 00 72 00 65 00 72 00 2E 00 65 00 78 00 65 } 
    condition: 
       filesize < 3000KB and ( $xc1 or 3 of them )
 }
@@ -5517,10 +5376,7 @@ rule APT_APT29_NOBELIUM_Malware_May21_4_RID3203 : APT DEMO EXE FILE G0016 G0118 
       $op1 = { 80 3d 50 6b 04 10 00 0f 85 96 00 00 00 33 c0 40 b9 48 6b 04 10 87 01 33 db 89 5d fc } 
       $op2 = { c3 33 c0 b9 7c 6f 04 10 40 87 01 c3 8b ff 55 } 
       $op3 = { 8d 4d f4 e8 53 ff ff ff 68 d0 22 01 10 8d 45 f4 50 e8 d8 05 00 00 cc 8b 41 04 } 
-      $xc1 = {
-         2E 64 6C 6C 00 00 00 00 41 53 4B 4F 44 00 00 00
-         53 75 63 63 65 73 73
-      } 
+      $xc1 = { 2E 64 6C 6C 00 00 00 00 41 53 4B 4F 44 00 00 00 53 75 63 63 65 73 73 } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 3000KB and ( $xc1 or 3 of them )
 }
@@ -5882,23 +5738,8 @@ rule WEBSHELL_ASPX_FileExplorer_Mar21_1_RID32A4 : DEMO T1505_003 WEBSHELL {
       
    strings:
       $x1 = "<span style=\"background-color: #778899; color: #fff; padding: 5px; cursor: pointer\" onclick=" ascii
-      $xc1 = {
-         3C 61 73 70 3A 48 69 64 64 65 6E 46 69 65 6C 64
-         20 72 75 6E 61 74 3D 22 73 65 72 76 65 72 22 20
-         49 44 3D 22 ?? ?? ?? ?? ?? 22 20 2F 3E 3C 62 72
-         20 2F 3E 3C 62 72 20 2F 3E 20 50 72 6F 63 65 73
-         73 20 4E 61 6D 65 3A 3C 61 73 70 3A 54 65 78 74
-         42 6F 78 20 49 44 3D
-      } 
-      $xc2 = {
-         22 3E 43 6F 6D 6D 61 6E 64 3C 2F 6C 61 62 65 6C
-         3E 3C 69 6E 70 75 74 20 69 64 3D 22 ?? ?? ?? ??
-         ?? 22 20 74 79 70 65 3D 22 72 61 64 69 6F 22 20
-         6E 61 6D 65 3D 22 74 61 62 73 22 3E 3C 6C 61 62
-         65 6C 20 66 6F 72 3D 22 ?? ?? ?? ?? ?? 22 3E 46
-         69 6C 65 20 45 78 70 6C 6F 72 65 72 3C 2F 6C 61
-         62 65 6C 3E 3C 25 2D 2D
-      } 
+      $xc1 = { 3C 61 73 70 3A 48 69 64 64 65 6E 46 69 65 6C 64 20 72 75 6E 61 74 3D 22 73 65 72 76 65 72 22 20 49 44 3D 22 ?? ?? ?? ?? ?? 22 20 2F 3E 3C 62 72 20 2F 3E 3C 62 72 20 2F 3E 20 50 72 6F 63 65 73 73 20 4E 61 6D 65 3A 3C 61 73 70 3A 54 65 78 74 42 6F 78 20 49 44 3D } 
+      $xc2 = { 22 3E 43 6F 6D 6D 61 6E 64 3C 2F 6C 61 62 65 6C 3E 3C 69 6E 70 75 74 20 69 64 3D 22 ?? ?? ?? ?? ?? 22 20 74 79 70 65 3D 22 72 61 64 69 6F 22 20 6E 61 6D 65 3D 22 74 61 62 73 22 3E 3C 6C 61 62 65 6C 20 66 6F 72 3D 22 ?? ?? ?? ?? ?? 22 3E 46 69 6C 65 20 45 78 70 6C 6F 72 65 72 3C 2F 6C 61 62 65 6C 3E 3C 25 2D 2D } 
       $r1 = "(Request.Form[" ascii
       $s1 = ".Text + \" Created!\";" ascii
       $s2 = "DriveInfo.GetDrives()" ascii
@@ -6210,10 +6051,7 @@ rule APT_MAL_ASP_DLL_HAFNIUM_Mar21_1_RID3086 : APT DEMO EXE FILE G0125 MAL {
       
    strings:
       $s1 = "Page_Load" ascii fullword
-      $sc1 = {
-         20 00 3A 00 20 00 68 00 74 00 74 00 70 00 3A 00
-         2F 00 2F 00 (66 | 67) 00 2F 00 00 89 A3 0D 00 0A 00
-      } 
+      $sc1 = { 20 00 3A 00 20 00 68 00 74 00 74 00 70 00 3A 00 2F 00 2F 00 (66 | 67) 00 2F 00 00 89 A3 0D 00 0A 00 } 
       $op1 = { 00 43 00 58 00 77 00 30 00 4a 00 45 00 00 51 7e 00 2f } 
       $op2 = { 58 00 77 00 30 00 4a 00 45 00 00 51 7e 00 2f 00 61 00 } 
       $op3 = { 01 0e 0e 05 20 01 01 11 79 04 07 01 12 2d 04 07 01 12 31 02 } 
@@ -6366,18 +6204,7 @@ rule SUSP_VEST_Encryption_Core_Accumulator_Jan21_RID3729 : DEMO EXE FILE G0032 N
       minimum_yara = "1.7"
       
    strings:
-      $sc1 = {
-         4F 70 46 DA E1 8D F6 41 59 E8 5D 26 1E CC 2F 89
-         26 6D 52 BA BC 11 6B A9 C6 47 E4 9C 1E B6 65 A2
-         B6 CD 90 47 1C DF F8 10 4B D2 7C C4 72 25 C6 97
-         25 5D C6 1D 4B 36 BC 38 36 33 F8 89 B4 4C 65 A7
-         96 CA 1B 63 C3 4B 6A 63 DC 85 4C 57 EE 2A 05 C7
-         0C E7 39 35 8A C1 BF 13 D9 52 51 3D 2E 41 F5 72
-         85 23 FE A1 AA 53 61 3B 25 5F 62 B4 36 EE 2A 51
-         AF 18 8E 9A C6 CF C4 07 4A 9B 25 9B 76 62 0E 3E
-         96 3A A7 64 23 6B B6 19 BC 2D 40 D7 36 3E E2 85
-         9A D1 22 9F BC 30 15 9F C2 5D F1 23 E6 3A 73 C0
-      } 
+      $sc1 = { 4F 70 46 DA E1 8D F6 41 59 E8 5D 26 1E CC 2F 89 26 6D 52 BA BC 11 6B A9 C6 47 E4 9C 1E B6 65 A2 B6 CD 90 47 1C DF F8 10 4B D2 7C C4 72 25 C6 97 25 5D C6 1D 4B 36 BC 38 36 33 F8 89 B4 4C 65 A7 96 CA 1B 63 C3 4B 6A 63 DC 85 4C 57 EE 2A 05 C7 0C E7 39 35 8A C1 BF 13 D9 52 51 3D 2E 41 F5 72 85 23 FE A1 AA 53 61 3B 25 5F 62 B4 36 EE 2A 51 AF 18 8E 9A C6 CF C4 07 4A 9B 25 9B 76 62 0E 3E 96 3A A7 64 23 6B B6 19 BC 2D 40 D7 36 3E E2 85 9A D1 22 9F BC 30 15 9F C2 5D F1 23 E6 3A 73 C0 } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and 1 of them
 }
@@ -6440,28 +6267,8 @@ rule SUSP_AdobePDF_SFX_Bitmap_Combo_Executable_RID362C : ANOMALY DEMO EXE FILE S
       minimum_yara = "3.0.0"
       
    strings:
-      $sc1 = {
-         FF 00 CC FF FF 00 99 FF FF 00 66 FF FF 00 33 FF
-         FF 80 00 FF FF 80 FF CC FF 80 CC CC FF C0 99 CC
-         FF 80 66 CC FF 00 33 CC FF 00 00 CC FF 00 FF 99
-         FF FF CC 99 FF FF 99 99 FF FF 66 99 FF FF 33 99
-         FF 08 00 99 FF 88 FF 66 FF 88 CC 66 FF 88 99 66
-         FF 88 66 66 FF 88 33 66 FF 05 00 66 FF 55 FF 33
-         FF 55 CC 33 FF 55 99 33 FF 55 66 33 FF 58 33 33
-         FF 01 00 33 FF 99 FF 00 FF 99 CC 00 FF 99 99 00
-         FF 99 66 00 FF 58 33 00 FF 01 00 00 FF 99 FF FF
-         CC 99 CC FF CC 99 99 FF CC 99 66 FF CC 58 33 FF
-         CC 01 00 FF CC FF FF CC CC FF CC CC CC FF 99 CC
-         CC FF 66 CC CC 58 33 CC CC 01 00 CC CC FF FF 99
-      } 
-      $sc2 = {
-         28 66 27 00 60 00 00 00 80 00 00 00 80 80 80 00
-         C0 C0 C0 00 FF FF FF 00 FF FF FF 00 FF FF FF 00
-         FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00
-         FF FF FF 00 FF FF FF 00 5D 33 00 00 5D 33 00 00
-         5D 33 00 00 5D 33 00 00 5D 33 00 00 5D 33 00 00
-         5D 33 00 00 5D 33 00 00 5D 33 00 00 5D 33 00 00
-      } 
+      $sc1 = { FF 00 CC FF FF 00 99 FF FF 00 66 FF FF 00 33 FF FF 80 00 FF FF 80 FF CC FF 80 CC CC FF C0 99 CC FF 80 66 CC FF 00 33 CC FF 00 00 CC FF 00 FF 99 FF FF CC 99 FF FF 99 99 FF FF 66 99 FF FF 33 99 FF 08 00 99 FF 88 FF 66 FF 88 CC 66 FF 88 99 66 FF 88 66 66 FF 88 33 66 FF 05 00 66 FF 55 FF 33 FF 55 CC 33 FF 55 99 33 FF 55 66 33 FF 58 33 33 FF 01 00 33 FF 99 FF 00 FF 99 CC 00 FF 99 99 00 FF 99 66 00 FF 58 33 00 FF 01 00 00 FF 99 FF FF CC 99 CC FF CC 99 99 FF CC 99 66 FF CC 58 33 FF CC 01 00 FF CC FF FF CC CC FF CC CC CC FF 99 CC CC FF 66 CC CC 58 33 CC CC 01 00 CC CC FF FF 99 } 
+      $sc2 = { 28 66 27 00 60 00 00 00 80 00 00 00 80 80 80 00 C0 C0 C0 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 FF FF FF 00 5D 33 00 00 5D 33 00 00 5D 33 00 00 5D 33 00 00 5D 33 00 00 5D 33 00 00 5D 33 00 00 5D 33 00 00 5D 33 00 00 5D 33 00 00 } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and all of them and pe.number_of_signatures < 1
 }
@@ -6481,20 +6288,7 @@ rule SUSP_AdobePDF_Bitmap_Executable_RID328D : DEMO EXE FILE SUSP {
       minimum_yara = "3.0.0"
       
    strings:
-      $sc1 = {
-         FF 00 CC FF FF 00 99 FF FF 00 66 FF FF 00 33 FF
-         FF 80 00 FF FF 80 FF CC FF 80 CC CC FF C0 99 CC
-         FF 80 66 CC FF 00 33 CC FF 00 00 CC FF 00 FF 99
-         FF FF CC 99 FF FF 99 99 FF FF 66 99 FF FF 33 99
-         FF 08 00 99 FF 88 FF 66 FF 88 CC 66 FF 88 99 66
-         FF 88 66 66 FF 88 33 66 FF 05 00 66 FF 55 FF 33
-         FF 55 CC 33 FF 55 99 33 FF 55 66 33 FF 58 33 33
-         FF 01 00 33 FF 99 FF 00 FF 99 CC 00 FF 99 99 00
-         FF 99 66 00 FF 58 33 00 FF 01 00 00 FF 99 FF FF
-         CC 99 CC FF CC 99 99 FF CC 99 66 FF CC 58 33 FF
-         CC 01 00 FF CC FF FF CC CC FF CC CC CC FF 99 CC
-         CC FF 66 CC CC 58 33 CC CC 01 00 CC CC FF FF 99
-      } 
+      $sc1 = { FF 00 CC FF FF 00 99 FF FF 00 66 FF FF 00 33 FF FF 80 00 FF FF 80 FF CC FF 80 CC CC FF C0 99 CC FF 80 66 CC FF 00 33 CC FF 00 00 CC FF 00 FF 99 FF FF CC 99 FF FF 99 99 FF FF 66 99 FF FF 33 99 FF 08 00 99 FF 88 FF 66 FF 88 CC 66 FF 88 99 66 FF 88 66 66 FF 88 33 66 FF 05 00 66 FF 55 FF 33 FF 55 CC 33 FF 55 99 33 FF 55 66 33 FF 58 33 33 FF 01 00 33 FF 99 FF 00 FF 99 CC 00 FF 99 99 00 FF 99 66 00 FF 58 33 00 FF 01 00 00 FF 99 FF FF CC 99 CC FF CC 99 99 FF CC 99 66 FF CC 58 33 FF CC 01 00 FF CC FF FF CC CC FF CC CC CC FF 99 CC CC FF 66 CC CC 58 33 CC CC 01 00 CC CC FF FF 99 } 
       $fp1 = "Adobe" ascii wide fullword
    condition: 
       uint16 ( 0 ) == 0x5a4d and $sc1 and not 1 of ( $fp* ) and pe.number_of_signatures < 1
@@ -6611,12 +6405,7 @@ rule APT_MAL_URL_CloudAtlas_Oct20_2_RID3144 : APT DEMO FILE G0100 MAL {
       minimum_yara = "1.7"
       
    strings:
-      $hc1 = {
-         5B 49 6E 74 65 72 6E 65 74 53 68 6F 72 74 63 75
-         74 5D 0D 0A 55 52 4C 3D 68 74 74 70 73 3A 2F 2F
-         6D 73 6F 66 66 69 63 65 75 70 64 61 74 65 2E 6F
-         72 67
-      } 
+      $hc1 = { 5B 49 6E 74 65 72 6E 65 74 53 68 6F 72 74 63 75 74 5D 0D 0A 55 52 4C 3D 68 74 74 70 73 3A 2F 2F 6D 73 6F 66 66 69 63 65 75 70 64 61 74 65 2E 6F 72 67 } 
    condition: 
       uint16 ( 0 ) == 0x495b and filesize < 200 and $hc1 at 0
 }
@@ -6637,11 +6426,7 @@ rule MAL_DOC_ZLoader_Oct20_1_RID2EA7 : DEMO FILE MAL {
       minimum_yara = "1.7"
       
    strings:
-      $sc1 = {
-         78 4E FC 04 AB 6B 17 E2 33 E3 49 62 50 69 BB 60
-         31 00 1E 00 02 4B BA E2 D8 E3 92 22 1E 69 96 20
-         98
-      } 
+      $sc1 = { 78 4E FC 04 AB 6B 17 E2 33 E3 49 62 50 69 BB 60 31 00 1E 00 02 4B BA E2 D8 E3 92 22 1E 69 96 20 98 } 
       $sc2 = { 6B 9E E2 36 E3 69 62 72 69 3A 60 55 6E } 
       $sc3 = { 3E 69 76 60 59 6E 34 FB 87 6B 75 } 
    condition: 
@@ -6712,37 +6497,11 @@ rule APT_MAL_SLOTHFULMEDIA_Oct20_1_RID2FD6 : APT DEMO EXE MAL {
       minimum_yara = "1.7"
       
    strings:
-      $xc1 = {
-         25 73 26 69 3D 25 64 00 48 54 54 50 2F 31 2E 31
-         00 00 00 00 50 4F 53 54 00 00 00 00 43 6F 6E 74
-         65 6E 74 2D 4C 65 6E 67 74 68 3A 20 25 64 00 00
-         5C 00 53 00 65 00 74 00 75 00 70 00 55 00 69 00
-         00 00 00 00 25 00 73 00 25 00 73 00 5F 00 25 00
-         64 00 2E 00 64 00 61 00 74
-      } 
-      $xc2 = {
-         2F 76 3F 6D 3D 00 00 00 35 30 31 00 32 30 30 00
-         2A 00 2E 00 2A 00 00 00 25 00 73 00 00 00 00 00
-         53 00 65 00 44 00 65 00 62 00 75 00 67 00 50 00
-         72 00 69 00 76 00 69 00 6C 00 65 00 67 00 65
-      } 
-      $xc3 = {
-         00 25 00 73 00 7C 00 25 00 73 00 7C 00 25 00 73
-         00 7C 00 25 00 73 00 00 00 5C 00 46 00 69 00 6C
-         00 74 00 65 00 72 00 33 00 2E 00 6A 00 70 00 67
-      } 
-      $sc1 = {
-         25 74 65 6D 70 25 00 00 25 73 5C 25 73 2E 65 78
-         65 00 00 00 25 74 65 6D 70 25 00 00 25 73 5C 25
-         73 2E 65 78 65
-      } 
-      $sc2 = {
-         61 70 70 6C 69 63 61 74 69 6F 6E 2F 6F 63 74 65
-         74 2D 73 74 72 65 61 6D 2C 61 70 70 6C 69 63 61
-         74 69 6F 6E 2F 78 68 74 6D 6C 00 00 25 73 26 69
-         3D 25 64 00 48 54 54 50 2F 31 2E 31 00 00 00 00
-         50 4F 53 54
-      } 
+      $xc1 = { 25 73 26 69 3D 25 64 00 48 54 54 50 2F 31 2E 31 00 00 00 00 50 4F 53 54 00 00 00 00 43 6F 6E 74 65 6E 74 2D 4C 65 6E 67 74 68 3A 20 25 64 00 00 5C 00 53 00 65 00 74 00 75 00 70 00 55 00 69 00 00 00 00 00 25 00 73 00 25 00 73 00 5F 00 25 00 64 00 2E 00 64 00 61 00 74 } 
+      $xc2 = { 2F 76 3F 6D 3D 00 00 00 35 30 31 00 32 30 30 00 2A 00 2E 00 2A 00 00 00 25 00 73 00 00 00 00 00 53 00 65 00 44 00 65 00 62 00 75 00 67 00 50 00 72 00 69 00 76 00 69 00 6C 00 65 00 67 00 65 } 
+      $xc3 = { 00 25 00 73 00 7C 00 25 00 73 00 7C 00 25 00 73 00 7C 00 25 00 73 00 00 00 5C 00 46 00 69 00 6C 00 74 00 65 00 72 00 33 00 2E 00 6A 00 70 00 67 } 
+      $sc1 = { 25 74 65 6D 70 25 00 00 25 73 5C 25 73 2E 65 78 65 00 00 00 25 74 65 6D 70 25 00 00 25 73 5C 25 73 2E 65 78 65 } 
+      $sc2 = { 61 70 70 6C 69 63 61 74 69 6F 6E 2F 6F 63 74 65 74 2D 73 74 72 65 61 6D 2C 61 70 70 6C 69 63 61 74 69 6F 6E 2F 78 68 74 6D 6C 00 00 25 73 26 69 3D 25 64 00 48 54 54 50 2F 31 2E 31 00 00 00 00 50 4F 53 54 } 
       $s1 = "%s%s_%d.dat" wide fullword
       $s2 = "Local Security Process" wide fullword
       $s3 = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.75" ascii fullword
@@ -6786,10 +6545,7 @@ rule HKTL_Mimikatz_SkeletonKey_in_memory_Aug20_1_RID3752 : DEMO HKTL S0002 T1003
       minimum_yara = "1.7"
       
    strings:
-      $x1 = {
-         60 ba 4f ca c7 44 24 34 dc 46 6c 7a c7 44 24 38
-         03 3c 17 81 c7 44 24 3c 94 c0 3d f6
-      } 
+      $x1 = { 60 ba 4f ca c7 44 24 34 dc 46 6c 7a c7 44 24 38 03 3c 17 81 c7 44 24 3c 94 c0 3d f6 } 
    condition: 
       1 of them
 }
@@ -6910,10 +6666,7 @@ rule APT_MAL_Ke3chang_Ketrican_Jun20_1_RID3280 : APT DEMO EXE G0004 MAL {
       minimum_yara = "1.7"
       
    strings:
-      $xc1 = {
-         00 59 89 85 D4 FB FF FF 8B 85 D4 FB FF FF 89 45
-         FC 68 E0 58 40 00 8F 45 FC E9
-      } 
+      $xc1 = { 00 59 89 85 D4 FB FF FF 8B 85 D4 FB FF FF 89 45 FC 68 E0 58 40 00 8F 45 FC E9 } 
       $op1 = { 6a 53 58 66 89 85 24 ff ff ff 6a 79 58 66 89 85 } 
       $op2 = { 8d 45 bc 50 53 53 6a 1c 8d 85 10 ff ff ff 50 ff } 
    condition: 
@@ -7245,14 +6998,8 @@ rule APT_LNX_Academic_Camp_May20_Eraser_1_RID33C6 : APT DEMO FILE LINUX {
       minimum_yara = "1.7"
       
    strings:
-      $sc2 = {
-         E6 FF FF 48 89 45 D0 8B 45 E0 BA 00 00 00 00 BE
-         00 00 00 00 89 C7 E8
-      } 
-      $sc3 = {
-         E6 FF FF 89 45 DC 8B 45 DC 83 C0 01 48 98 BE 01
-         00 00 00 48 89 C7 E8
-      } 
+      $sc2 = { E6 FF FF 48 89 45 D0 8B 45 E0 BA 00 00 00 00 BE 00 00 00 00 89 C7 E8 } 
+      $sc3 = { E6 FF FF 89 45 DC 8B 45 DC 83 C0 01 48 98 BE 01 00 00 00 48 89 C7 E8 } 
    condition: 
       uint16 ( 0 ) == 0x457f and filesize < 60KB and all of them
 }
@@ -7271,10 +7018,7 @@ rule APT_LNX_Academic_Camp_May20_Loader_1_RID33BB : APT DEMO FILE LINUX {
       minimum_yara = "1.7"
       
    strings:
-      $sc1 = {
-         C6 45 F1 00 C6 45 F2 0A C6 45 F3 0A C6 45 F4 4A
-         C6 45 F5 04 C6 45 F6 06 C6 45 F7 1B C6 45 F8 01
-      } 
+      $sc1 = { C6 45 F1 00 C6 45 F2 0A C6 45 F3 0A C6 45 F4 4A C6 45 F5 04 C6 45 F6 06 C6 45 F7 1B C6 45 F8 01 } 
       $sc2 = { 01 48 39 EB 75 EA 48 83 C4 08 5B 5D 41 5C 41 5D } 
    condition: 
       uint16 ( 0 ) == 0x457f and filesize < 10KB and all of them
@@ -7295,25 +7039,10 @@ rule MAL_RANSOM_Ragna_Locker_Apr20_1_RID3195 : CRIME DEMO EXE MAL RANSOM {
       
    strings:
       $x1 = "---RAGNAR SECRET---" ascii
-      $xc1 = {
-         0D 0A 25 73 0D 0A 0D 0A 25 73 0D 0A 25 73 0D 0A
-         25 73 0D 0A 0D 0A 25 73 0D 0A 00 00 2E 00 72 00
-         61 00 67 00 6E 00 61 00 72 00 5F
-      } 
-      $xc2 = {
-         00 2D 00 66 00 6F 00 72 00 63 00 65 00 00 00 00
-         00 57 00 69 00 6E 00 53 00 74 00 61 00 30 00 5C
-         00 44 00 65 00 66 00 61 00 75 00 6C 00 74 00 00
-         00 5C 00 6E 00 6F 00 74 00 65 00 70 00 61 00 64
-         00 2E 00 65 00 78 00 65 00
-      } 
+      $xc1 = { 0D 0A 25 73 0D 0A 0D 0A 25 73 0D 0A 25 73 0D 0A 25 73 0D 0A 0D 0A 25 73 0D 0A 00 00 2E 00 72 00 61 00 67 00 6E 00 61 00 72 00 5F } 
+      $xc2 = { 00 2D 00 66 00 6F 00 72 00 63 00 65 00 00 00 00 00 57 00 69 00 6E 00 53 00 74 00 61 00 30 00 5C 00 44 00 65 00 66 00 61 00 75 00 6C 00 74 00 00 00 5C 00 6E 00 6F 00 74 00 65 00 70 00 61 00 64 00 2E 00 65 00 78 00 65 00 } 
       $s1 = "bootfont.bin" wide fullword
-      $sc2 = {
-         00 57 00 69 00 6E 00 64 00 6F 00 77 00 73 00 00
-         00 57 00 69 00 6E 00 64 00 6F 00 77 00 73 00 2E
-         00 6F 00 6C 00 64 00 00 00 54 00 6F 00 72 00 20
-         00 62 00 72 00 6F 00 77 00 73 00 65 00 72 00
-      } 
+      $sc2 = { 00 57 00 69 00 6E 00 64 00 6F 00 77 00 73 00 00 00 57 00 69 00 6E 00 64 00 6F 00 77 00 73 00 2E 00 6F 00 6C 00 64 00 00 00 54 00 6F 00 72 00 20 00 62 00 72 00 6F 00 77 00 73 00 65 00 72 00 } 
       $op1 = { c7 85 58 ff ff ff 55 00 6b 00 c7 85 5c ff ff ff } 
       $op2 = { 50 c7 85 7a ff ff ff 5c } 
       $op3 = { 8b 75 08 8a 84 0d 20 ff ff ff ff 45 08 32 06 8b } 
@@ -7784,10 +7513,7 @@ rule MAL_Emotet_JS_Dropper_Oct19_1_RID316E : DEMO FILE MAL {
       minimum_yara = "1.7"
       
    strings:
-      $xc1 = {
-         FF FE 76 00 61 00 72 00 20 00 61 00 3D 00 5B 00
-         27 00
-      } 
+      $xc1 = { FF FE 76 00 61 00 72 00 20 00 61 00 3D 00 5B 00 27 00 } 
    condition: 
       uint32 ( 0 ) == 0x0076feff and filesize <= 700KB and $xc1 at 0
 }
@@ -7945,17 +7671,7 @@ rule SUSP_Unsigned_OSPPSVC_RID2E85 : DEMO EXE FILE OFFICE SUSP T1569_002 {
       minimum_yara = "3.0.0"
       
    strings:
-      $sc1 = {
-         00 46 00 69 00 6C 00 65 00 44 00 65 00 73 00 63
-         00 72 00 69 00 70 00 74 00 69 00 6F 00 6E 00 00
-         00 00 00 4D 00 69 00 63 00 72 00 6F 00 73 00 6F
-         00 66 00 74 00 20 00 4F 00 66 00 66 00 69 00 63
-         00 65 00 20 00 53 00 6F 00 66 00 74 00 77 00 61
-         00 72 00 65 00 20 00 50 00 72 00 6F 00 74 00 65
-         00 63 00 74 00 69 00 6F 00 6E 00 20 00 50 00 6C
-         00 61 00 74 00 66 00 6F 00 72 00 6D 00 20 00 53
-         00 65 00 72 00 76 00 69 00 63 00 65
-      } 
+      $sc1 = { 00 46 00 69 00 6C 00 65 00 44 00 65 00 73 00 63 00 72 00 69 00 70 00 74 00 69 00 6F 00 6E 00 00 00 00 00 4D 00 69 00 63 00 72 00 6F 00 73 00 6F 00 66 00 74 00 20 00 4F 00 66 00 66 00 69 00 63 00 65 00 20 00 53 00 6F 00 66 00 74 00 77 00 61 00 72 00 65 00 20 00 50 00 72 00 6F 00 74 00 65 00 63 00 74 00 69 00 6F 00 6E 00 20 00 50 00 6C 00 61 00 74 00 66 00 6F 00 72 00 6D 00 20 00 53 00 65 00 72 00 76 00 69 00 63 00 65 } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 8000KB and $sc1 and pe.number_of_signatures < 1
 }
@@ -7974,29 +7690,10 @@ rule MAL_ArtraDownloader2_Aug19_1_RID30FB : DEMO EXE FILE MAL {
       minimum_yara = "1.7"
       
    strings:
-      $xc1 = {
-         47 45 54 20 25 73 20 48 54 54 50 2F 31 2E 30 00
-         0D 0A 00 00 48 6F 73 74 3A 20 25 73 00 00 00 00
-         3F 61 3D 00 26 62 3D 00 26 63 3D 00 26 64 3D 00
-         26 65 3D 00 25 32 30
-      } 
-      $xc2 = {
-         25 73 20 25 73 20 25 73 0D 0A 25 73 20 25 73 0D
-         0A 25 73 25 73 0D 0A 25 73 25 73 0D 0A 25 73 20
-         25 64 0D 0A 0D 0A 25 73 00 00 00 00 71 72 79 3D
-      } 
-      $xc3 = {
-         49 44 3D 25 73 00 00 00 3A 00 00 00 25 73 20 25
-         73 20 25 73 0D 0A 25 73 20 25 73 0D 0A 25 73 25
-         73 0D 0A 25 73 25 73 0D 0A 43 6F 6E 74 65 6E 74
-         2D 6C 65 6E 67 74 68 25 73 20 25 64
-      } 
-      $xc4 = {
-         25 73 20 25 73 20 25 73 0D 0A 25 73 20 25 73 0D
-         0A 25 73 25 73 0D 0A 25 73 25 73 0D 0A 43 6F 6E
-         74 65 6E 74 2D 6C 65 6E 67 74 68 3A 20 25 64 0D
-         0A 0D 0A 25 73
-      } 
+      $xc1 = { 47 45 54 20 25 73 20 48 54 54 50 2F 31 2E 30 00 0D 0A 00 00 48 6F 73 74 3A 20 25 73 00 00 00 00 3F 61 3D 00 26 62 3D 00 26 63 3D 00 26 64 3D 00 26 65 3D 00 25 32 30 } 
+      $xc2 = { 25 73 20 25 73 20 25 73 0D 0A 25 73 20 25 73 0D 0A 25 73 25 73 0D 0A 25 73 25 73 0D 0A 25 73 20 25 64 0D 0A 0D 0A 25 73 00 00 00 00 71 72 79 3D } 
+      $xc3 = { 49 44 3D 25 73 00 00 00 3A 00 00 00 25 73 20 25 73 20 25 73 0D 0A 25 73 20 25 73 0D 0A 25 73 25 73 0D 0A 25 73 25 73 0D 0A 43 6F 6E 74 65 6E 74 2D 6C 65 6E 67 74 68 25 73 20 25 64 } 
+      $xc4 = { 25 73 20 25 73 20 25 73 0D 0A 25 73 20 25 73 0D 0A 25 73 25 73 0D 0A 25 73 25 73 0D 0A 43 6F 6E 74 65 6E 74 2D 6C 65 6E 67 74 68 3A 20 25 64 0D 0A 0D 0A 25 73 } 
       $x1 = "Tpguxbsf]Njdsptpgu" ascii
       $x2 = ".gpsn.vsmfodpefe" ascii
    condition: 
@@ -8233,13 +7930,7 @@ rule SUSP_Unsigned_GoogleUpdate_RID3117 : DEMO EXE FILE HIGHVOL SUSP {
       minimum_yara = "3.0.0"
       
    strings:
-      $ac1 = {
-         00 4F 00 72 00 69 00 67 00 69 00 6E 00 61 00 6C
-         00 46 00 69 00 6C 00 65 00 6E 00 61 00 6D 00 65
-         00 00 00 47 00 6F 00 6F 00 67 00 6C 00 65 00 55
-         00 70 00 64 00 61 00 74 00 65 00 2E 00 65 00 78
-         00 65
-      } 
+      $ac1 = { 00 4F 00 72 00 69 00 67 00 69 00 6E 00 61 00 6C 00 46 00 69 00 6C 00 65 00 6E 00 61 00 6D 00 65 00 00 00 47 00 6F 00 6F 00 67 00 6C 00 65 00 55 00 70 00 64 00 61 00 74 00 65 00 2E 00 65 00 78 00 65 } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 2000KB and $ac1 and pe.number_of_signatures < 1
 }
@@ -8531,21 +8222,8 @@ rule MAL_QuasarRAT_May19_1_RID2E1E : DEMO EXE FILE MAL {
       $x2 = "Client.MimikatzTools" ascii fullword
       $x3 = "Resources.powerkatz_x86.dll" ascii fullword
       $x4 = "Uninstalling... good bye :-(" wide
-      $xc1 = {
-         41 00 64 00 6D 00 69 00 6E 00 00 11 73 00 63 00
-         68 00 74 00 61 00 73 00 6B 00 73 00 00 1B 2F 00
-         63 00 72 00 65 00 61 00 74 00 65 00 20 00 2F 00
-         74 00 6E 00 20 00 22 00 00 27 22 00 20 00 2F 00
-         73
-      } 
-      $xc2 = {
-         00 70 00 69 00 6E 00 67 00 20 00 2D 00 6E 00 20
-         00 31 00 30 00 20 00 6C 00 6F 00 63 00 61 00 6C
-         00 68 00 6F 00 73 00 74 00 20 00 3E 00 20 00 6E
-         00 75 00 6C 00 0D 00 0A 00 64 00 65 00 6C 00 20
-         00 2F 00 61 00 20 00 2F 00 71 00 20 00 2F 00 66
-         00 20 00
-      } 
+      $xc1 = { 41 00 64 00 6D 00 69 00 6E 00 00 11 73 00 63 00 68 00 74 00 61 00 73 00 6B 00 73 00 00 1B 2F 00 63 00 72 00 65 00 61 00 74 00 65 00 20 00 2F 00 74 00 6E 00 20 00 22 00 00 27 22 00 20 00 2F 00 73 } 
+      $xc2 = { 00 70 00 69 00 6E 00 67 00 20 00 2D 00 6E 00 20 00 31 00 30 00 20 00 6C 00 6F 00 63 00 61 00 6C 00 68 00 6F 00 73 00 74 00 20 00 3E 00 20 00 6E 00 75 00 6C 00 0D 00 0A 00 64 00 65 00 6C 00 20 00 2F 00 61 00 20 00 2F 00 71 00 20 00 2F 00 66 00 20 00 } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 10000KB and 1 of them
 }
@@ -8942,17 +8620,8 @@ rule Ransom_LockerGoga_Mar19_1_RID3037 : CRIME DEMO EXE FILE MAL RANSOM {
       $x1 = "\\.(doc|dot|wbk|docx|dotx|docb|xlm|xlsx|xltx|xlsb|xlw|ppt|pot|pps|pptx|potx|ppsx|sldx|pdf)" wide
       $x2 = "|[A-Za-z]:\\cl.log" wide
       $x4 = "\\crypto-locker\\" ascii
-      $xc1 = {
-         00 43 00 6F 00 6D 00 70 00 61 00 6E 00 79 00 4E
-         00 61 00 6D 00 65 00 00 00 00 00 4D 00 6C 00 63
-         00 72 00 6F 00 73 00 6F 00 66 00 74
-      } 
-      $xc2 = {
-         00 2E 00 6C 00 6F 00 63 00 6B 00 65 00 64 00 00
-         00 20 46 41 49 4C 45 44 20 00 00 00 00 20 00 00
-         00 20 75 6E 6B 6E 6F 77 6E 20 65 78 63 65 70 74
-         69 6F 6E
-      } 
+      $xc1 = { 00 43 00 6F 00 6D 00 70 00 61 00 6E 00 79 00 4E 00 61 00 6D 00 65 00 00 00 00 00 4D 00 6C 00 63 00 72 00 6F 00 73 00 6F 00 66 00 74 } 
+      $xc2 = { 00 2E 00 6C 00 6F 00 63 00 6B 00 65 00 64 00 00 00 20 46 41 49 4C 45 44 20 00 00 00 00 20 00 00 00 20 75 6E 6B 6E 6F 77 6E 20 65 78 63 65 70 74 69 6F 6E } 
       $rn1 = "This may lead to the impossibility of recovery of the certain files." wide
    condition: 
       ( uint16 ( 0 ) == 0x5a4d and filesize < 4000KB and 1 of ( $x* ) ) or $rn1
@@ -9725,11 +9394,7 @@ rule MAL_ELF_LNX_Mirai_Oct10_2_RID2F3A : DEMO FILE LINUX MAL {
       minimum_yara = "1.7"
       
    strings:
-      $c01 = {
-         50 4F 53 54 20 2F 63 64 6E 2D 63 67 69 2F 00 00
-         20 48 54 54 50 2F 31 2E 31 0D 0A 55 73 65 72 2D
-         41 67 65 6E 74 3A 20 00 0D 0A 48 6F 73 74 3A
-      } 
+      $c01 = { 50 4F 53 54 20 2F 63 64 6E 2D 63 67 69 2F 00 00 20 48 54 54 50 2F 31 2E 31 0D 0A 55 73 65 72 2D 41 67 65 6E 74 3A 20 00 0D 0A 48 6F 73 74 3A } 
    condition: 
       uint16 ( 0 ) == 0x457f and filesize < 200KB and all of them
 }
@@ -10103,16 +9768,7 @@ rule SUSP_Microsoft_7z_SFX_Combo_RID3120 : ANOMALY DEMO EXE FILE SUSP {
    strings:
       $s1 = "7ZSfx%03x.cmd" fullword wide
       $s2 = "7z SFX: error" fullword ascii
-      $c1 = {
-         00 4C 00 65 00 67 00 61 00 6C 00 43 00 6F 00 70
-         00 79 00 72 00 69 00 67 00 68 00 74 00 00 00 A9
-         00 20 00 4D 00 69 00 63 00 72 00 6F 00 73 00 6F
-         00 66 00 74 00 20 00 43 00 6F 00 72 00 70 00 6F
-         00 72 00 61 00 74 00 69 00 6F 00 6E 00 2E 00 20
-         00 41 00 6C 00 6C 00 20 00 72 00 69 00 67 00 68
-         00 74 00 73 00 20 00 72 00 65 00 73 00 65 00 72
-         00 76 00 65 00 64 00 2E
-      } 
+      $c1 = { 00 4C 00 65 00 67 00 61 00 6C 00 43 00 6F 00 70 00 79 00 72 00 69 00 67 00 68 00 74 00 00 00 A9 00 20 00 4D 00 69 00 63 00 72 00 6F 00 73 00 6F 00 66 00 74 00 20 00 43 00 6F 00 72 00 70 00 6F 00 72 00 61 00 74 00 69 00 6F 00 6E 00 2E 00 20 00 41 00 6C 00 6C 00 20 00 72 00 69 00 67 00 68 00 74 00 73 00 20 00 72 00 65 00 73 00 65 00 72 00 76 00 65 00 64 00 2E } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 3000KB and 1 of ( $s* ) and $c1
 }
@@ -10134,16 +9790,7 @@ rule SUSP_Microsoft_RAR_SFX_Combo_RID3154 : ANOMALY DEMO EXE FILE SUSP {
       $s1 = "winrarsfxmappingfile.tmp" fullword wide
       $s2 = "WinRAR self-extracting archive" fullword wide
       $s3 = "WINRAR.SFX" fullword
-      $c1 = {
-         00 4C 00 65 00 67 00 61 00 6C 00 43 00 6F 00 70
-         00 79 00 72 00 69 00 67 00 68 00 74 00 00 00 A9
-         00 20 00 4D 00 69 00 63 00 72 00 6F 00 73 00 6F
-         00 66 00 74 00 20 00 43 00 6F 00 72 00 70 00 6F
-         00 72 00 61 00 74 00 69 00 6F 00 6E 00 2E 00 20
-         00 41 00 6C 00 6C 00 20 00 72 00 69 00 67 00 68
-         00 74 00 73 00 20 00 72 00 65 00 73 00 65 00 72
-         00 76 00 65 00 64 00 2E
-      } 
+      $c1 = { 00 4C 00 65 00 67 00 61 00 6C 00 43 00 6F 00 70 00 79 00 72 00 69 00 67 00 68 00 74 00 00 00 A9 00 20 00 4D 00 69 00 63 00 72 00 6F 00 73 00 6F 00 66 00 74 00 20 00 43 00 6F 00 72 00 70 00 6F 00 72 00 61 00 74 00 69 00 6F 00 6E 00 2E 00 20 00 41 00 6C 00 6C 00 20 00 72 00 69 00 67 00 68 00 74 00 73 00 20 00 72 00 65 00 73 00 65 00 72 00 76 00 65 00 64 00 2E } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 3000KB and 1 of ( $s* ) and $c1
 }
@@ -10640,12 +10287,7 @@ rule APT_FIN7_EXE_Sample_Aug18_10_RID3010 : APT DEMO EXE FILE G0046 RUSSIA {
       minimum_yara = "1.7"
       
    strings:
-      $c1 = {
-         00 4C 00 65 00 67 00 61 00 6C 00 43 00 6F 00 70
-         00 79 00 72 00 69 00 67 00 68 00 74 00 00 00 43
-         00 6F 00 70 00 79 00 72 00 69 00 67 00 68 00 74
-         00 20 00 31 00 20 00 2D 00 20 00 31 00 39 00
-      } 
+      $c1 = { 00 4C 00 65 00 67 00 61 00 6C 00 43 00 6F 00 70 00 79 00 72 00 69 00 67 00 68 00 74 00 00 00 43 00 6F 00 70 00 79 00 72 00 69 00 67 00 68 00 74 00 20 00 31 00 20 00 2D 00 20 00 31 00 39 00 } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and 1 of them
 }
@@ -10669,11 +10311,7 @@ rule APT_FIN7_Sample_EXE_Aug18_1_RID2FE0 : APT DEMO EXE FILE G0046 RUSSIA {
       $s1 = "x0=%d, y0=%d, x1=%d, y1=%d" fullword ascii
       $s2 = "dx=%d, dy=%d" fullword ascii
       $s3 = "Error with JP2H box size" fullword ascii
-      $co1 = {
-         00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-         00 00 00 00 00 00 00 00 00 00 00 2E 63 6F 64 65
-         00 00 00
-      } 
+      $co1 = { 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 2E 63 6F 64 65 00 00 00 } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and all of ( $s* ) and $co1 at 0x015D
 }
@@ -14194,12 +13832,7 @@ rule Sofacy_Campaign_Mal_Feb18_cdnver_RID3324 : APT DEMO EXE FILE G0007 MAL RUSS
       
    strings:
       $x1 = "cdnver.dll" fullword wide
-      $x2 = {
-         25 73 0A 00 00 00 00 00 30 00 00 00 20 00 2D 00
-         20 00 00 00 0A 00 00 00 25 00 73 00 00 00 00 00
-         69 00 6D 00 61 00 67 00 65 00 2F 00 6A 00 70 00
-         65 00 67
-      } 
+      $x2 = { 25 73 0A 00 00 00 00 00 30 00 00 00 20 00 2D 00 20 00 00 00 0A 00 00 00 25 00 73 00 00 00 00 00 69 00 6D 00 61 00 67 00 65 00 2F 00 6A 00 70 00 65 00 67 } 
       $s1 = "S7%s - %lu" fullword ascii
       $s2 = "SNFIRNW" fullword ascii
    condition: 
@@ -14647,14 +14280,8 @@ rule OilRig_RGDoor_Gen1_RID2D8D : APT DEMO EXE FILE G0049 MIDDLE_EAST {
       minimum_yara = "3.2.0"
       
    strings:
-      $c1 = {
-         00 63 6D 64 24 00 00 00 00 72 00 00 00 00 00 00 00 75 70 6C 6F
-         61 64 24
-      } 
-      $c2 = {
-         63 61 6E 27 74 20 6F 70 65 6E 20 66 69 6C 65 3A 20 00 00 00 00
-         00 00 00 64 6F 77 6E 6C 6F 61 64 24
-      } 
+      $c1 = { 00 63 6D 64 24 00 00 00 00 72 00 00 00 00 00 00 00 75 70 6C 6F 61 64 24 } 
+      $c2 = { 63 61 6E 27 74 20 6F 70 65 6E 20 66 69 6C 65 3A 20 00 00 00 00 00 00 00 64 6F 77 6E 6C 6F 61 64 24 } 
       $s1 = "MyNativeModule.dll" fullword ascii
       $s2 = "RGSESSIONID=" fullword ascii
       $s3 = "download$" fullword ascii
@@ -14836,11 +14463,7 @@ rule NK_Miner_Malware_Jan18_1_RID2F9D : DEMO EXE FILE MAL NK {
       $x0 = "c:\\users\\jawhar\\documents\\" ascii
       $x1 = "C:\\Users\\Jawhar\\documents\\" ascii
       $x2 = "The number of processors on this computer is {0}." fullword wide
-      $x3 = {
-         00 00 1F 43 00 3A 00 5C 00 4E 00 65 00 77 00 44
-         00 69 00 72 00 65 00 63 00 74 00 6F 00 72 00 79
-         00 00
-      } 
+      $x3 = { 00 00 1F 43 00 3A 00 5C 00 4E 00 65 00 77 00 44 00 69 00 72 00 65 00 63 00 74 00 6F 00 72 00 79 00 00 } 
       $x4 = "Le fichier Hello txt n'existe pas" fullword wide
       $x5 = "C:\\NewDirectory2\\info2" fullword wide
       $a = "82e999fb-a6e0-4094-aa1f-1a306069d1a5" ascii
@@ -15179,10 +14802,7 @@ rule Lazarus_Dec_17_1_RID2CB5 : APT DEMO FILE G0032 NK T1218_001 {
    strings:
       $s1 = "::DataSpace/Storage/MSCompressed/Transform/" ascii
       $s2 = "HHA Version 4." ascii
-      $s3 = {
-         74 45 58 74 53 6F 66 74 77 61 72 65 00 41 64 6F
-         62 65 20 49 6D 61 67 65 52 65 61 64 79 71
-      } 
+      $s3 = { 74 45 58 74 53 6F 66 74 77 61 72 65 00 41 64 6F 62 65 20 49 6D 61 67 65 52 65 61 64 79 71 } 
       $s4 = "bUEeYE" fullword ascii
    condition: 
       uint16 ( 0 ) == 0x5449 and filesize < 4000KB and all of them
@@ -15276,19 +14896,7 @@ rule Invoke_PSImage_RID2C62 : DEMO SCRIPT T1059 T1059_001 {
    strings:
       $ = "IEX([System.Text.Encoding]::ASCII.GetString(" ascii wide
       $ = "System.Drawing.Bitmap((a Net.WebClient).OpenRead(" ascii wide
-      $ = {
-         89 50 4E 47 0D 0A 1A 0A 00 00 00 0D 49 48 44 52
-         00 00 04 E4 00 00 03 A0 08 06 00 00 00 9D AF A9
-         E8 00 00 00 09 70 48 59 73 00 00 19 D6 00 00 19
-         D6 01 18 D1 CA ED 00 00 00 07 74 49 4D 45 07 E1
-         0C 0F 13 1E 36 89 C4 28 BF 00 00 00 07 74 45 58
-         74 41 75 74 68 6F 72 00 A9 AE CC 48 00 00 00 0C
-         74 45 58 74 44 65 73 63 72 69 70 74 69 6F 6E 00
-         13 09 21 23 00 00 00 0A 74 45 58 74 43 6F 70 79
-         72 69 67 68 74 00 AC 0F CC 3A 00 00 00 0E 74 45
-         58 74 43 72 65 61 74 69 6F 6E 20 74 69 6D 65 00
-         35 F7 0F
-      } 
+      $ = { 89 50 4E 47 0D 0A 1A 0A 00 00 00 0D 49 48 44 52 00 00 04 E4 00 00 03 A0 08 06 00 00 00 9D AF A9 E8 00 00 00 09 70 48 59 73 00 00 19 D6 00 00 19 D6 01 18 D1 CA ED 00 00 00 07 74 49 4D 45 07 E1 0C 0F 13 1E 36 89 C4 28 BF 00 00 00 07 74 45 58 74 41 75 74 68 6F 72 00 A9 AE CC 48 00 00 00 0C 74 45 58 74 44 65 73 63 72 69 70 74 69 6F 6E 00 13 09 21 23 00 00 00 0A 74 45 58 74 43 6F 70 79 72 69 67 68 74 00 AC 0F CC 3A 00 00 00 0E 74 45 58 74 43 72 65 61 74 69 6F 6E 20 74 69 6D 65 00 35 F7 0F } 
    condition: 
       filesize < 3000KB and 1 of them
 }
@@ -15844,10 +15452,7 @@ rule SunOrcal_Malware_Nov17_1_RID2FEA : DEMO EXE FILE MAL {
       
    strings:
       $x1 = "kQZ6l5t1kAlsjmBzsCZPrSpQn5tFrChLtTdsgTlOsClKt5pBsDdFrSVshnxMr6ZOpn9slndBsy1jq6lIr216rSNApn9P" fullword ascii
-      $x2 = {
-         00 00 00 00 00 00 00 00 00 00 00 00 21 21 21 73
-         79 73 74 65 6D 00 00 00 00 00 00 00 00 00 00 00
-      } 
+      $x2 = { 00 00 00 00 00 00 00 00 00 00 00 00 21 21 21 73 79 73 74 65 6D 00 00 00 00 00 00 00 00 00 00 00 } 
       $x3 = "!!!url!!!" fullword ascii
       $x4 = "h4NcbkdLrCpFpPQ=" fullword ascii
       $x5 = "GloablCryptNv1" fullword ascii
@@ -16589,13 +16194,7 @@ rule Saudi_Phish_Trojan_RID2E2F : DEMO EXE FILE MAL T1203 T1566_001 {
       minimum_yara = "1.7"
       
    strings:
-      $s1 = {
-         7B 00 30 00 7D 00 7B 00 31 00 7D 00 5C 00 00 09
-         2E 00 64 00 6C 00 6C 00 00 11 77 00 33 00 77 00
-         70 00 2E 00 65 00 78 00 65 00 00 1B 61 00 73 00
-         70 00 6E 00 65 00 74 00 5F 00 77 00 70 00 2E 00
-         65 00 78 00 65
-      } 
+      $s1 = { 7B 00 30 00 7D 00 7B 00 31 00 7D 00 5C 00 00 09 2E 00 64 00 6C 00 6C 00 00 11 77 00 33 00 77 00 70 00 2E 00 65 00 78 00 65 00 00 1B 61 00 73 00 70 00 6E 00 65 00 74 00 5F 00 77 00 70 00 2E 00 65 00 78 00 65 } 
    condition: 
       ( uint16 ( 0 ) == 0x5a4d and filesize < 3000KB and 1 of them )
 }
@@ -19630,10 +19229,7 @@ rule NotPetya_Ransomware_Jun17_RID30B7 : CRIME DEMO EXE FILE MAL RANSOM T1047 T1
       $x4 = "Send your Bitcoin wallet ID and personal installation key to e-mail " fullword wide
       $x5 = "fsutil usn deletejournal /D %c:" fullword wide
       $x6 = "wevtutil cl Setup & wevtutil cl System" ascii
-      $x7 = {
-         2C 00 23 00 31 00 20 00 00 00 00 00 00 00 00 00 72 00 75 00 6E
-         00 64 00 6C 00 6C 00 33 00 32 00 2E 00 65 00 78 00 65 00
-      } 
+      $x7 = { 2C 00 23 00 31 00 20 00 00 00 00 00 00 00 00 00 72 00 75 00 6E 00 64 00 6C 00 6C 00 33 00 32 00 2E 00 65 00 78 00 65 00 } 
       $s1 = "%s /node:\"%ws\" /user:\"%ws\" /password:\"%ws\" " fullword wide
       $s4 = "\\\\.\\pipe\\%ws" fullword wide
       $s5 = "schtasks %ws/Create /SC once /TN \"\" /TR \"%ws\" /ST %02d:%02d" fullword wide
@@ -20239,13 +19835,7 @@ rule Industroyer_Malware_1_RID2F71 : APT DEMO EXE FILE T1543_003 {
       $s3 = "SYS_BASCON.COM" fullword wide
       $s4 = "*.pcmt" fullword wide
       $s5 = "*.pcmi" fullword wide
-      $x1 = {
-         00 53 00 65 00 72 00 76 00 69 00 63 00 65 00 73
-         00 5C 00 25 00 6C 00 73 00 00 00 49 00 6D 00 61
-         00 67 00 65 00 50 00 61 00 74 00 68 00 00 00 43
-         00 3A 00 5C 00 00 00 44 00 3A 00 5C 00 00 00 45
-         00 3A 00 5C 00 00 00
-      } 
+      $x1 = { 00 53 00 65 00 72 00 76 00 69 00 63 00 65 00 73 00 5C 00 25 00 6C 00 73 00 00 00 49 00 6D 00 61 00 67 00 65 00 50 00 61 00 74 00 68 00 00 00 43 00 3A 00 5C 00 00 00 44 00 3A 00 5C 00 00 00 45 00 3A 00 5C 00 00 00 } 
       $x2 = "haslo.dat\x00Crash" 
    condition: 
       ( uint16 ( 0 ) == 0x5a4d and filesize < 200KB and 1 of ( $x* ) or 2 of them )
@@ -21854,20 +21444,7 @@ rule EquationGroup_Toolset_Apr17_RemoteExecute_Implant_RID3A69 : APT DEMO EXE FI
       minimum_yara = "1.7"
       
    strings:
-      $op1 = {
-         53 00 63 00 68 00 65 00 64 00 75 00 6C 00 65 00
-         00 00 00 00 53 00 65 00 72 00 76 00 69 00 63 00
-         65 00 73 00 41 00 63 00 74 00 69 00 76 00 65 00
-         00 00 00 00 FF FF FF FF 00 00 00 00 B0 17 00 68
-         5C 00 70 00 69 00 70 00 65 00 5C 00 53 00 65 00
-         63 00 6F 00 6E 00 64 00 61 00 72 00 79 00 4C 00
-         6F 00 67 00 6F 00 6E 00 00 00 00 00 5C 00 00 00
-         57 00 69 00 6E 00 53 00 74 00 61 00 30 00 5C 00
-         44 00 65 00 66 00 61 00 75 00 6C 00 74 00 00 00
-         6E 00 63 00 61 00 63 00 6E 00 5F 00 6E 00 70 00
-         00 00 00 00 5C 00 70 00 69 00 70 00 65 00 5C 00
-         53 00 45 00 43 00 4C 00 4F 00 47 00 4F 00 4E
-      } 
+      $op1 = { 53 00 63 00 68 00 65 00 64 00 75 00 6C 00 65 00 00 00 00 00 53 00 65 00 72 00 76 00 69 00 63 00 65 00 73 00 41 00 63 00 74 00 69 00 76 00 65 00 00 00 00 00 FF FF FF FF 00 00 00 00 B0 17 00 68 5C 00 70 00 69 00 70 00 65 00 5C 00 53 00 65 00 63 00 6F 00 6E 00 64 00 61 00 72 00 79 00 4C 00 6F 00 67 00 6F 00 6E 00 00 00 00 00 5C 00 00 00 57 00 69 00 6E 00 53 00 74 00 61 00 30 00 5C 00 44 00 65 00 66 00 61 00 75 00 6C 00 74 00 00 00 6E 00 63 00 61 00 63 00 6E 00 5F 00 6E 00 70 00 00 00 00 00 5C 00 70 00 69 00 70 00 65 00 5C 00 53 00 45 00 43 00 4C 00 4F 00 47 00 4F 00 4E } 
    condition: 
       ( uint16 ( 0 ) == 0x5a4d and filesize < 40KB and all of them )
 }
@@ -32548,17 +32125,7 @@ rule APT_EQGRP_false_RID2C3E : APT DEMO EXE FILE {
       minimum_yara = "1.7"
       
    strings:
-      $s1 = {
-         00 25 64 2E 0A 00 00 00 00 25 64 2E 0A 00 00 00
-         00 25 6C 75 2E 25 6C 75 2E 25 6C 75 2E 25 6C 75
-         00 25 64 2E 0A 00 00 00 00 25 64 2E 0A 00 00 00
-         00 25 64 2E 0A 00 00 00 00 25 64 2E 0A 00 00 00
-         00 25 32 2E 32 58 20 00 00 0A 00 00 00 25 64 20
-         2D 20 25 64 20 25 64 0A 00 25 64 0A 00 25 64 2E
-         0A 00 00 00 00 25 64 2E 0A 00 00 00 00 25 64 2E
-         0A 00 00 00 00 25 64 20 2D 20 25 64 0A 00 00 00
-         00 25 64 20 2D 20 25 64
-      } 
+      $s1 = { 00 25 64 2E 0A 00 00 00 00 25 64 2E 0A 00 00 00 00 25 6C 75 2E 25 6C 75 2E 25 6C 75 2E 25 6C 75 00 25 64 2E 0A 00 00 00 00 25 64 2E 0A 00 00 00 00 25 64 2E 0A 00 00 00 00 25 64 2E 0A 00 00 00 00 25 32 2E 32 58 20 00 00 0A 00 00 00 25 64 20 2D 20 25 64 20 25 64 0A 00 25 64 0A 00 25 64 2E 0A 00 00 00 00 25 64 2E 0A 00 00 00 00 25 64 2E 0A 00 00 00 00 25 64 20 2D 20 25 64 0A 00 00 00 00 25 64 20 2D 20 25 64 } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 50KB and $s1
 }
