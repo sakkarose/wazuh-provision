@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-07-23 21:22
+    Retrieved: 2025-07-24 21:22
     Generated for User: demo
-    Number of Rules: 2682
+    Number of Rules: 2685
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "pe"
 import "math"
+import "pe"
 
 rule WEBSHELL_ASPX_Sharepoint_Drop_CVE_2025_53770_Jul25_RID372D : CVE_2025_53770 DEMO SCRIPT T1505_003 WEBSHELL {
    meta:
@@ -29,6 +29,81 @@ rule WEBSHELL_ASPX_Sharepoint_Drop_CVE_2025_53770_Jul25_RID372D : CVE_2025_53770
       $s1 = "<script runat=\"server\" language=\"c#\" CODEPAGE=\"65001\">" ascii fullword
    condition: 
       filesize < 4KB and 1 of ( $x* ) or all of them
+}
+
+rule WEBSHELL_ASPX_Compiled_Sharepoint_Drop_CVE_2025_53770_Jul25_2_RID3B4A : CVE_2025_53770 DEMO EXE SCRIPT T1505_003 WEBSHELL {
+   meta:
+      description = "Detects compiled ASPX web shell dropped during the exploitation of SharePoint RCE vulnerability CVE-2025-53770"
+      author = "Florian Roth"
+      reference = "https://research.eye.security/sharepoint-under-siege/"
+      date = "2025-07-20 20:22:51"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2025-07-23"
+      tags = "CVE_2025_53770, DEMO, EXE, SCRIPT, T1505_003, WEBSHELL"
+      minimum_yara = "2.2.0"
+      
+   strings:
+      $x1 = /App_Web_spinstall\d{0,1}.aspx/ wide
+      $x2 = /spinstall[\w]?[\._]aspx/ ascii
+      $x3 = /\/_layouts\/1[0-9]\/spinstall/ wide
+      $s1 = "System.Web.Configuration.MachineKeySection" wide
+      $s2 = "Page_load" ascii fullword
+      $s3 = "GetApplicationConfig" wide fullword
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 20KB and ( 1 of ( $x* ) or all of ( $s* ) ) or 2 of ( $x* ) or 4 of them
+}
+
+rule APT_EXPL_Sharepoint_CVE_2025_53770_ForensicArtefact_Jul25_1_RID3B17 : APT CVE_2025_53770 DEMO EXPLOIT {
+   meta:
+      description = "Detects URIs accessed during the exploitation of SharePoint RCE vulnerability CVE-2025-53770"
+      author = "Florian Roth"
+      reference = "https://research.eye.security/sharepoint-under-siege/"
+      date = "2025-07-20 20:14:21"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2025-07-23"
+      tags = "APT, CVE_2025_53770, DEMO, EXPLOIT"
+      minimum_yara = "2.2.0"
+      
+   strings:
+      $sa1 = /POST \/_layouts\/1[0-9]\/ToolPane\.aspx/ ascii wide nocase
+      $sa2 = "DisplayMode=Edit&a=/ToolPane.aspx" ascii wide
+      $sb1 = /GET \/_layouts\/1[0-9]\/spinstall/ ascii wide
+      $sb2 = "/_layouts/SignOut.aspx 200" ascii wide nocase
+   condition: 
+      ( @sa2 - @sa1 ) < 700 or ( @sb2 - @sb1 ) < 700 or ( @sb2 - @sa1 ) < 700
+}
+
+rule APT_EXPL_Sharepoint_CVE_2025_53770_ForensicArtefact_Jul25_2_RID3B18 : APT CVE_2025_53770 DEMO EXPLOIT {
+   meta:
+      description = "Detects URIs accessed during the exploitation of SharePoint RCE vulnerability CVE-2025-53770"
+      author = "Florian Roth"
+      reference = "https://research.eye.security/sharepoint-under-siege/"
+      date = "2025-07-20 20:14:31"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2025-07-24"
+      tags = "APT, CVE_2025_53770, DEMO, EXPLOIT"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "-EncodedCommand JABiAGEAcwBlADYANABTAHQAcgBpAG4AZwAgAD0" ascii wide
+      $x2 = "TEMPLATE\\LAYOUTS\\spinstall" ascii wide
+      $x3 = "TEMPLATE\\LAYOUTS\\ghostfile" ascii wide
+      $x4 = "TEMPLATE\\LAYOUTS\\1.css" ascii wide
+      $x5 = "Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64;+rv:120.0)+Gecko/20100101+Firefox/120.0 /_layouts/SignOut.aspx" ascii wide
+      $xe1 = "TQBJAEMAUgBPAFMAfgAxAFwAVwBFAEIAUwBFAFIAfgAxAFwAMQA2AFwAVABFAE0AUABMAEEAVABFAFwATABBAFkATwBVAFQAUwBcA" 
+      $xe2 = "0ASQBDAFIATwBTAH4AMQBcAFcARQBCAFMARQBSAH4AMQBcADEANgBcAFQARQBNAFAATABBAFQARQBcAEwAQQBZAE8AVQBUAFMAXA" 
+      $xe3 = "NAEkAQwBSAE8AUwB+ADEAXABXAEUAQgBTAEUAUgB+ADEAXAAxADYAXABUAEUATQBQAEwAQQBUAEUAXABMAEEAWQBPAFUAVABTAFwA" 
+      $xe4 = "TQBJAEMAUgBPAFMAfgAxAFwAVwBFAEIAUwBFAFIAfgAxAFwAMQA1AFwAVABFAE0AUABMAEEAVABFAFwATABBAFkATwBVAFQAUwBcA" 
+      $xe5 = "0ASQBDAFIATwBTAH4AMQBcAFcARQBCAFMARQBSAH4AMQBcADEANQBcAFQARQBNAFAATABBAFQARQBcAEwAQQBZAE8AVQBUAFMAXA" 
+      $xe6 = "NAEkAQwBSAE8AUwB+ADEAXABXAEUAQgBTAEUAUgB+ADEAXAAxADUAXABUAEUATQBQAEwAQQBUAEUAXABMAEEAWQBPAFUAVABTAFwA" 
+   condition: 
+      1 of them
 }
 
 rule MAL_WIPER_Unknown_Jun25_RID2F13 : DEMO EXE FILE MAL {
