@@ -1,14 +1,34 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-08-01 21:21
+    Retrieved: 2025-08-02 21:20
     Generated for User: demo
-    Number of Rules: 2685
+    Number of Rules: 2686
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
 import "pe"
 import "math"
+
+rule MAL_LNX_PLAGUE_BACKDOOR_Jul25_RID2FEE : DEMO FILE LINUX MAL {
+   meta:
+      description = "Detects Plague backdoor ELF binaries, related to PAM authentication alteration."
+      author = "Pezier Pierre-Henri"
+      reference = "Internal Research"
+      date = "2025-07-25 12:18:11"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, FILE, LINUX, MAL"
+      minimum_yara = "3.2.0"
+      
+   strings:
+      $s1 = "decrypt_phrase" 
+      $s2 = "init_phrases" 
+   condition: 
+      uint32be ( 0 ) == 0x7f454c46 and filesize < 1MB and all of them
+}
 
 rule WEBSHELL_ASPX_Sharepoint_Drop_CVE_2025_53770_Jul25_RID372D : CVE_2025_53770 DEMO SCRIPT T1505_003 WEBSHELL {
    meta:
