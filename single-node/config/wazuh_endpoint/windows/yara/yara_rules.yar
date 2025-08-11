@@ -1,14 +1,99 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-08-10 21:19
+    Retrieved: 2025-08-11 21:19
     Generated for User: demo
-    Number of Rules: 2686
+    Number of Rules: 2690
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "pe"
 import "math"
+import "pe"
+
+rule SUSP_Scheduled_Task_Java_JAR_Aug25_RID333E : DEMO FILE SUSP T1053_005 {
+   meta:
+      description = "Detects scheduled tasks that execute Java JAR files, which is suspicious but not necessarily malicious"
+      author = "Florian Roth"
+      reference = "Internal Research"
+      date = "2025-08-07 14:39:31"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, FILE, SUSP, T1053_005"
+      minimum_yara = "1.7"
+      
+   strings:
+      $a0 = "<Task version=" wide
+      $a1 = "xmlns=\"http://schemas.microsoft.com/windows/" wide
+      $sa1 = "java.exe</Command>" wide
+      $sa2 = "javaw.exe</Command>" wide
+      $sb1 = "<Arguments>-jar " wide
+   condition: 
+      uint16 ( 0 ) == 0xfeff and filesize < 500KB and all of ( $a* ) and 1 of ( $sa* ) and 1 of ( $sb* )
+}
+
+rule SUSP_JAVA_Loader_Indicators_Aug25_RID32E5 : DEMO FILE SUSP T1203 T1566_001 {
+   meta:
+      description = "Detects indicators of a Java loader used in phishing campaigns"
+      author = "Florian Roth"
+      reference = "https://www.malwation.com/blog/technical-analysis-of-a-stealth-java-loader-used-in-phishing-campaigns-targeting-turkiye"
+      date = "2025-08-07 14:24:41"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "c4cf746fce283878dde567e5457a8ebdbb7ff3414be46569ecdd57338bd96fa1"
+      tags = "DEMO, FILE, SUSP, T1203, T1566_001"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "Loader.classPK" ascii fullword
+      $s2 = "stubPK" ascii
+      $s3 = "META-INF/MANIFEST.MFPK" ascii
+   condition: 
+      uint16 ( 0 ) == 0x4b50 and filesize < 500KB and $s1 in ( filesize - 224 .. filesize ) and $s2 in ( filesize - 224 .. filesize ) and $s3 in ( filesize - 224 .. filesize )
+}
+
+rule MAL_JAVA_Loader_Final_Jar_Aug25_RID31CA : DEMO MAL T1203 T1566_001 {
+   meta:
+      description = "Detects a final Java loader JAR file used in phishing campaigns"
+      author = "Florian Roth"
+      reference = "https://www.malwation.com/blog/technical-analysis-of-a-stealth-java-loader-used-in-phishing-campaigns-targeting-turkiye"
+      date = "2025-08-07 13:37:31"
+      score = 85
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "0a7fddd91b332c8daee2c0727b884fc92cfaede02883dbad75f7efc299e884e3"
+      tags = "DEMO, MAL, T1203, T1566_001"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "Obfuscation by Allatori Obfuscator" ascii fullword
+      $s2 = "MANIFEST.MFM" ascii fullword
+      $s3 = "GetCpu.classPK" ascii fullword
+      $s4 = "extra/spreader" ascii fullword
+   condition: 
+      all of them
+}
+
+rule SUSP_JAVA_Class_Allatori_Obfuscator_Aug25_RID3623 : DEMO FILE OBFUS SUSP {
+   meta:
+      description = "Detects a relatively small Java class file obfuscated by Allatori Obfuscator"
+      author = "Florian Roth"
+      reference = "https://www.malwation.com/blog/technical-analysis-of-a-stealth-java-loader-used-in-phishing-campaigns-targeting-turkiye"
+      date = "2025-08-07 16:43:01"
+      score = 50
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "0a7fddd91b332c8daee2c0727b884fc92cfaede02883dbad75f7efc299e884e3"
+      tags = "DEMO, FILE, OBFUS, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "Obfuscation by Allatori Obfuscator" ascii fullword
+   condition: 
+      uint16 ( 0 ) == 0x4b50 and filesize < 500KB and $x1
+}
 
 rule MAL_LNX_PLAGUE_BACKDOOR_Jul25_RID2FEE : DEMO FILE LINUX MAL {
    meta:
