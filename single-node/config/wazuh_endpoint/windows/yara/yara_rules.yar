@@ -1,14 +1,35 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-08-12 21:20
+    Retrieved: 2025-08-13 21:20
     Generated for User: demo
-    Number of Rules: 2690
+    Number of Rules: 2692
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
 import "pe"
 import "math"
+
+rule EXPL_RAR_Archive_With_Path_Traversal_Aug25_RID368C : CVE_2025_6218 CVE_2025_8088 DEMO EXPLOIT FILE {
+   meta:
+      description = "Detects RAR archives abused for path traversal like CVE-2025-8088 and CVE-2025-6218"
+      author = "Arnim Rupp (Nextron Systems)"
+      reference = "https://www.welivesecurity.com/en/eset-research/update-winrar-tools-now-romcom-and-others-exploiting-zero-day-vulnerability/#the-discovery-of-cve-2025-8088"
+      date = "2025-08-11 17:00:31"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CVE_2025_6218, CVE_2025_8088, DEMO, EXPLOIT, FILE"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "..\\\\..\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu" 
+      $s2 = "..//../AppData/Roaming/Microsoft/Windows/Start Menu" 
+      $s3 = "/.. /.. /AppData/Roaming/Microsoft/Windows/Start Menu/" 
+   condition: 
+      1 of ( $s* ) and ( uint16 ( 0 ) == 0x4B50 or int32 ( 0 ) == 0x21726152 )
+}
 
 rule SUSP_Scheduled_Task_Java_JAR_Aug25_RID333E : DEMO FILE SUSP T1053_005 {
    meta:
@@ -7879,6 +7900,28 @@ rule MAL_ArtraDownloader2_Aug19_1_RID30FB : DEMO EXE FILE MAL {
       $x2 = ".gpsn.vsmfodpefe" ascii
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 600KB and 1 of them
+}
+
+rule EXPL_Office_TemplateInjection_Aug19_RID3419 : DEMO EXPLOIT OFFICE T1221 {
+   meta:
+      description = "Detects possible template injection in Office document"
+      author = "Florian Roth"
+      reference = "https://attack.mitre.org/techniques/T1221/"
+      date = "2019-08-22 15:16:01"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2025-03-20"
+      hash1 = "f2bdf3716b39d29a9c6c3b7b3355e935594b8d8e9149a784a59dc2381fa1628a"
+      tags = "DEMO, EXPLOIT, OFFICE, T1221"
+      minimum_yara = "2.2.0"
+      
+   strings:
+      $x1 = /attachedTemplate" Target="http[s]?:\/\/[^"]{4,60}/ ascii
+      $fp1 = ".sharepoint.com" 
+      $fp2 = ".office.com" 
+   condition: 
+      filesize < 20MB and $x1 and not 1 of ( $fp* )
 }
 
 rule APT_APT41_POISONPLUG_3_RID2DA0 : APT DEMO EXE FILE G0096 T1218_011 {
