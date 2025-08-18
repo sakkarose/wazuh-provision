@@ -1,6 +1,6 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-08-17 21:19
+    Retrieved: 2025-08-18 21:18
     Generated for User: demo
     Number of Rules: 2692
     
@@ -7902,9 +7902,9 @@ rule MAL_ArtraDownloader2_Aug19_1_RID30FB : DEMO EXE FILE MAL {
       uint16 ( 0 ) == 0x5a4d and filesize < 600KB and 1 of them
 }
 
-rule EXPL_Office_TemplateInjection_Aug19_RID3419 : DEMO EXPLOIT OFFICE T1221 {
+rule EXPL_Office_TemplateInjection_Aug19_RID3419 : DEMO EXPLOIT OFFICE T1203 T1221 T1566_001 {
    meta:
-      description = "Detects possible template injection in Office document"
+      description = "Detects possible template injections in Office documents, particularly those that load content from external sources"
       author = "Florian Roth"
       reference = "https://attack.mitre.org/techniques/T1221/"
       date = "2019-08-22 15:16:01"
@@ -7912,8 +7912,7 @@ rule EXPL_Office_TemplateInjection_Aug19_RID3419 : DEMO EXPLOIT OFFICE T1221 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2025-03-20"
-      hash1 = "f2bdf3716b39d29a9c6c3b7b3355e935594b8d8e9149a784a59dc2381fa1628a"
-      tags = "DEMO, EXPLOIT, OFFICE, T1221"
+      tags = "DEMO, EXPLOIT, OFFICE, T1203, T1221, T1566_001"
       minimum_yara = "2.2.0"
       
    strings:
