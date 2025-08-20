@@ -1,6 +1,6 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-08-19 21:19
+    Retrieved: 2025-08-20 21:19
     Generated for User: demo
     Number of Rules: 2692
     
@@ -1303,7 +1303,7 @@ rule BCKDR_XZUtil_KillSwitch_CVE_2024_3094_Mar24_1_RID358B : CVE_2024_3094 DEMO 
       $x1
 }
 
-rule SUSP_ScreenConnect_User_PoC_Com_Unused_Feb24_RID3767 : DEMO SUSP {
+rule SUSP_ScreenConnect_User_PoC_Com_Unused_Feb24_RID3767 : ADMINTOOL_ScreenConnect DEMO SUSP {
    meta:
       description = "Detects suspicious ScreenConnect user with poc.com email address, which is a sign of exploitation of the ConnectWise ScreenConnect (versions prior to 23.9.8) vulnerability with the POC released by WatchTower and the account wasn't actually used yet to login"
       author = "Florian Roth"
@@ -1313,7 +1313,7 @@ rule SUSP_ScreenConnect_User_PoC_Com_Unused_Feb24_RID3767 : DEMO SUSP {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "DEMO, SUSP"
+      tags = "ADMINTOOL_ScreenConnect, DEMO, SUSP"
       minimum_yara = "1.7"
       
    strings:
@@ -1325,7 +1325,7 @@ rule SUSP_ScreenConnect_User_PoC_Com_Unused_Feb24_RID3767 : DEMO SUSP {
       filesize < 200KB and all of ( $a* ) and all of ( $s* )
 }
 
-rule SUSP_ScreenConnect_User_PoC_Com_Used_Feb24_RID3684 : DEMO SUSP {
+rule SUSP_ScreenConnect_User_PoC_Com_Used_Feb24_RID3684 : ADMINTOOL_ScreenConnect DEMO SUSP {
    meta:
       description = "Detects suspicious ScreenConnect user with poc.com email address, which is a sign of exploitation of the ConnectWise ScreenConnect (versions prior to 23.9.8) vulnerability with the POC released by WatchTower and the account was already used yet to login"
       author = "Florian Roth"
@@ -1335,7 +1335,7 @@ rule SUSP_ScreenConnect_User_PoC_Com_Used_Feb24_RID3684 : DEMO SUSP {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "DEMO, SUSP"
+      tags = "ADMINTOOL_ScreenConnect, DEMO, SUSP"
       minimum_yara = "1.7"
       
    strings:
@@ -1347,7 +1347,7 @@ rule SUSP_ScreenConnect_User_PoC_Com_Used_Feb24_RID3684 : DEMO SUSP {
       filesize < 200KB and all of ( $a* ) and $s1 and not 1 of ( $f* )
 }
 
-rule SUSP_ScreenConnect_Exploitation_Artefacts_Feb24_RID3912 : DEMO SCRIPT SUSP T1136 T1218_011 {
+rule SUSP_ScreenConnect_Exploitation_Artefacts_Feb24_RID3912 : ADMINTOOL_ScreenConnect DEMO SCRIPT SUSP T1136 T1218_011 {
    meta:
       description = "Detects post exploitation indicators observed by HuntressLabs in relation to the ConnectWise ScreenConnect (versions prior to 23.9.8) vulnerability that allows an Authentication Bypass"
       author = "Florian Roth"
@@ -1357,7 +1357,7 @@ rule SUSP_ScreenConnect_Exploitation_Artefacts_Feb24_RID3912 : DEMO SCRIPT SUSP 
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "DEMO, SCRIPT, SUSP, T1136, T1218_011"
+      tags = "ADMINTOOL_ScreenConnect, DEMO, SCRIPT, SUSP, T1136, T1218_011"
       minimum_yara = "1.7"
       
    strings:
@@ -1413,7 +1413,7 @@ rule SUSP_Command_Line_Combos_Feb24_2_RID3286 : DEMO SCRIPT SUSP {
       filesize < 2MB and all of them
 }
 
-rule MAL_SUSP_RANSOM_LockBit_RansomNote_Feb24_RID3502 : CRIME DEMO MAL RANSOM SUSP {
+rule MAL_SUSP_RANSOM_LockBit_RansomNote_Feb24_RID3502 : CRIME DEMO LockBit MAL RANSOM SUSP {
    meta:
       description = "Detects the LockBit ransom note file 'LockBit-DECRYPT.txt' which is a sign of a LockBit ransomware infection"
       author = "Florian Roth"
@@ -1423,7 +1423,7 @@ rule MAL_SUSP_RANSOM_LockBit_RansomNote_Feb24_RID3502 : CRIME DEMO MAL RANSOM SU
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "CRIME, DEMO, MAL, RANSOM, SUSP"
+      tags = "CRIME, DEMO, LockBit, MAL, RANSOM, SUSP"
       minimum_yara = "1.7"
       
    strings:
@@ -1493,7 +1493,7 @@ rule MAL_CS_Loader_Feb24_1_RID2DF8 : COBALTSTRIKE CVE_2024_1708 CVE_2024_1709 DE
       uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and ( pe.exports ( "UpdateSystem" ) and ( pe.imphash ( ) == "0dc05c4c21a86d29f1c3bf9cc5b712e0" or $s1 ) )
 }
 
-rule MAL_RANSOM_LockBit_Indicators_Feb24_RID3362 : CRIME CVE_2024_1708 CVE_2024_1709 DEMO EXE MAL RANSOM {
+rule MAL_RANSOM_LockBit_Indicators_Feb24_RID3362 : CRIME CVE_2024_1708 CVE_2024_1709 DEMO EXE LockBit MAL RANSOM {
    meta:
       description = "Detects Lockbit ransomware samples mentioned in a HuntressLabs report on the exploitation of ScreenConnect vulnerability CVE-2024-1708 and CVE-2024-1709"
       author = "Florian Roth"
@@ -1503,7 +1503,7 @@ rule MAL_RANSOM_LockBit_Indicators_Feb24_RID3362 : CRIME CVE_2024_1708 CVE_2024_
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "a50d9954c0a50e5804065a8165b18571048160200249766bfa2f75d03c8cb6d0"
-      tags = "CRIME, CVE_2024_1708, CVE_2024_1709, DEMO, EXE, MAL, RANSOM"
+      tags = "CRIME, CVE_2024_1708, CVE_2024_1709, DEMO, EXE, LockBit, MAL, RANSOM"
       required_modules = "pe"
       minimum_yara = "3.2.0"
       
@@ -1733,7 +1733,7 @@ rule MAL_Python_Backdoor_Script_Nov23_RID331B : CVE_2023_4966 DEMO MAL RANSOM SC
       filesize < 50KB and all of them
 }
 
-rule APT_RANSOM_Lockbit_ForensicArtifacts_Nov23_RID367C : APT DEMO RANSOM T1021_002 {
+rule APT_RANSOM_Lockbit_ForensicArtifacts_Nov23_RID367C : APT DEMO LockBit RANSOM T1021_002 {
    meta:
       description = "Detects patterns found in Lockbit TA attacks exploiting Citrixbleed vulnerability CVE 2023-4966"
       author = "Florian Roth"
@@ -1743,7 +1743,7 @@ rule APT_RANSOM_Lockbit_ForensicArtifacts_Nov23_RID367C : APT DEMO RANSOM T1021_
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "APT, DEMO, RANSOM, T1021_002"
+      tags = "APT, DEMO, LockBit, RANSOM, T1021_002"
       minimum_yara = "1.7"
       
    strings:
@@ -2025,7 +2025,7 @@ rule LOG_EXPL_SharePoint_CVE_2023_29357_Sep23_1_RID342F : CVE_2023_29357 DEMO EX
       $xr1
 }
 
-rule SUSP_QakBot_Uninstaller_FBI_Aug23_RID32FE : DEMO QAKBOT SUSP {
+rule SUSP_QakBot_Uninstaller_FBI_Aug23_RID32FE : DEMO Qakbot SUSP {
    meta:
       description = "Detects Qakbot uninstaller used by the FBI / Dutch Police"
       author = "Florian Roth"
@@ -2037,7 +2037,7 @@ rule SUSP_QakBot_Uninstaller_FBI_Aug23_RID32FE : DEMO QAKBOT SUSP {
       hash1 = "559cae635f0d870652b9482ef436b31d4bb1a5a0f51750836f328d749291d0b6"
       hash2 = "855eb5481f77dde5ad8fa6e9d953d4aebc280dddf9461144b16ed62817cc5071"
       hash3 = "fab408536aa37c4abc8be97ab9c1f86cb33b63923d423fdc2859eb9d63fa8ea0"
-      tags = "DEMO, QAKBOT, SUSP"
+      tags = "DEMO, Qakbot, SUSP"
       minimum_yara = "1.7"
       
    strings:
@@ -2049,7 +2049,7 @@ rule SUSP_QakBot_Uninstaller_FBI_Aug23_RID32FE : DEMO QAKBOT SUSP {
       all of them
 }
 
-rule SUSP_Qakbot_Uninstaller_File_Aug23_RID33CD : DEMO METARULE QAKBOT SUSP {
+rule SUSP_Qakbot_Uninstaller_File_Aug23_RID33CD : DEMO METARULE Qakbot SUSP {
    meta:
       description = "Detects Qakbot Uninstaller files used by the FBI and Dutch National Police in a disruption operation against the Qakbot in August 2023"
       author = "Florian Roth"
@@ -2059,7 +2059,7 @@ rule SUSP_Qakbot_Uninstaller_File_Aug23_RID33CD : DEMO METARULE QAKBOT SUSP {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "DEMO, METARULE, QAKBOT, SUSP"
+      tags = "DEMO, METARULE, Qakbot, SUSP"
       minimum_yara = "1.7"
       
    strings:
@@ -2863,7 +2863,7 @@ rule SUSP_TH_APT_UNC4736_TradingTech_Cert_Apr23_1_RID35C4 : APT DEMO SUSP {
       pe.timestamp > 1651363200 and all of them
 }
 
-rule MAL_RANSOM_LockBit_Locker_LOG_Apr23_1_RID3398 : CRIME DEMO LOG MAL RANSOM {
+rule MAL_RANSOM_LockBit_Locker_LOG_Apr23_1_RID3398 : CRIME DEMO LOG LockBit MAL RANSOM {
    meta:
       description = "Detects indicators found in LockBit ransomware log files"
       author = "Florian Roth"
@@ -2873,7 +2873,7 @@ rule MAL_RANSOM_LockBit_Locker_LOG_Apr23_1_RID3398 : CRIME DEMO LOG MAL RANSOM {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "CRIME, DEMO, LOG, MAL, RANSOM"
+      tags = "CRIME, DEMO, LOG, LockBit, MAL, RANSOM"
       minimum_yara = "1.7"
       
    strings:
@@ -2885,7 +2885,7 @@ rule MAL_RANSOM_LockBit_Locker_LOG_Apr23_1_RID3398 : CRIME DEMO LOG MAL RANSOM {
       2 of them
 }
 
-rule MAL_RANSOM_LNX_macOS_LockBit_Apr23_1_RID331B : CRIME DEMO LINUX MACOS MAL RANSOM {
+rule MAL_RANSOM_LNX_macOS_LockBit_Apr23_1_RID331B : CRIME DEMO LINUX LockBit MACOS MAL RANSOM {
    meta:
       description = "Detects LockBit ransomware samples for Linux and macOS"
       author = "Florian Roth"
@@ -2897,7 +2897,7 @@ rule MAL_RANSOM_LNX_macOS_LockBit_Apr23_1_RID331B : CRIME DEMO LINUX MACOS MAL R
       hash1 = "0a2bffa0a30ec609d80591eef1d0994d8b37ab1f6a6bad7260d9d435067fb48e"
       hash2 = "9ebcbaf3c9e2bbce6b2331238ab584f95f7ced326ca4aba2ddcc8aa8ee964f66"
       hash3 = "a405d034c01a357a89c9988ffe8a46a165915df18fd297469b2bcaaf97578442"
-      tags = "CRIME, DEMO, LINUX, MACOS, MAL, RANSOM"
+      tags = "CRIME, DEMO, LINUX, LockBit, MACOS, MAL, RANSOM"
       minimum_yara = "3.2.0"
       
    strings:
@@ -3348,7 +3348,7 @@ rule EXPL_SUSP_Outlook_CVE_2023_23397_Exfil_IP_Mar23_RID363D : CVE_2023_23397 DE
       ( uint16 ( 0 ) == 0xCFD0 and 1 of ( $psetid* ) or uint32be ( 0 ) == 0x789F3E22 ) and any of ( $u* ) and $rfp and not 1 of ( $fp* )
 }
 
-rule MAL_RANSOM_DarkBit_Feb23_1_RID2F7B : CRIME DEMO EXE FILE MAL RANSOM {
+rule MAL_RANSOM_DarkBit_Feb23_1_RID2F7B : CRIME DEMO DarkBit EXE FILE MAL RANSOM {
    meta:
       description = "Detects indicators found in DarkBit ransomware"
       author = "Florian Roth"
@@ -3358,7 +3358,7 @@ rule MAL_RANSOM_DarkBit_Feb23_1_RID2F7B : CRIME DEMO EXE FILE MAL RANSOM {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "CRIME, DEMO, EXE, FILE, MAL, RANSOM"
+      tags = "CRIME, DEMO, DarkBit, EXE, FILE, MAL, RANSOM"
       minimum_yara = "1.7"
       
    strings:
@@ -3950,7 +3950,7 @@ rule MAL_RANSOM_Venus_Nov22_1_RID2F10 : CRIME DEMO EXE MAL RANSOM {
       uint16 ( 0 ) == 0x5a4d and filesize < 700KB and ( pe.imphash ( ) == "bb2600e94092da119ee6acbbd047be43" or 1 of ( $x* ) or 2 of them ) or 4 of them
 }
 
-rule HKTL_BruteRatel_Badger_Indicators_Oct22_4_RID362C : DEMO FILE HKTL {
+rule HKTL_BruteRatel_Badger_Indicators_Oct22_4_RID362C : BruteRatelC4 DEMO FILE HKTL {
    meta:
       description = "Detects Brute Ratel C4 badger indicators"
       author = "Florian Roth"
@@ -3960,7 +3960,7 @@ rule HKTL_BruteRatel_Badger_Indicators_Oct22_4_RID362C : DEMO FILE HKTL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "DEMO, FILE, HKTL"
+      tags = "BruteRatelC4, DEMO, FILE, HKTL"
       minimum_yara = "1.7"
       
    strings:
@@ -3997,7 +3997,7 @@ rule EXPL_Exchange_ProxyNotShell_Patterns_CVE_2022_41040_Oct22_1_RID3B59 : CVE_2
       $sr1 and 1 of ( $sa* ) and not 1 of ( $fp* )
 }
 
-rule MAL_QBot_HTML_Smuggling_Indicators_Oct22_1_RID3648 : DEMO MAL QAKBOT {
+rule MAL_QBot_HTML_Smuggling_Indicators_Oct22_1_RID3648 : DEMO MAL Qakbot {
    meta:
       description = "Detects double encoded PKZIP headers as seen in HTML files used by QBot"
       author = "Florian Roth"
@@ -4009,7 +4009,7 @@ rule MAL_QBot_HTML_Smuggling_Indicators_Oct22_1_RID3648 : DEMO MAL QAKBOT {
       hash1 = "4f384bcba31fda53e504d0a6c85cee0ce3ea9586226633d063f34c53ddeaca3f"
       hash2 = "8e61c2b751682becb4c0337f5a79b2da0f5f19c128b162ec8058104b894cae9b"
       hash3 = "c5d23d991ce3fbcf73b177bc6136d26a501ded318ccf409ca16f7c664727755a"
-      tags = "DEMO, MAL, QAKBOT"
+      tags = "DEMO, MAL, Qakbot"
       minimum_yara = "1.7"
       
    strings:
@@ -8177,7 +8177,7 @@ rule SUSP_DOC_LNK_in_ZIP_RID2D5D : DEMO FILE SUSP T1547_009 {
       uint16 ( 0 ) == 0x4b50 and 1 of them
 }
 
-rule MAL_AveMaria_RAT_Jul19_RID2E8A : DEMO EXE FILE MAL {
+rule MAL_AveMaria_RAT_Jul19_RID2E8A : AveMaria DEMO EXE FILE MAL {
    meta:
       description = "Detects AveMaria RAT"
       author = "Florian Roth"
@@ -8187,7 +8187,7 @@ rule MAL_AveMaria_RAT_Jul19_RID2E8A : DEMO EXE FILE MAL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "5a927db1566468f23803746ba0ccc9235c79ca8672b1444822631ddbf2651a59"
-      tags = "DEMO, EXE, FILE, MAL"
+      tags = "AveMaria, DEMO, EXE, FILE, MAL"
       minimum_yara = "1.7"
       
    strings:
@@ -8426,7 +8426,7 @@ rule HKTL_LNX_Pnscan_RID2C57 : DEMO HKTL LINUX T1046 {
       filesize < 6000KB and 1 of them
 }
 
-rule MAL_QuasarRAT_May19_1_RID2E1E : DEMO EXE FILE MAL {
+rule MAL_QuasarRAT_May19_1_RID2E1E : DEMO EXE FILE MAL QuasarRAT {
    meta:
       description = "Detects QuasarRAT malware"
       author = "Florian Roth"
@@ -8437,7 +8437,7 @@ rule MAL_QuasarRAT_May19_1_RID2E1E : DEMO EXE FILE MAL {
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2023-01-06"
       hash1 = "0644e561225ab696a97ba9a77583dcaab4c26ef0379078c65f9ade684406eded"
-      tags = "DEMO, EXE, FILE, MAL"
+      tags = "DEMO, EXE, FILE, MAL, QuasarRAT"
       minimum_yara = "1.7"
       
    strings:
@@ -13678,7 +13678,7 @@ rule TurlaMosquito_Mal_6_RID2E88 : DEMO EXE FILE G0010 MAL RUSSIA {
       uint16 ( 0 ) == 0x5a4d and filesize < 500KB and ( 2 of ( $a* ) or 4 of them )
 }
 
-rule Nanocore_RAT_Feb18_1_RID2DF1 : DEMO EXE FILE MAL {
+rule Nanocore_RAT_Feb18_1_RID2DF1 : DEMO EXE FILE MAL NanocoreRAT {
    meta:
       description = "Detects Nanocore RAT"
       author = "Florian Roth"
@@ -13688,7 +13688,7 @@ rule Nanocore_RAT_Feb18_1_RID2DF1 : DEMO EXE FILE MAL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "aa486173e9d594729dbb5626748ce10a75ee966481b68c1b4f6323c827d9658c"
-      tags = "DEMO, EXE, FILE, MAL"
+      tags = "DEMO, EXE, FILE, MAL, NanocoreRAT"
       minimum_yara = "1.7"
       
    strings:
@@ -13703,7 +13703,7 @@ rule Nanocore_RAT_Feb18_1_RID2DF1 : DEMO EXE FILE MAL {
       uint16 ( 0 ) == 0x5a4d and filesize < 600KB and ( 1 of ( $x* ) or 5 of them )
 }
 
-rule Nanocore_RAT_Feb18_2_RID2DF2 : DEMO EXE FILE MAL {
+rule Nanocore_RAT_Feb18_2_RID2DF2 : DEMO EXE FILE MAL NanocoreRAT {
    meta:
       description = "Detects Nanocore RAT"
       author = "Florian Roth"
@@ -13713,7 +13713,7 @@ rule Nanocore_RAT_Feb18_2_RID2DF2 : DEMO EXE FILE MAL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "377ef8febfd8df1a57a7966043ff0c7b8f3973c2cf666136e6c04080bbf9881a"
-      tags = "DEMO, EXE, FILE, MAL"
+      tags = "DEMO, EXE, FILE, MAL, NanocoreRAT"
       minimum_yara = "1.7"
       
    strings:
@@ -14244,7 +14244,7 @@ rule GoldDragon_Ghost419_RAT_RID2F3A : APT CHINA CRIME DEMO EXE FILE T1082 T1083
       uint16 ( 0 ) == 0x5a4d and filesize < 600KB and ( ( pe.exports ( "ExportFunction" ) and pe.number_of_exports == 1 ) or ( 1 of ( $x* ) and 1 of ( $s* ) ) or 3 of them )
 }
 
-rule GoldDragon_RunningRAT_RID2F19 : APT CHINA CRIME DEMO EXE FILE T1218_011 {
+rule GoldDragon_RunningRAT_RID2F19 : APT CHINA CRIME DEMO EXE FILE RunningRAT T1218_011 {
    meta:
       description = "Detects Running RAT from Gold Dragon report"
       author = "Florian Roth"
@@ -14257,7 +14257,7 @@ rule GoldDragon_RunningRAT_RID2F19 : APT CHINA CRIME DEMO EXE FILE T1218_011 {
       hash1 = "0852f2c5741997d8899a34bb95c349d7a9fb7277cd0910656c3ce37a6f11cb88"
       hash2 = "2981e1a1b3c395cee6e4b9e6c46d062cf6130546b04401d724750e4c8382c863"
       hash3 = "7aa99ebc49a130f07304ed25655862a04cc20cb59d129e1416a7dfa04f7d3e51"
-      tags = "APT, CHINA, CRIME, DEMO, EXE, FILE, T1218_011"
+      tags = "APT, CHINA, CRIME, DEMO, EXE, FILE, RunningRAT, T1218_011"
       required_modules = "pe"
       minimum_yara = "3.2.0"
       
@@ -14381,7 +14381,7 @@ rule TopHat_BAT_RID2A97 : APT DEMO SCRIPT {
       filesize < 5KB and all of them
 }
 
-rule Quasar_RAT_Jan18_1_RID2D35 : APT DEMO EXE FILE T1047 {
+rule Quasar_RAT_Jan18_1_RID2D35 : APT DEMO EXE FILE QuasarRAT T1047 {
    meta:
       description = "Detects Quasar RAT"
       author = "Florian Roth"
@@ -14392,7 +14392,7 @@ rule Quasar_RAT_Jan18_1_RID2D35 : APT DEMO EXE FILE T1047 {
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "0157b43eb3c20928b77f8700ad8eb279a0aa348921df074cd22ebaff01edaae6"
       hash2 = "24956d8edcf2a1fd26805ec58cfd1ee7498e1a59af8cc2f4b832a7ab34948c18"
-      tags = "APT, DEMO, EXE, FILE, T1047"
+      tags = "APT, DEMO, EXE, FILE, QuasarRAT, T1047"
       minimum_yara = "1.7"
       
    strings:
@@ -14635,7 +14635,7 @@ rule Turla_Mal_Script_Jan18_1_RID2FD7 : DEMO G0010 MAL RUSSIA SCRIPT T1059 {
       filesize < 200KB and 2 of them
 }
 
-rule MAL_Neshta_Generic_RID2DC9 : DEMO EXE FILE GEN HIGHVOL MAL {
+rule MAL_Neshta_Generic_RID2DC9 : DEMO EXE FILE GEN HIGHVOL MAL neshta {
    meta:
       description = "Detects Neshta malware"
       author = "Florian Roth"
@@ -14649,7 +14649,7 @@ rule MAL_Neshta_Generic_RID2DC9 : DEMO EXE FILE GEN HIGHVOL MAL {
       hash1 = "27c67eb1378c2fd054c6649f92ec8ee9bfcb6f790224036c974f6c883c46f586"
       hash2 = "b7f8233dafab45e3abbbb4f3cc76e6860fae8d5337fb0b750ea20058b56b0efb"
       hash3 = "1954e06fc952a5a0328774aaf07c23970efd16834654793076c061dffb09a7eb"
-      tags = "DEMO, EXE, FILE, GEN, HIGHVOL, MAL"
+      tags = "DEMO, EXE, FILE, GEN, HIGHVOL, MAL, neshta"
       required_modules = "pe"
       minimum_yara = "3.2.0"
       
@@ -16842,7 +16842,7 @@ rule Xtreme_Sep17_2_RID2C06 : DEMO EXE FILE MAL {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 3000KB and all of them )
 }
 
-rule Xtreme_RAT_Gen_Imp_RID2DCA : DEMO EXE FILE GEN MAL {
+rule Xtreme_RAT_Gen_Imp_RID2DCA : DEMO EXE FILE GEN MAL XtremeRAT {
    meta:
       description = "Detects XTREME sample analyzed in September 2017"
       author = "Florian Roth"
@@ -16852,7 +16852,7 @@ rule Xtreme_RAT_Gen_Imp_RID2DCA : DEMO EXE FILE GEN MAL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "7b5082bcc8487bb65c38e34c192c2a891e7bb86ba97281352b0837debee6f1cf"
-      tags = "DEMO, EXE, FILE, GEN, MAL"
+      tags = "DEMO, EXE, FILE, GEN, MAL, XtremeRAT"
       required_modules = "pe"
       minimum_yara = "3.2.0"
       
@@ -19317,18 +19317,18 @@ rule Disclosed_0day_POCs_InjectDll_RID3204 : DEMO EXE FILE HKTL {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 300KB and 1 of them )
 }
 
-rule Disclosed_0day_POCs_payload_MSI_RID32BD : DEMO FILE HKTL {
+rule SUSP_MSI_Patterns_Jul17_RID2F46 : DEMO FILE HKTL SUSP {
    meta:
       description = "Detects POC code from disclosed 0day hacktool set"
       author = "Florian Roth"
       reference = "Disclosed 0day Repos"
-      date = "2017-07-07 14:18:01"
-      score = 75
+      date = "2017-07-07 11:50:11"
+      score = 50
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2022-12-21"
       hash1 = "a7c498a95850e186b7749a96004a98598f45faac2de9b93354ac93e627508a87"
-      tags = "DEMO, FILE, HKTL"
+      tags = "DEMO, FILE, HKTL, SUSP"
       minimum_yara = "1.7"
       
    strings:
@@ -25227,7 +25227,7 @@ rule karmaSMB_RID29FF : DEMO EXE FILE HKTL {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 17000KB and all of them )
 }
 
-rule Quasar_RAT_1_RID2B54 : DEMO EXE FILE MAL {
+rule Quasar_RAT_1_RID2B54 : DEMO EXE FILE MAL QuasarRAT {
    meta:
       description = "Detects Quasar RAT"
       author = "Florian Roth"
@@ -25239,7 +25239,7 @@ rule Quasar_RAT_1_RID2B54 : DEMO EXE FILE MAL {
       hash1 = "0774d25e33ca2b1e2ee2fafe3fdbebecefbf1d4dd99e6460f0bc8713dd0fd740"
       hash2 = "1ce40a89ef9d56fd32c00db729beecc17d54f4f7c27ff22f708a957cd3f9a4ec"
       hash3 = "515c1a68995557035af11d818192f7866ef6a2018aa13112fefbe08395732e89"
-      tags = "DEMO, EXE, FILE, MAL"
+      tags = "DEMO, EXE, FILE, MAL, QuasarRAT"
       minimum_yara = "1.7"
       
    strings:
@@ -25254,7 +25254,7 @@ rule Quasar_RAT_1_RID2B54 : DEMO EXE FILE MAL {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 5000KB and all of ( $s* ) or all of ( $op* ) )
 }
 
-rule Quasar_RAT_2_RID2B55 : DEMO EXE FILE MAL {
+rule Quasar_RAT_2_RID2B55 : DEMO EXE FILE MAL QuasarRAT {
    meta:
       description = "Detects Quasar RAT"
       author = "Florian Roth"
@@ -25266,7 +25266,7 @@ rule Quasar_RAT_2_RID2B55 : DEMO EXE FILE MAL {
       hash1 = "0774d25e33ca2b1e2ee2fafe3fdbebecefbf1d4dd99e6460f0bc8713dd0fd740"
       hash2 = "515c1a68995557035af11d818192f7866ef6a2018aa13112fefbe08395732e89"
       hash3 = "f08db220df716de3d4f63f3007a03f902601b9b32099d6a882da87312f263f34"
-      tags = "DEMO, EXE, FILE, MAL"
+      tags = "DEMO, EXE, FILE, MAL, QuasarRAT"
       minimum_yara = "1.7"
       
    strings:
@@ -29913,7 +29913,7 @@ rule Unspecified_Malware_Oct16_A_RID3134 : DEMO EXE FILE MAL T1546_012 {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and ( 2 of ( $x* ) or 3 of ( $s* ) or all of ( $op* ) ) ) or ( 6 of them )
 }
 
-rule Sality_Malware_Oct16_RID2E9B : DEMO EXE FILE MAL {
+rule Sality_Malware_Oct16_RID2E9B : DEMO EXE FILE MAL Sality {
    meta:
       description = "Detects an unspecififed malware - October 2016"
       author = "Florian Roth"
@@ -29923,7 +29923,7 @@ rule Sality_Malware_Oct16_RID2E9B : DEMO EXE FILE MAL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "8eaff5e1d4b55dd6e25f007549271da10afd1fa25064d7105de0ca2735487aad"
-      tags = "DEMO, EXE, FILE, MAL"
+      tags = "DEMO, EXE, FILE, MAL, Sality"
       minimum_yara = "1.7"
       
    strings:
@@ -33444,7 +33444,7 @@ rule BeepService_Hacktool_RID2EF2 : CHINA DEMO EXE FILE HKTL T1021_002 {
       uint16 ( 0 ) == 0x5a4d and filesize < 100KB and $x1 and 1 of ( $s* )
 }
 
-rule GhostDragon_Gh0stRAT_Sample2_RID3170 : CHINA DEMO EXE FILE MAL {
+rule GhostDragon_Gh0stRAT_Sample2_RID3170 : CHINA DEMO EXE FILE Gh0stRAT MAL {
    meta:
       description = "Detects Gh0st RAT mentioned in Cylance' Ghost Dragon Report"
       author = "Florian Roth"
@@ -33454,7 +33454,7 @@ rule GhostDragon_Gh0stRAT_Sample2_RID3170 : CHINA DEMO EXE FILE MAL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "71a52058f6b5cef66302c19169f67cf304507b4454cca83e2c36151da8da1d97"
-      tags = "CHINA, DEMO, EXE, FILE, MAL"
+      tags = "CHINA, DEMO, EXE, FILE, Gh0stRAT, MAL"
       minimum_yara = "1.7"
       
    strings:
@@ -33466,7 +33466,7 @@ rule GhostDragon_Gh0stRAT_Sample2_RID3170 : CHINA DEMO EXE FILE MAL {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 80KB and ( all of ( $x* ) or all of ( $c* ) ) ) or ( all of them )
 }
 
-rule GhostDragon_Gh0stRAT_Sample3_RID3171 : CHINA DEMO MAL {
+rule GhostDragon_Gh0stRAT_Sample3_RID3171 : CHINA DEMO Gh0stRAT MAL {
    meta:
       description = "Detects Gh0st RAT mentioned in Cylance' Ghost Dragon Report"
       author = "Florian Roth"
@@ -33476,7 +33476,7 @@ rule GhostDragon_Gh0stRAT_Sample3_RID3171 : CHINA DEMO MAL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "1be9c68b31247357328596a388010c9cfffadcb6e9841fb22de8b0dc2d161c42"
-      tags = "CHINA, DEMO, MAL"
+      tags = "CHINA, DEMO, Gh0stRAT, MAL"
       minimum_yara = "1.7"
       
    strings:
@@ -33512,7 +33512,7 @@ rule PoisonIvy_RAT_ssMUIDLL_RID2F13 : APT DEMO EXE FILE {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 20KB and ( all of ( $op* ) ) ) or ( all of them )
 }
 
-rule Nanocore_RAT_Gen_1_RID2D95 : APT DEMO EXE FILE GEN {
+rule Nanocore_RAT_Gen_1_RID2D95 : APT DEMO EXE FILE GEN NanocoreRAT {
    meta:
       description = "Detetcs the Nanocore RAT and similar malware"
       author = "Florian Roth"
@@ -33522,7 +33522,7 @@ rule Nanocore_RAT_Gen_1_RID2D95 : APT DEMO EXE FILE GEN {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "e707a7745e346c5df59b5aa4df084574ae7c204f4fb7f924c0586ae03b79bf06"
-      tags = "APT, DEMO, EXE, FILE, GEN"
+      tags = "APT, DEMO, EXE, FILE, GEN, NanocoreRAT"
       minimum_yara = "1.7"
       
    strings:
@@ -33535,7 +33535,7 @@ rule Nanocore_RAT_Gen_1_RID2D95 : APT DEMO EXE FILE GEN {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 100KB and ( 1 of them ) ) or ( 3 of them )
 }
 
-rule Nanocore_RAT_Sample_1_RID2EDD : APT DEMO EXE FILE {
+rule Nanocore_RAT_Sample_1_RID2EDD : APT DEMO EXE FILE NanocoreRAT {
    meta:
       description = "Detetcs a certain Nanocore RAT sample"
       author = "Florian Roth"
@@ -33545,7 +33545,7 @@ rule Nanocore_RAT_Sample_1_RID2EDD : APT DEMO EXE FILE {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash2 = "b7cfc7e9551b15319c068aae966f8a9ff563b522ed9b1b42d19c122778e018c8"
-      tags = "APT, DEMO, EXE, FILE"
+      tags = "APT, DEMO, EXE, FILE, NanocoreRAT"
       minimum_yara = "1.7"
       
    strings:
@@ -33556,7 +33556,7 @@ rule Nanocore_RAT_Sample_1_RID2EDD : APT DEMO EXE FILE {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 900KB and ( 1 of ( $x* ) ) ) or ( all of them )
 }
 
-rule Nanocore_RAT_Sample_2_RID2EDE : APT DEMO EXE FILE {
+rule Nanocore_RAT_Sample_2_RID2EDE : APT DEMO EXE FILE NanocoreRAT {
    meta:
       description = "Detetcs a certain Nanocore RAT sample"
       author = "Florian Roth"
@@ -33566,7 +33566,7 @@ rule Nanocore_RAT_Sample_2_RID2EDE : APT DEMO EXE FILE {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "51142d1fb6c080b3b754a92e8f5826295f5da316ec72b480967cbd68432cede1"
-      tags = "APT, DEMO, EXE, FILE"
+      tags = "APT, DEMO, EXE, FILE, NanocoreRAT"
       minimum_yara = "1.7"
       
    strings:
