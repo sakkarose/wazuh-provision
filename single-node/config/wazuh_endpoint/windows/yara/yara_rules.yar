@@ -1,14 +1,136 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-08-21 21:18
+    Retrieved: 2025-08-22 21:18
     Generated for User: demo
-    Number of Rules: 2692
+    Number of Rules: 2698
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "math"
 import "pe"
+import "math"
+
+rule SUSP_EXPL_CommVault_CVE_2025_57791_Aug25_1_RID342F : CVE_2025_57791 DEMO EXE EXPLOIT FILE SUSP {
+   meta:
+      description = "Detects potential exploit for WT-2025-0050, authentication bypass through QCommand argument injection"
+      author = "X__Junior"
+      reference = "https://labs.watchtowr.com/guess-who-would-be-stupid-enough-to-rob-the-same-vault-twice-pre-auth-rce-chains-in-commvault/"
+      date = "2025-08-21 15:19:41"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CVE_2025_57791, DEMO, EXE, EXPLOIT, FILE, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $sa1 = "_localadmin__" 
+      $sa2 = "-localadmin" 
+   condition: 
+      not uint16 ( 0 ) == 0x5a4d and filesize < 20MB and all of them
+}
+
+rule SUSP_EXPL_CommVault_CVE_2025_57791_Aug25_2_RID3430 : CVE_2025_57791 DEMO EXPLOIT SUSP {
+   meta:
+      description = "Detects potential exploit for WT-2025-0050, authentication bypass through QCommand argument injection"
+      author = "X__Junior"
+      reference = "https://labs.watchtowr.com/guess-who-would-be-stupid-enough-to-rob-the-same-vault-twice-pre-auth-rce-chains-in-commvault/"
+      date = "2025-08-21 15:19:51"
+      score = 65
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CVE_2025_57791, DEMO, EXPLOIT, SUSP"
+      minimum_yara = "4.0.0"
+      
+   strings:
+      $sa1 = "_localadmin__" 
+      $sa2 = "-localadmin" base64
+   condition: 
+      filesize < 20MB and all of them
+}
+
+rule SUSP_EXPL_CommVault_CVE_2025_57791_Artifact_Aug25_RID372C : CVE_2025_57791 DEMO EXPLOIT SUSP {
+   meta:
+      description = "Detects exploit artifact for WT-2025-0050, authentication bypass through QCommand argument injection"
+      author = "X__Junior"
+      reference = "https://labs.watchtowr.com/guess-who-would-be-stupid-enough-to-rob-the-same-vault-twice-pre-auth-rce-chains-in-commvault/"
+      date = "2025-08-21 17:27:11"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CVE_2025_57791, DEMO, EXPLOIT, SUSP"
+      minimum_yara = "4.0.0"
+      
+   strings:
+      $sa1 = "_localadmin__" 
+      $sa2 = /-cs [a-zA-Z0-9-{}]{3,32} -cs / 
+      $sb2 = "-localadmin" base64
+      $sb1 = "-localadmin" 
+   condition: 
+      filesize < 20MB and all of ( $sa* ) and 1 of ( $sb* )
+}
+
+rule EXPL_JSP_CommVault_CVE_2025_57791_Aug25_1_RID33D1 : CVE_2025_57791 DEMO EXPLOIT {
+   meta:
+      description = "Detects potential exploit for WT-2025-0049, Post-Auth RCE with QCommand Path Traversal"
+      author = "X__Junior"
+      reference = "https://labs.watchtowr.com/guess-who-would-be-stupid-enough-to-rob-the-same-vault-twice-pre-auth-rce-chains-in-commvault/"
+      date = "2025-08-21 15:04:01"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CVE_2025_57791, DEMO, EXPLOIT"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "<App_GetUserPropertiesResponse>" ascii
+      $s2 = "getMethod('getRuntime').invoke(null).exec(param.cmd)" ascii
+   condition: 
+      filesize < 50KB and all of them
+}
+
+rule EXPL_JSP_CommVault_CVE_2025_57791_Aug25_2_RID33D2 : CVE_2025_57791 DEMO EXPLOIT {
+   meta:
+      description = "Detects potential exploit for WT-2025-0049, Post-Auth RCE with QCommand Path Traversal"
+      author = "X__Junior"
+      reference = "https://labs.watchtowr.com/guess-who-would-be-stupid-enough-to-rob-the-same-vault-twice-pre-auth-rce-chains-in-commvault/"
+      date = "2025-08-21 15:04:11"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CVE_2025_57791, DEMO, EXPLOIT"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "<App_UpdateUserPropertiesRequest>" ascii
+      $s2 = "<description>" ascii
+      $s3 = "getMethod('getRuntime').invoke(null).exec(param.cmd)" ascii
+   condition: 
+      filesize < 50KB and all of them
+}
+
+rule EXPL_LOG_CommVault_CVE_2025_57791_Indicator_Shell_Drop_Aug25_RID3B7D : CVE_2025_57791 DEMO EXPLOIT LOG SCRIPT T1505_003 {
+   meta:
+      description = "Detects suspicious log lines that indicate web shell drops into the Apache root folder of a Commvault installation"
+      author = "Florian Roth"
+      reference = "https://labs.watchtowr.com/guess-who-would-be-stupid-enough-to-rob-the-same-vault-twice-pre-auth-rce-chains-in-commvault/"
+      date = "2025-08-21 20:31:21"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CVE_2025_57791, DEMO, EXPLOIT, LOG, SCRIPT, T1505_003"
+      minimum_yara = "2.2.0"
+      
+   strings:
+      $xr1 = /Results written to \[[C-Z]:\\Program Files\\Commvault\\ContentStore\\Apache\\webapps\\ROOT\\[^\\]{1,20}\.jsp\]/ 
+   condition: 
+      $xr1
+}
 
 rule EXPL_RAR_Archive_With_Path_Traversal_Aug25_RID368C : CVE_2025_6218 CVE_2025_8088 DEMO EXPLOIT FILE {
    meta:
