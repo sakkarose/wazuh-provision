@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-08-24 21:17
+    Retrieved: 2025-08-25 21:19
     Generated for User: demo
     Number of Rules: 2698
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "math"
 import "pe"
+import "math"
 
 rule SUSP_EXPL_CommVault_CVE_2025_57791_Aug25_1_RID342F : CVE_2025_57791 DEMO EXE EXPLOIT FILE SUSP {
    meta:
@@ -573,7 +573,7 @@ rule VULN_Erlang_OTP_SSH_CVE_2025_32433_Apr25_RID3359 : CVE_2025_32433 DEMO T102
       filesize < 1MB and $a1 at 0 and $s1 and not 1 of ( $fix* )
 }
 
-rule SUSP_SVG_JS_Payload_Mar25_RID2FB6 : DEMO GEN SUSP {
+rule SUSP_SVG_JS_Payload_Mar25_RID2FB6 : DEMO GEN SUSP T1059_007 {
    meta:
       description = "Detects a suspicious SVG file that contains a JavaScript payload. This rule is a generic rule that might generate false positives. A match should be further investigated."
       author = "Florian Roth"
@@ -583,7 +583,7 @@ rule SUSP_SVG_JS_Payload_Mar25_RID2FB6 : DEMO GEN SUSP {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2025-03-21"
-      tags = "DEMO, GEN, SUSP"
+      tags = "DEMO, GEN, SUSP, T1059_007"
       minimum_yara = "1.7"
       
    strings:
@@ -1658,7 +1658,7 @@ rule MAL_MSI_Mpyutils_Feb24_1_RID2F5B : CVE_2024_1708 CVE_2024_1709 DEMO FILE MA
       uint16 ( 0 ) == 0xcfd0 and filesize < 20000KB and all of them
 }
 
-rule MAL_Beacon_Unknown_Feb24_1_RID3043 : COBALTSTRIKE CVE_2024_1708 CVE_2024_1709 DEMO EXE FILE MAL {
+rule MAL_Beacon_Unknown_Feb24_1_RID3043 : BEACON CVE_2024_1708 CVE_2024_1709 DEMO EXE FILE MAL {
    meta:
       description = "Detects malware samples mentioned in a HuntressLabs report on the exploitation of ScreenConnect vulnerability CVE-2024-1708 and CVE-2024-1709 "
       author = "Florian Roth"
@@ -1670,7 +1670,7 @@ rule MAL_Beacon_Unknown_Feb24_1_RID3043 : COBALTSTRIKE CVE_2024_1708 CVE_2024_17
       hash1 = "6e8f83c88a66116e1a7eb10549542890d1910aee0000e3e70f6307aae21f9090"
       hash2 = "b0adf3d58fa354dbaac6a2047b6e30bc07a5460f71db5f5975ba7b96de986243"
       hash3 = "c0f7970bed203a5f8b2eca8929b4e80ba5c3276206da38c4e0a4445f648f3cec"
-      tags = "COBALTSTRIKE, CVE_2024_1708, CVE_2024_1709, DEMO, EXE, FILE, MAL"
+      tags = "BEACON, CVE_2024_1708, CVE_2024_1709, DEMO, EXE, FILE, MAL"
       minimum_yara = "1.7"
       
    strings:
@@ -3038,7 +3038,7 @@ rule MAL_RANSOM_LNX_macOS_LockBit_Apr23_1_RID331B : CRIME DEMO LINUX LockBit MAC
       ( uint32be ( 0 ) == 0x7f454c46 or uint16 ( 0 ) == 0xfeca or uint16 ( 0 ) == 0xfacf or uint32 ( 0 ) == 0xbebafeca ) and ( 1 of ( $x* ) or 3 of them ) or 2 of ( $x* ) or 5 of them
 }
 
-rule MAL_JS_EFile_Apr23_1_RID2D82 : DEMO MAL {
+rule MAL_JS_EFile_Apr23_1_RID2D82 : DEMO MAL T1059_007 {
    meta:
       description = "Detects JavaScript malware used in eFile compromise"
       author = "Florian Roth"
@@ -3048,7 +3048,7 @@ rule MAL_JS_EFile_Apr23_1_RID2D82 : DEMO MAL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "DEMO, MAL"
+      tags = "DEMO, MAL, T1059_007"
       minimum_yara = "1.7"
       
    strings:
@@ -5238,7 +5238,7 @@ rule VULN_LNX_OMI_RCE_CVE_2021_386471_Sep21_RID320B : CVE_2021_38647 CVE_2021_38
       uint32be ( 0 ) == 0x7f454c46 and $a1 and 1 of ( $s* )
 }
 
-rule HKTL_Khepri_Beacon_Sep21_1_RID3027 : COBALTSTRIKE DEMO EXE HKTL T1105 {
+rule HKTL_Khepri_Beacon_Sep21_1_RID3027 : BEACON DEMO EXE HKTL T1105 {
    meta:
       description = "Detects Khepri C2 framework beacons"
       author = "Florian Roth"
@@ -5248,7 +5248,7 @@ rule HKTL_Khepri_Beacon_Sep21_1_RID3027 : COBALTSTRIKE DEMO EXE HKTL T1105 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "86c48679db5f4c085fd741ebec5235bc6cf0cdf8ef2d98fd8a689ceb5088f431"
-      tags = "COBALTSTRIKE, DEMO, EXE, HKTL, T1105"
+      tags = "BEACON, DEMO, EXE, HKTL, T1105"
       minimum_yara = "3.2.0"
       
    strings:
@@ -5294,7 +5294,7 @@ rule APT_FIN7_MsDoc_Sep21_1_RID2E18 : APT DEMO FILE G0046 RUSSIA {
       uint16 ( 0 ) == 0xcfd0 and ( 1 of ( $x* ) or 3 of them )
 }
 
-rule SUSP_OBFUSC_JS_Sept21_2_RID2E68 : DEMO G0046 OBFUS RUSSIA SUSP T1027 {
+rule SUSP_OBFUSC_JS_Sept21_2_RID2E68 : DEMO G0046 OBFUS RUSSIA SUSP T1027 T1059_007 {
    meta:
       description = "Detects JavaScript obfuscation as used in MalDocs by FIN7 group"
       author = "Florian Roth"
@@ -5304,7 +5304,7 @@ rule SUSP_OBFUSC_JS_Sept21_2_RID2E68 : DEMO G0046 OBFUS RUSSIA SUSP T1027 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "DEMO, G0046, OBFUS, RUSSIA, SUSP, T1027"
+      tags = "DEMO, G0046, OBFUS, RUSSIA, SUSP, T1027, T1059_007"
       minimum_yara = "1.7"
       
    strings:
@@ -5546,7 +5546,7 @@ rule APT_MAL_REvil_Kaseya_Jul21_2_RID30AB : APT DEMO EXE FILE MAL {
       uint16 ( 0 ) == 0x5a4d and filesize < 3000KB and ( 2 of ( $opa* ) or 3 of them )
 }
 
-rule APT_APT29_NOBELIUM_JS_EnvyScout_May21_1_RID33E3 : APT DEMO G0016 G0118 RUSSIA {
+rule APT_APT29_NOBELIUM_JS_EnvyScout_May21_1_RID33E3 : APT DEMO G0016 G0118 RUSSIA T1059_007 {
    meta:
       description = "Detects EnvyScout deobfuscator code as used by NOBELIUM group"
       author = "Florian Roth"
@@ -5556,7 +5556,7 @@ rule APT_APT29_NOBELIUM_JS_EnvyScout_May21_1_RID33E3 : APT DEMO G0016 G0118 RUSS
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "APT, DEMO, G0016, G0118, RUSSIA"
+      tags = "APT, DEMO, G0016, G0118, RUSSIA, T1059_007"
       minimum_yara = "1.7"
       
    strings:
@@ -5565,7 +5565,7 @@ rule APT_APT29_NOBELIUM_JS_EnvyScout_May21_1_RID33E3 : APT DEMO G0016 G0118 RUSS
       filesize < 5000KB and 1 of them
 }
 
-rule APT_APT29_NOBELIUM_JS_EnvyScout_May21_2_RID33E4 : APT DEMO G0016 G0118 RUSSIA {
+rule APT_APT29_NOBELIUM_JS_EnvyScout_May21_2_RID33E4 : APT DEMO G0016 G0118 RUSSIA T1059_007 {
    meta:
       description = "Detects EnvyScout deobfuscator code as used by NOBELIUM group"
       author = "Florian Roth"
@@ -5575,7 +5575,7 @@ rule APT_APT29_NOBELIUM_JS_EnvyScout_May21_2_RID33E4 : APT DEMO G0016 G0118 RUSS
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "APT, DEMO, G0016, G0118, RUSSIA"
+      tags = "APT, DEMO, G0016, G0118, RUSSIA, T1059_007"
       minimum_yara = "1.7"
       
    strings:
@@ -6533,7 +6533,7 @@ rule SUSP_VEST_Encryption_Core_Accumulator_Jan21_RID3729 : DEMO EXE FILE G0032 N
       uint16 ( 0 ) == 0x5a4d and 1 of them
 }
 
-rule PUA_WIN_XMRIG_CryptoCoin_Miner_Dec20_RID33BA : DEMO EXE MAL {
+rule PUA_WIN_XMRIG_CryptoCoin_Miner_Dec20_RID33BA : DEMO EXE MAL xmrig {
    meta:
       description = "Detects XMRIG crypto coin miners"
       author = "Florian Roth"
@@ -6543,7 +6543,7 @@ rule PUA_WIN_XMRIG_CryptoCoin_Miner_Dec20_RID33BA : DEMO EXE MAL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "b6154d25b3aa3098f2cee790f5de5a727fc3549865a7aa2196579fe39a86de09"
-      tags = "DEMO, EXE, MAL"
+      tags = "DEMO, EXE, MAL, xmrig"
       minimum_yara = "1.7"
       
    strings:
@@ -6734,7 +6734,7 @@ rule APT_MAL_URL_CloudAtlas_Oct20_2_RID3144 : APT DEMO FILE G0100 MAL {
       uint16 ( 0 ) == 0x495b and filesize < 200 and $hc1 at 0
 }
 
-rule MAL_DOC_ZLoader_Oct20_1_RID2EA7 : DEMO FILE MAL {
+rule MAL_DOC_ZLoader_Oct20_1_RID2EA7 : DEMO FILE MAL Zloader {
    meta:
       description = "Detects weaponized ZLoader documents"
       author = "Florian Roth"
@@ -6746,7 +6746,7 @@ rule MAL_DOC_ZLoader_Oct20_1_RID2EA7 : DEMO FILE MAL {
       hash1 = "668ca7ede54664360b0a44d5e19e76beb92c19659a8dec0e7085d05528df42b5"
       hash2 = "a2ffabbb1b5a124f462a51fee41221081345ec084d768ffe1b1ef72d555eb0a0"
       hash3 = "d268af19db475893a3d19f76be30bb063ab2ca188d1b5a70e51d260105b201da"
-      tags = "DEMO, FILE, MAL"
+      tags = "DEMO, FILE, MAL, Zloader"
       minimum_yara = "1.7"
       
    strings:
@@ -7822,7 +7822,7 @@ rule LOG_TeamViewer_Connect_Russian_Keyboard_Layout_RID3925 : DEMO LOG T1072 T12
       #x1 > #fp1
 }
 
-rule MAL_Emotet_JS_Dropper_Oct19_1_RID316E : DEMO FILE MAL {
+rule MAL_Emotet_JS_Dropper_Oct19_1_RID316E : DEMO FILE MAL T1059_007 {
    meta:
       description = "Detects Emotet JS dropper"
       author = "Florian Roth"
@@ -7833,7 +7833,7 @@ rule MAL_Emotet_JS_Dropper_Oct19_1_RID316E : DEMO FILE MAL {
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "38295d728522426672b9497f63b72066e811f5b53a14fb4c4ffc23d4efbbca4a"
       hash2 = "9bc004a53816a5b46bfb08e819ac1cf32c3bdc556a87a58cbada416c10423573"
-      tags = "DEMO, FILE, MAL"
+      tags = "DEMO, FILE, MAL, T1059_007"
       minimum_yara = "1.7"
       
    strings:
@@ -8365,7 +8365,7 @@ rule SUSP_VBA_FileSystem_Access_RID30A9 : DEMO FILE SCRIPT SUSP {
       uint16 ( 0 ) == 0xcfd0 and filesize < 100KB and all of ( $s* ) and 1 of ( $a* )
 }
 
-rule SUSP_XMRIG_Reference_RID2E30 : DEMO EXE FILE SUSP {
+rule SUSP_XMRIG_Reference_RID2E30 : DEMO EXE FILE SUSP xmrig {
    meta:
       description = "Detects an executable with a suspicious XMRIG crypto miner reference"
       author = "Florian Roth"
@@ -8375,7 +8375,7 @@ rule SUSP_XMRIG_Reference_RID2E30 : DEMO EXE FILE SUSP {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "DEMO, EXE, FILE, SUSP"
+      tags = "DEMO, EXE, FILE, SUSP, xmrig"
       minimum_yara = "1.7"
       
    strings:
@@ -9475,7 +9475,7 @@ rule HKTL_NoPowerShell_RID2D65 : DEMO HKTL {
       1 of them
 }
 
-rule SUSP_XMRIG_String_RID2D18 : DEMO EXE FILE SUSP {
+rule SUSP_XMRIG_String_RID2D18 : DEMO EXE FILE SUSP xmrig {
    meta:
       description = "Detects a suspicious XMRIG crypto miner executable string in filr"
       author = "Florian Roth"
@@ -9485,7 +9485,7 @@ rule SUSP_XMRIG_String_RID2D18 : DEMO EXE FILE SUSP {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "eb18ae69f1511eeb4ed9d4d7bcdf3391a06768f384e94427f4fc3bd21b383127"
-      tags = "DEMO, EXE, FILE, SUSP"
+      tags = "DEMO, EXE, FILE, SUSP, xmrig"
       minimum_yara = "1.7"
       
    strings:
@@ -10074,7 +10074,7 @@ rule MAL_Xbash_SH_Sep18_RID2D2A : DEMO FILE MAL SCRIPT {
       uint16 ( 0 ) == 0x2123 and filesize < 3KB and 1 of them
 }
 
-rule MAL_Xbash_JS_Sep18_RID2D2C : DEMO MAL {
+rule MAL_Xbash_JS_Sep18_RID2D2C : DEMO MAL T1059_007 {
    meta:
       description = "Detects XBash malware"
       author = "Florian Roth"
@@ -10085,7 +10085,7 @@ rule MAL_Xbash_JS_Sep18_RID2D2C : DEMO MAL {
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2023-01-06"
       hash1 = "f888dda9ca1876eba12ffb55a7a993bd1f5a622a30045a675da4955ede3e4cb8"
-      tags = "DEMO, MAL"
+      tags = "DEMO, MAL, T1059_007"
       minimum_yara = "1.7"
       
    strings:
@@ -10920,7 +10920,7 @@ rule APT_ME_BigBang_Mal_Jul18_1_RID2FCC : APT DEMO EXE FILE G1028 MAL MIDDLE_EAS
       uint16 ( 0 ) == 0x5a4d and filesize < 3000KB and 4 of them
 }
 
-rule PUA_LNX_XMRIG_CryptoMiner_RID3009 : DEMO FILE LINUX MAL {
+rule PUA_LNX_XMRIG_CryptoMiner_RID3009 : DEMO FILE LINUX MAL xmrig {
    meta:
       description = "Detects XMRIG CryptoMiner software"
       author = "Florian Roth"
@@ -10931,7 +10931,7 @@ rule PUA_LNX_XMRIG_CryptoMiner_RID3009 : DEMO FILE LINUX MAL {
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2023-01-06"
       hash1 = "10a72f9882fc0ca141e39277222a8d33aab7f7a4b524c109506a407cd10d738c"
-      tags = "DEMO, FILE, LINUX, MAL"
+      tags = "DEMO, FILE, LINUX, MAL, xmrig"
       minimum_yara = "1.7"
       
    strings:
@@ -10943,7 +10943,7 @@ rule PUA_LNX_XMRIG_CryptoMiner_RID3009 : DEMO FILE LINUX MAL {
       uint16 ( 0 ) == 0x457f and filesize < 8000KB and ( 1 of ( $x* ) or 2 of them )
 }
 
-rule APT_RANCOR_JS_Malware_RID2E3E : APT DEMO FILE G0075 T1053_005 {
+rule APT_RANCOR_JS_Malware_RID2E3E : APT DEMO FILE G0075 T1053_005 T1059_007 {
    meta:
       description = "Detects Rancor Malware"
       author = "Florian Roth"
@@ -10953,7 +10953,7 @@ rule APT_RANCOR_JS_Malware_RID2E3E : APT DEMO FILE G0075 T1053_005 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "1dc5966572e94afc2fbcf8e93e3382eef4e4d7b5bc02f24069c403a28fa6a458"
-      tags = "APT, DEMO, FILE, G0075, T1053_005"
+      tags = "APT, DEMO, FILE, G0075, T1053_005, T1059_007"
       minimum_yara = "1.7"
       
    strings:
@@ -14861,7 +14861,7 @@ rule CoinMiner_Strings_RID2DDE : DEMO HIGHVOL SCRIPT SUSP {
       filesize < 3000KB and 1 of them
 }
 
-rule XMRIG_Monero_Miner_RID2DC1 : DEMO EXE FILE HIGHVOL SUSP {
+rule XMRIG_Monero_Miner_RID2DC1 : DEMO EXE FILE HIGHVOL SUSP xmrig {
    meta:
       description = "Detects Monero mining software"
       author = "Florian Roth"
@@ -14874,7 +14874,7 @@ rule XMRIG_Monero_Miner_RID2DC1 : DEMO EXE FILE HIGHVOL SUSP {
       hash1 = "5c13a274adb9590249546495446bb6be5f2a08f9dcd2fc8a2049d9dc471135c0"
       hash2 = "08b55f9b7dafc53dfc43f7f70cdd7048d231767745b76dc4474370fb323d7ae7"
       hash3 = "f3f2703a7959183b010d808521b531559650f6f347a5830e47f8e3831b10bad5"
-      tags = "DEMO, EXE, FILE, HIGHVOL, SUSP"
+      tags = "DEMO, EXE, FILE, HIGHVOL, SUSP, xmrig"
       minimum_yara = "1.7"
       
    strings:
@@ -14887,7 +14887,7 @@ rule XMRIG_Monero_Miner_RID2DC1 : DEMO EXE FILE HIGHVOL SUSP {
       ( uint16 ( 0 ) == 0x5a4d or uint16 ( 0 ) == 0x457f ) and filesize < 10MB and 2 of them
 }
 
-rule XMRIG_Monero_Miner_Config_RID3076 : DEMO FILE SUSP {
+rule XMRIG_Monero_Miner_Config_RID3076 : DEMO FILE SUSP xmrig {
    meta:
       description = "Semiautomatically generated YARA rule - from files config.json, config.json"
       author = "Florian Roth"
@@ -14898,7 +14898,7 @@ rule XMRIG_Monero_Miner_Config_RID3076 : DEMO FILE SUSP {
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "031333d44a3a917f9654d7e7257e00c9d961ada3bee707de94b7c7d06234909a"
       hash2 = "409b6ec82c3bdac724dae702e20cb7f80ca1e79efa4ff91212960525af016c41"
-      tags = "DEMO, FILE, SUSP"
+      tags = "DEMO, FILE, SUSP, xmrig"
       minimum_yara = "1.7"
       
    strings:
@@ -15425,7 +15425,7 @@ rule APT34_Malware_Exeruner_RID2F32 : DEMO EXE FILE G0049 G0057 MAL MIDDLE_EAST 
       uint16 ( 0 ) == 0x5a4d and filesize < 100KB and 1 of them
 }
 
-rule Suspicious_JS_script_content_RID3292 : DEMO SCRIPT T1059 T1218_010 {
+rule Suspicious_JS_script_content_RID3292 : DEMO SCRIPT T1059 T1059_007 T1218_010 {
    meta:
       description = "Detects suspicious statements in JavaScript files"
       author = "Florian Roth"
@@ -15436,7 +15436,7 @@ rule Suspicious_JS_script_content_RID3292 : DEMO SCRIPT T1059 T1218_010 {
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2024-07-19"
       hash1 = "fc0fad39b461eb1cfc6be57932993fcea94fca650564271d1b74dd850c81602f"
-      tags = "DEMO, SCRIPT, T1059, T1218_010"
+      tags = "DEMO, SCRIPT, T1059, T1059_007, T1218_010"
       minimum_yara = "1.7"
       
    strings:
@@ -17254,7 +17254,7 @@ rule CVE_2017_8759_Mal_Doc_RID2D42 : CVE_2017_8759 DEMO EXPLOIT FILE MAL T1203 T
       uint16 ( 0 ) == 0xcfd0 and filesize < 500KB and ( 1 of ( $s* ) and $c1 )
 }
 
-rule CVE_2017_8759_SOAP_via_JS_RID2E81 : CVE_2017_8759 DEMO EXPLOIT {
+rule CVE_2017_8759_SOAP_via_JS_RID2E81 : CVE_2017_8759 DEMO EXPLOIT T1059_007 {
    meta:
       description = "Detects SOAP WDSL Download via JavaScript"
       author = "Florian Roth"
@@ -17264,7 +17264,7 @@ rule CVE_2017_8759_SOAP_via_JS_RID2E81 : CVE_2017_8759 DEMO EXPLOIT {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "CVE_2017_8759, DEMO, EXPLOIT"
+      tags = "CVE_2017_8759, DEMO, EXPLOIT, T1059_007"
       minimum_yara = "1.7"
       
    strings:
@@ -18815,7 +18815,7 @@ rule Exp_EPS_CVE20152545_RID2C5A : DEMO EXPLOIT FILE OFFICE {
       uint16 ( 0 ) == 0x4b50 and ( $s1 and #s2 > 20 )
 }
 
-rule JS_Suspicious_Obfuscation_Dropbox_RID345D : DEMO OBFUS SCRIPT T1059 T1059_001 {
+rule JS_Suspicious_Obfuscation_Dropbox_RID345D : DEMO OBFUS SCRIPT T1059 T1059_001 T1059_007 {
    meta:
       description = "Detects PowerShell AMSI Bypass"
       author = "Florian Roth"
@@ -18825,7 +18825,7 @@ rule JS_Suspicious_Obfuscation_Dropbox_RID345D : DEMO OBFUS SCRIPT T1059 T1059_0
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "DEMO, OBFUS, SCRIPT, T1059, T1059_001"
+      tags = "DEMO, OBFUS, SCRIPT, T1059, T1059_001, T1059_007"
       minimum_yara = "1.7"
       
    strings:
@@ -18835,7 +18835,7 @@ rule JS_Suspicious_Obfuscation_Dropbox_RID345D : DEMO OBFUS SCRIPT T1059 T1059_0
       2 of them
 }
 
-rule JS_Suspicious_MSHTA_Bypass_RID30F1 : DEMO SCRIPT T1059 T1218_005 {
+rule JS_Suspicious_MSHTA_Bypass_RID30F1 : DEMO SCRIPT T1059 T1059_007 T1218_005 {
    meta:
       description = "Detects MSHTA Bypass"
       author = "Florian Roth"
@@ -18845,7 +18845,7 @@ rule JS_Suspicious_MSHTA_Bypass_RID30F1 : DEMO SCRIPT T1059 T1218_005 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "DEMO, SCRIPT, T1059, T1218_005"
+      tags = "DEMO, SCRIPT, T1059, T1059_007, T1218_005"
       minimum_yara = "1.7"
       
    strings:
@@ -20354,7 +20354,7 @@ rule CredentialStealer_Generic_Backdoor_RID347C : DEMO EXE FILE GEN MAL T1003 {
       ( uint16 ( 0 ) == 0x5a4d and 4 of them )
 }
 
-rule Beacon_K5om_RID2B14 : APT COBALTSTRIKE DEMO EXE FILE METASPLOIT T1105 {
+rule Beacon_K5om_RID2B14 : APT BEACON DEMO EXE FILE METASPLOIT T1105 {
    meta:
       description = "Detects Meterpreter Beacon - file K5om.dll"
       author = "Florian Roth"
@@ -20364,7 +20364,7 @@ rule Beacon_K5om_RID2B14 : APT COBALTSTRIKE DEMO EXE FILE METASPLOIT T1105 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "e3494fd2cc7e9e02cff76841630892e4baed34a3e1ef2b9ae4e2608f9a4d7be9"
-      tags = "APT, COBALTSTRIKE, DEMO, EXE, FILE, METASPLOIT, T1105"
+      tags = "APT, BEACON, DEMO, EXE, FILE, METASPLOIT, T1105"
       minimum_yara = "1.7"
       
    strings:
@@ -21064,7 +21064,7 @@ rule Obfuscated_VBS_April17_RID2F1A : ANOMALY DEMO HKTL OBFUS S0002 SCRIPT T1003
       filesize < 500KB and all of them
 }
 
-rule Obfuscated_JS_April17_RID2ECC : ANOMALY DEMO HKTL OBFUS S0002 T1003 T1134_005 T1550_002 T1550_003 {
+rule Obfuscated_JS_April17_RID2ECC : ANOMALY DEMO HKTL OBFUS S0002 T1003 T1059_007 T1134_005 T1550_002 T1550_003 {
    meta:
       description = "Detects cloaked Mimikatz in JS obfuscation"
       author = "Florian Roth"
@@ -21074,7 +21074,7 @@ rule Obfuscated_JS_April17_RID2ECC : ANOMALY DEMO HKTL OBFUS S0002 T1003 T1134_0
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "ANOMALY, DEMO, HKTL, OBFUS, S0002, T1003, T1134_005, T1550_002, T1550_003"
+      tags = "ANOMALY, DEMO, HKTL, OBFUS, S0002, T1003, T1059_007, T1134_005, T1550_002, T1550_003"
       minimum_yara = "1.7"
       
    strings:
@@ -26258,7 +26258,7 @@ rule Invoke_OSiRis_RID2C15 : DEMO SCRIPT T1059 T1059_001 {
       filesize < 8MB and 1 of them
 }
 
-rule Malware_JS_powershell_obfuscated_RID33F9 : DEMO MAL OBFUS SCRIPT T1059_001 {
+rule Malware_JS_powershell_obfuscated_RID33F9 : DEMO MAL OBFUS SCRIPT T1059_001 T1059_007 {
    meta:
       description = "Unspecified malware - file rechnung_3.js"
       author = "Florian Roth"
@@ -26268,7 +26268,7 @@ rule Malware_JS_powershell_obfuscated_RID33F9 : DEMO MAL OBFUS SCRIPT T1059_001 
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "3af15a2d60f946e0c4338c84bd39880652f676dc884057a96a10d7f802215760"
-      tags = "DEMO, MAL, OBFUS, SCRIPT, T1059_001"
+      tags = "DEMO, MAL, OBFUS, SCRIPT, T1059_001, T1059_007"
       minimum_yara = "1.7"
       
    strings:
@@ -27827,7 +27827,7 @@ rule Winnti_NlaifSvc_RID2CFF : CHINA DEMO EXE FILE G0044 MAL {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 900KB and ( 1 of ( $x* ) or 2 of them ) ) or ( 3 of them )
 }
 
-rule p0wnedPowerCat_RID2C84 : COBALTSTRIKE DEMO FILE HKTL {
+rule p0wnedPowerCat_RID2C84 : DEMO FILE HKTL {
    meta:
       description = "p0wnedShell Runspace Post Exploitation Toolkit - file p0wnedPowerCat_RID2C84.cs"
       author = "Florian Roth"
@@ -27837,7 +27837,7 @@ rule p0wnedPowerCat_RID2C84 : COBALTSTRIKE DEMO FILE HKTL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "6a3ba991d3b5d127c4325bc194b3241dde5b3a5853b78b4df1bce7cbe87c0fdf"
-      tags = "COBALTSTRIKE, DEMO, FILE, HKTL"
+      tags = "DEMO, FILE, HKTL"
       minimum_yara = "1.7"
       
    strings:
@@ -27852,7 +27852,7 @@ rule p0wnedPowerCat_RID2C84 : COBALTSTRIKE DEMO FILE HKTL {
       ( uint16 ( 0 ) == 0x7375 and filesize < 150KB and 1 of them ) or ( 2 of them )
 }
 
-rule p0wnedExploits_RID2CB7 : COBALTSTRIKE DEMO HKTL T1033 {
+rule p0wnedExploits_RID2CB7 : DEMO HKTL T1033 {
    meta:
       description = "p0wnedShell Runspace Post Exploitation Toolkit - file p0wnedExploits_RID2CB7.cs"
       author = "Florian Roth"
@@ -27862,7 +27862,7 @@ rule p0wnedExploits_RID2CB7 : COBALTSTRIKE DEMO HKTL T1033 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "54548e7848e742566f5596d8f02eca1fd2cbfeae88648b01efb7bab014b9301b"
-      tags = "COBALTSTRIKE, DEMO, HKTL, T1033"
+      tags = "DEMO, HKTL, T1033"
       minimum_yara = "1.7"
       
    strings:
@@ -27872,7 +27872,7 @@ rule p0wnedExploits_RID2CB7 : COBALTSTRIKE DEMO HKTL T1033 {
       all of them
 }
 
-rule p0wnedListenerConsole_RID2F78 : COBALTSTRIKE DEMO HKTL T1055_002 {
+rule p0wnedListenerConsole_RID2F78 : DEMO HKTL T1055_002 {
    meta:
       description = "p0wnedShell Runspace Post Exploitation Toolkit - file p0wnedListenerConsole_RID2F78.cs"
       author = "Florian Roth"
@@ -27882,7 +27882,7 @@ rule p0wnedListenerConsole_RID2F78 : COBALTSTRIKE DEMO HKTL T1055_002 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "d2d84e65fad966a8556696fdaab5dc8110fc058c9e9caa7ea78aa00921ae3169"
-      tags = "COBALTSTRIKE, DEMO, HKTL, T1055_002"
+      tags = "DEMO, HKTL, T1055_002"
       minimum_yara = "1.7"
       
    strings:
@@ -27898,7 +27898,7 @@ rule p0wnedListenerConsole_RID2F78 : COBALTSTRIKE DEMO HKTL T1055_002 {
       1 of them
 }
 
-rule p0wnedBinaries_RID2C8C : COBALTSTRIKE DEMO HKTL {
+rule p0wnedBinaries_RID2C8C : DEMO HKTL {
    meta:
       description = "p0wnedShell Runspace Post Exploitation Toolkit - file p0wnedBinaries_RID2C8C.cs"
       author = "Florian Roth"
@@ -27908,7 +27908,7 @@ rule p0wnedBinaries_RID2C8C : COBALTSTRIKE DEMO HKTL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "fd7014625b58d00c6e54ad0e587c6dba5d50f8ca4b0f162d5af3357c2183c7a7"
-      tags = "COBALTSTRIKE, DEMO, HKTL"
+      tags = "DEMO, HKTL"
       minimum_yara = "1.7"
       
    strings:
@@ -27923,7 +27923,7 @@ rule p0wnedBinaries_RID2C8C : COBALTSTRIKE DEMO HKTL {
       1 of them
 }
 
-rule p0wnedAmsiBypass_RID2D5B : COBALTSTRIKE DEMO HKTL {
+rule p0wnedAmsiBypass_RID2D5B : DEMO HKTL {
    meta:
       description = "p0wnedShell Runspace Post Exploitation Toolkit - file p0wnedAmsiBypass_RID2D5B.cs"
       author = "Florian Roth"
@@ -27933,7 +27933,7 @@ rule p0wnedAmsiBypass_RID2D5B : COBALTSTRIKE DEMO HKTL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "345e8e6f38b2914f4533c4c16421d372d61564a4275537e674a2ac3360b19284"
-      tags = "COBALTSTRIKE, DEMO, HKTL"
+      tags = "DEMO, HKTL"
       minimum_yara = "1.7"
       
    strings:
@@ -27944,7 +27944,7 @@ rule p0wnedAmsiBypass_RID2D5B : COBALTSTRIKE DEMO HKTL {
       1 of them
 }
 
-rule p0wnedShell_outputs_RID2EDA : COBALTSTRIKE DEMO HKTL {
+rule p0wnedShell_outputs_RID2EDA : DEMO HKTL {
    meta:
       description = "p0wnedShell Runspace Post Exploitation Toolkit - from files p0wnedShell.cs, p0wnedShell.cs"
       author = "Florian Roth"
@@ -27954,7 +27954,7 @@ rule p0wnedShell_outputs_RID2EDA : COBALTSTRIKE DEMO HKTL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "e1f35310192416cd79e60dba0521fc6eb107f3e65741c344832c46e9b4085e60"
-      tags = "COBALTSTRIKE, DEMO, HKTL"
+      tags = "DEMO, HKTL"
       minimum_yara = "1.7"
       
    strings:
@@ -54926,7 +54926,7 @@ rule Webshell_telnet_cgi_RID2EC4 : DEMO T1505_003 WEBSHELL {
       1 of them
 }
 
-rule Webshell_Java_Shell_js_RID2FBB : DEMO SCRIPT T1505_003 WEBSHELL {
+rule Webshell_Java_Shell_js_RID2FBB : DEMO SCRIPT T1059_007 T1505_003 WEBSHELL {
    meta:
       description = "Semi-Auto-generated - file Java Shell.js.txt"
       author = "Florian Roth"
@@ -54936,7 +54936,7 @@ rule Webshell_Java_Shell_js_RID2FBB : DEMO SCRIPT T1505_003 WEBSHELL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "DEMO, SCRIPT, T1505_003, WEBSHELL"
+      tags = "DEMO, SCRIPT, T1059_007, T1505_003, WEBSHELL"
       minimum_yara = "1.7"
       
    strings:
