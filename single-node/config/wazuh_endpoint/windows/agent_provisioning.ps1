@@ -97,14 +97,6 @@ if (-Not (Test-Path -Path "$scaPath")) {
 # Copy the SCA rules to the new directory
 Copy-Item -Path "$PSScriptRoot\agent_config\policies\*" -Destination "$scaPath" -Recurse
 
-# Open ossec.conf under Andministrator privileges
-
-# Find if these lines already exist in ossec.conf
-
-# If not, insert this 
-
-# Clean up downloaded and extracted files
-
 # Print a message asking the user to restart the computer
 Write-Host "Provisioning completed. Please restart your computer to apply all changes."
 Read-Host -Prompt "Press Enter to exit"
