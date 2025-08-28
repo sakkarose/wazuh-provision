@@ -55,8 +55,13 @@ Copy-Item -Path "$PSScriptRoot\Sysmon64.exe" -Destination "$sysmonPath\Sysmon64.
 # Copy configuration file
 Copy-Item -Path "$PSScriptRoot\sysmon\sysmonconfig.xml" -Destination "$sysmonPath\sysmonconfig.xml"
 
+# Set the current location to the Sysmon directory for reliable execution
+Set-Location -Path $sysmonPath
+
 # Start Sysmon with configuration
-Start-Process -FilePath "$sysmonPath\Sysmon64.exe" -ArgumentList "/accepteula -i $sysmonPath\sysmonconfig.xml" -NoNewWindow -Wait
+Start-Process -FilePath ".\Sysmon64.exe" -ArgumentList @("-accepteula", "-i", ".\sysmonconfig.xml") -NoNewWindow -Wait
+
+Set-Location -Path $PSScriptRoot
 
 # Download the latest YARA binary
 Invoke-WebRequest -Uri $yaraUrl -OutFile "$PSScriptRoot\yara-v4.5.2-2326-win64.zip"

@@ -46,7 +46,7 @@ services:
       - ./config/wazuh_cluster/decoders:/var/ossec/etc/decoders
       - ./config/wazuh_cluster/lists:/var/ossec/etc/lists
       - ./config/wazuh_endpoint/windows/agent_config:/var/ossec/etc/shared/windows
-#     - ./config/wazuh_endpoint/linux/agent_config:/var/ossec/etc/shared/linux
+      - ./config/wazuh_endpoint/linux/agent_config:/var/ossec/etc/shared/linux
       - ./config/wazuh_cluster/local_internal_options.conf:/var/ossec/etc/local_internal_options.conf
 
   wazuh.indexer:
