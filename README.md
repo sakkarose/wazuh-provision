@@ -18,34 +18,59 @@ Current version: v4.12.0
 
 ### Done
 
-- Configuration provisioning.
+- Configuration provisioning
     - CDB lists
     - Decoders
     - Rules
     - SCA Policies
-- Windows agent provisioning.
+- Windows agent provisioning
     - Setup Sysmon
     - Setup YARA & rules
     - Enable PowerShell logs gathering
     - Provision ransomware active responses (through YARA, CDB lists & VirusTotal)
-- YARA rule update thourgh Github Action.
-- Environment file for credentials.
+- Linux agent provisioning
+    - Sysmon
+- YARA rule update thourgh Github Action
+- Environment file for credentials
 
 ### To-do
 
-- Provisioning Sysmon for Linux
 - Provisioning for AIO setup
 - API setup script
-- Shuffle worker provisioning.
-- Shuffle example workflows.
-- Grafana provisioning (Haven't decided between OpenSearch dashboard and Grafana).
+- Shuffle worker provisioning
+- Shuffle example workflows
+- Dashboard provisioning
 - Malware hash sample CDB lists automatic update
 - Remove debug snippet on Github Action
 - Velociraptor integration with SIGMA rules
 
 ## How-to
 
-### Wazuh Cluster
+### Single-node Wazuh Cluster
+
+This deployment is defined in the `docker-compose.yml` file with one Wazuh manager containers, one Wazuh indexer containers, and one Wazuh dashboard container. It can be deployed by following these steps: 
+
+1. Increase max_map_count on your host (Linux). This command must be run with root permissions:
+```
+$ sysctl -w vm.max_map_count=262144
+```
+2) Run the certificate creation script:
+```
+$ docker-compose -f generate-indexer-certs.yml run --rm generator
+```
+3) Start the environment with docker-compose:
+
+- In the foregroud:
+```
+$ docker-compose up
+```
+- In the background:
+```
+$ docker-compose up -d
+```
+
+The environment takes about 1 minute to get up (depending on your Docker host) for the first time since Wazuh Indexer must be started for the first time and the indexes and index patterns must be generated.
+
 
 ### Wazuh Agents
 
@@ -58,6 +83,29 @@ Current version: v4.12.0
 3. Download the `./single-node/config/wazuh_endpoint/windows/active-response` folder and place it in the same directory as the script.
 
 4. Run the `./single-node/config/wazuh_endpoint/windows/agent_provisioning.ps1` script.
+
+#### Linux
+
+1. Install Sysmon based on your agent operating system at [SysmonForLinux](https://github.com/microsoft/SysmonForLinux/blob/main/INSTALL.md).
+
+2. Download the ... folder
+
+3. Setup the SysmonForLinux config file
+
+```
+sudo sysmon -accepteula -i
+sudo sysmon -i sysmonforlinux-config.xml
+```
+
+4. Allow Sysmon to run at startup
+
+```
+sudo systemctl enable sysmon
+sudo systemctl start sysmon
+```
+
+
+
 
 ## Credits
 
