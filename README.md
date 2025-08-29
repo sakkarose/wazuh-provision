@@ -30,12 +30,13 @@ Current version: v4.12.0
     - Provision ransomware active responses (through YARA, CDB lists & VirusTotal)
 - Linux agent provisioning
     - Sysmon
+- MacOS agent provisioning
 - YARA rule update thourgh Github Action
 - Environment file for credentials
 
 ### To-do
 
-- MacOS agent provision
+- Hyper-V on Windows agent (WiP)
 - Provisioning for AIO setup
 - API setup script
 - Shuffle worker provisioning
