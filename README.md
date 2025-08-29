@@ -32,7 +32,7 @@ Current version: v4.12.0
     - Sysmon
     - AppArmor
 - MacOS agent provisioning
-- YARA managed rule update thourgh Github Action
+- VALHALLA YARA managed rule update thourgh Github Action
 - Environment file for credentials
 
 ### To-do
@@ -45,6 +45,7 @@ Current version: v4.12.0
 - Dashboard provisioning
 - Malware hash sample CDB lists update automation
 - Velociraptor integration with SIGMA rules
+- VALHALLA SIGMA managed rule update thourgh Github Action
 
 ## Note
 
