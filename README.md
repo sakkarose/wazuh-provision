@@ -134,7 +134,7 @@ systemctl restart wazuh-agent
 
 ## Note
 
-1. SCA policies serve as a second method in case of a network problem or a flooded event queue, which could cause the Wazuh server to miss important information.
+1. SCA policies serve as a second method for malware detection in case of a network problem or a flooded event queue, which could cause the Wazuh server to miss important information.
 
 ## Credits
 
