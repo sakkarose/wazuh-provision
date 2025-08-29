@@ -41,7 +41,7 @@ Current version: v4.12.0
 - YARA on Linux agents
 - Provisioning for AIO setup
 - API setup script
-- SOAR example workflows
+- Recommended SOAR workflows
 - Dashboard provisioning
 - Malware hash sample CDB lists update automation
 - Velociraptor integration with SIGMA rules
