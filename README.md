@@ -43,8 +43,7 @@ Current version: v4.12.0
 - API setup script
 - SOAR example workflows
 - Dashboard provisioning
-- Malware hash sample CDB lists automatic update
-- Remove debug snippet on Github Action
+- Malware hash sample CDB lists update automation
 - Velociraptor integration with SIGMA rules
 
 ## How-to
