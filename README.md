@@ -37,7 +37,8 @@ Current version: v4.12.0
 
 ### To-do
 
-- Hyper-V on Windows agent (WiP)
+- Hyper-V on Windows agents (WiP)
+- YARA on Linux agents
 - Provisioning for AIO setup
 - API setup script
 - SOAR example workflows
