@@ -30,6 +30,7 @@ Current version: v4.12.0
     - Provision ransomware active responses (through YARA, CDB lists & VirusTotal)
 - Linux agent provisioning
     - Sysmon
+    - AppArmor
 - MacOS agent provisioning
 - YARA rule update thourgh Github Action
 - Environment file for credentials
