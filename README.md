@@ -22,7 +22,7 @@ Current version: v4.12.0
     - CDB lists
     - Decoders
     - Rules
-    - SCA Policies
+    - SCA policies
 - Windows agent provisioning
     - Setup Sysmon
     - Setup YARA & rules
@@ -132,6 +132,9 @@ systemctl restart wazuh-agent
 /Library/Ossec/bin/wazuh-control restart
 ```
 
+## Note
+
+1. SCA policies serve as a second method in case of a network problem or a flooded event queue, which could cause the Wazuh server to miss important information.
 
 ## Credits
 
