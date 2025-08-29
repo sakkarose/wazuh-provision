@@ -35,6 +35,7 @@ Current version: v4.12.0
 
 ### To-do
 
+- MacOS agent provision
 - Provisioning for AIO setup
 - API setup script
 - Shuffle worker provisioning
@@ -119,6 +120,16 @@ chown root:wazuh /var/ossec/active-response/bin/remove-threat.py
 
 ```
 systemctl restart wazuh-agent
+```
+
+#### MacOS
+
+1. Install agent on the endpoint with default group being `macos`.
+
+2. Restart agent service
+
+```
+/Library/Ossec/bin/wazuh-control restart
 ```
 
 
