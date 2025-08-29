@@ -32,7 +32,7 @@ Current version: v4.12.0
     - Sysmon
     - AppArmor
 - MacOS agent provisioning
-- YARA rule update thourgh Github Action
+- YARA managed rule update thourgh Github Action
 - Environment file for credentials
 
 ### To-do
