@@ -39,8 +39,7 @@ Current version: v4.12.0
 - Hyper-V on Windows agent (WiP)
 - Provisioning for AIO setup
 - API setup script
-- Shuffle worker provisioning
-- Shuffle example workflows
+- SOAR example workflows
 - Dashboard provisioning
 - Malware hash sample CDB lists automatic update
 - Remove debug snippet on Github Action
