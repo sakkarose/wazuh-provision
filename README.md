@@ -46,6 +46,10 @@ Current version: v4.12.0
 - Malware hash sample CDB lists update automation
 - Velociraptor integration with SIGMA rules
 
+## Note
+
+1. SCA policies serve as a second method for malware detection in case of a network problem or a flooded event queue, which could cause the Wazuh server to miss important information.
+
 ## How-to
 
 ### Single-node Wazuh Cluster
@@ -132,10 +136,6 @@ systemctl restart wazuh-agent
 ```
 /Library/Ossec/bin/wazuh-control restart
 ```
-
-## Note
-
-1. SCA policies serve as a second method for malware detection in case of a network problem or a flooded event queue, which could cause the Wazuh server to miss important information.
 
 ## Credits
 
