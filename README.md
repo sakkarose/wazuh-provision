@@ -91,6 +91,16 @@ The environment takes about 1 minute to get up (depending on your Docker host) f
 
 4. Run the `./single-node/config/wazuh_endpoint/windows/agent_provisioning.ps1` script.
 
+##### Hyper-V
+
+1. Navigate to *Indexer management > Dev Tools*, run `GET _cat/indices/wazuh-alerts-*`.
+
+2. From the output, check for the date of the latest indice, then run `POST <RECENT_ALERTS_INDEX>/_doc` (.e.g: `POST wazuh-alerts-4.x-2025.04.28/_doc`).
+
+3. Navigate to *Dashboard Management > Dashboard Management > Index patterns > wazuh-alerts-\**, click refresh button in the top-right corner.
+
+4. In `./single-node/config/wazuh_endpoint/windows/agent.conf`, set <disabled> to no for the `hyper-v_metrics` command.
+
 #### Linux
 
 1. Install agent on the endpoint with default group being `linux`.

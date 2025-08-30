@@ -102,6 +102,9 @@ if (-Not (Test-Path -Path "$scaPath")) {
 # Copy the SCA rules to the new directory
 Copy-Item -Path "$PSScriptRoot\agent_config\policies\*" -Destination "$scaPath" -Recurse
 
+# Copy the wodles folder
+Copy-Item -Path "$PSScriptRoot\wodles\*" -Destination "$ossecPath\wodles\" -Recurse
+
 # Print a message asking the user to restart the computer
 Write-Host "Provisioning completed. Please restart your computer to apply all changes."
 Read-Host -Prompt "Press Enter to exit"
