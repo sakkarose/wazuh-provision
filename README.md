@@ -18,24 +18,28 @@ Current version: v4.12.0
 
 ### Done
 
-- Configuration provisioning
+- Configuration provisioning:
     - CDB lists
     - Decoders
     - Rules
     - SCA policies
     - Dashboard
-- Windows agent provisioning
+    - Environment file for credentials
+- Windows agent provisioning:
     - Setup Sysmon
     - Setup YARA & rules
     - Enable PowerShell logs gathering
     - Provision ransomware active responses (through YARA, CDB lists & VirusTotal)
     - Hyper-V
-- Linux agent provisioning
+- Linux agent provisioning:
     - Sysmon
     - AppArmor
 - MacOS agent provisioning
-- VALHALLA YARA managed rule update through Github Action
-- Environment file for credentials
+- Github Action:
+    - VALHALLA YARA managed rule update automation
+    - Checking for conflict rule ID (WIP)
+- Misc:
+    - CCMC Compliance
 
 ### To-do
 
@@ -156,6 +160,11 @@ systemctl restart wazuh-agent
 ```
 /Library/Ossec/bin/wazuh-control restart
 ```
+
+#### Misc
+
+##### CCMC Compliance - Account Brute Force
+- Check Hyper-V setup (From step 5 to 8).
 
 ## Credits
 

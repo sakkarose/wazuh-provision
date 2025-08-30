@@ -27,12 +27,12 @@
     <description>Yara grouping rule</description>
   </rule>
 <!--  YARA scan detects a positive match -->
-  <rule id="100013" level="7">
+  <rule id="100013" level="12">
     <if_sid>100012</if_sid>
     <match type="pcre2">wazuh-yara: INFO - Scan result: </match>
     <description>Yara scan result: File "$(yara_scanned_file)" is a positive match. Yara rule: $(yara_rule)</description>
   </rule>
-  <rule id="100014" level="7">
+  <rule id="100014" level="12">
     <if_sid>100012</if_sid>
     <match type="pcre2">wazuh-yara: INFO - Successfully deleted: </match>
     <description>Active Response: Successfully removed "$(yara_scanned_file)". YARA rule: $(yara_rule)</description>

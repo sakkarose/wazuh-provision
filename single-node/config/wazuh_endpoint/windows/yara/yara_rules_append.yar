@@ -218,3 +218,47 @@ rule _DOGE_Big_Balls_Ransomware {
       ( uint16(0) == 0x5a4d and filesize < 1000KB and ( 8 of them )
       ) or ( all of them )
 }
+
+/* Mamona ransomware */
+rule Mamona_ransomware {
+    meta:
+        description = "Detects Mamona ransomware or similar variants"
+        author = "Oluwaseyi Soneye"
+        reference = "Strings output analysis"
+        date = "2025-05-22"
+
+    strings:
+        $s1 = "YOUR FILES HAVE BEEN ENCRYPTED!" nocase
+        $s2 = "CHECK README." nocase
+        $s3 = "README." nocase
+        $s4 = "password OK" nocase
+        $s5 = "wrong pass" nocase
+        $s6 = "provide pass" nocase
+        $s7 = "encryption mode" nocase
+        $s8 = "Mamona" nocase
+        $s9 = "cleared event logs" nocase
+        $s10 = "WinDefend" nocase
+        $s11 = "SecurityHealthService" nocase
+        $s12 = "TerminateProcess" nocase
+        $s13 = "killed process" nocase
+        $s14 = "killed service" nocase
+        $s15 = "WNetAddConnection2W" nocase
+        $s16 = "NetShareEnum" nocase
+        $s17 = "\\%s\\IPC$" nocase
+        $s18 = "encrypting file" nocase
+        $s19 = "encrypting directory" nocase
+        $s20 = "Del /f /q" nocase
+        $s21 = "cmd.exe /C ping 127.0.0.7 -n 3 > Nul & Del /f /q" nocase
+        $s22 = "PrintMe22" nocase
+        $s23 = "printed note to printer" nocase
+
+    condition:
+        (uint16(0) == 0x5A4D) and  // PE header check
+        (
+            any of ($s*) or
+            (3 of ($s1, $s2, $s3, $s4, $s5, $s6, $s7, $s8)) or
+            (2 of ($s9, $s10, $s11, $s12, $s13, $s14)) or
+            (2 of ($s15, $s16, $s17)) or
+            (2 of ($s18, $s19, $s20, $s21, $s22, $s23))
+        )
+}
