@@ -47,6 +47,7 @@ services:
       - ./config/wazuh_cluster/lists:/var/ossec/etc/lists
       - ./config/wazuh_endpoint/windows/agent_config:/var/ossec/etc/shared/windows
       - ./config/wazuh_endpoint/linux/agent_config:/var/ossec/etc/shared/linux
+      - ./config/wazuh_endpoint/macos/agent_config:/var/ossec/etc/shared/macos
       - ./config/wazuh_cluster/local_internal_options.conf:/var/ossec/etc/local_internal_options.conf
 
   wazuh.indexer:
@@ -95,7 +96,7 @@ services:
       - ./config/wazuh_dashboard/opensearch_dashboards.yml:/usr/share/wazuh-dashboard/config/opensearch_dashboards.yml
       - ./config/wazuh_dashboard/wazuh.yml:/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml
       - wazuh-dashboard-config:/usr/share/wazuh-dashboard/data/wazuh/config
-      - ./config/wazuh_dashboard/custom:/usr/share/wazuh-dashboard/plugins/wazuh/public/assets/custom
+      - wazuh-dashboard-custom:/usr/share/wazuh-dashboard/plugins/wazuh/public/assets/custom
     depends_on:
       - wazuh.indexer
     links:
@@ -112,7 +113,6 @@ volumes:
   wazuh_active_response:
   wazuh_agentless:
   wazuh_wodles:
-  filebeat_etc:
   filebeat_var:
   wazuh-indexer-data:
   wazuh-dashboard-config:

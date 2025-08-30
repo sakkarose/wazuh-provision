@@ -34,7 +34,7 @@ Current version: v4.12.0
     - Sysmon
     - AppArmor
 - MacOS agent provisioning
-- VALHALLA YARA managed rule update thourgh Github Action
+- VALHALLA YARA managed rule update through Github Action
 - Environment file for credentials
 
 ### To-do
@@ -46,7 +46,7 @@ Current version: v4.12.0
 - Dashboard provisioning
 - Malware hash sample CDB lists update automation
 - Velociraptor integration with SIGMA rules
-- VALHALLA SIGMA managed rule update thourgh Github Action
+- VALHALLA SIGMA managed rule update through Github Action
 
 ## Note
 
@@ -56,7 +56,7 @@ Current version: v4.12.0
 
 ### Single-node Wazuh Cluster
 
-This deployment is defined in the `docker-compose.yml` file with one Wazuh manager containers, one Wazuh indexer containers, and one Wazuh dashboard container. It can be deployed by following these steps: 
+This deployment is defined in the `docker-compose.yml` file with a Wazuh manager, indexer and dashboard container. It can be deployed by following these steps: 
 
 1. Increase max_map_count on your host (Linux). This command must be run with root permissions:
 ```
@@ -68,7 +68,7 @@ $ docker-compose -f generate-indexer-certs.yml run --rm generator
 ```
 3) Start the environment with docker-compose:
 
-- In the foregroud:
+- In the foreground:
 ```
 $ docker-compose up
 ```
@@ -96,11 +96,19 @@ The environment takes about 1 minute to get up (depending on your Docker host) f
 
 1. Navigate to **Indexer management > Dev Tools**, run `GET _cat/indices/wazuh-alerts-*`.
 
-2. From the output, check for the date of the latest indice, then run `POST <RECENT_ALERTS_INDEX>/_doc` (.e.g: `POST wazuh-alerts-4.x-2025.04.28/_doc`).
+2. From the output, check for the date of the latest indices, then run `POST <RECENT_ALERTS_INDEX>/_doc` (.e.g: `POST wazuh-alerts-4.x-2025.04.28/_doc`).
 
 3. Navigate to **Dashboard Management > Dashboard Management > Index patterns > wazuh-alerts-\***, click refresh button in the top-right corner.
 
 4. In `./single-node/config/wazuh_endpoint/windows/agent.conf`, set <disabled> to no for the `hyper-v_metrics` command.
+
+5. Check if Wazuh can receive Hyper-V metrics from your Windows agent(s) first, then navigate to **Dashboard Management > Dashboards Management > Saved objects**.
+
+6. Click **Import**, tick `Request action on conflict` and select the file `hyper-v.ndjson` in `./config/wazuh_dashboard/custom`.
+
+7. Click **Skip** on the **Overwrite index-pattern?** pop-up then click **Done**.
+
+8. Navigate to **Dashboard Management > Dashboards Management > Index patterns**, select the `wazuh-alerts-*` index then click the refresh button in the top-right corner.
 
 #### Linux
 

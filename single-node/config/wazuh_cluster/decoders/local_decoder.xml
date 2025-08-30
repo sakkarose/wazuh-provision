@@ -52,13 +52,11 @@
   <order>rollback_status</order>
 </decoder>
 
+<!-- Linux Sysmon -->
 <decoder name="sysmon-linux">
   <program_name>sysmon</program_name>
 </decoder>
 
-<!-- Linux Sysmon -->
-<!-- system -->
-<!-- EventID -->
 <decoder name="sysmon-linux-child">
   <parent>sysmon-linux</parent>
   <regex offset="after_parent">\pEventID\p(\d+)\p/EventID\p</regex>

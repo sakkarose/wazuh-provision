@@ -185,3 +185,36 @@ hash1= "90ae0c693f6ffd6dc5bb2d5a5ef078629c3d77f874b2d2ebd9e109d8ca049f2c"
       uint16(0) == 0x5a4d and filesize < 7000KB and
       1 of ($x*) and 4 of them
 }
+
+/* DOGE Big Balls ransomware */
+rule _DOGE_Big_Balls_Ransomware {
+   meta:
+      description = "DOGE Big Balls ransomware executable detection"
+      author = "Anthony Faruna"
+      reference = "https://github.com/Neo23x0/yarGen"
+      date = "2025-05-19"
+   strings:
+      $s1 = "Failed to open file. ShellExecute error: %d" fullword ascii
+      $s2 = "AppPolicyGetProcessTerminationMethod" fullword ascii
+      $s3 = "\\RANSOMNOTE.txt" fullword ascii
+      $s4 = "Failed to get Desktop path." fullword ascii
+      $s5 = "%s\\Desktop\\RANSOMNOTE.txt" fullword ascii
+      $s6 = "Open RANSOMNOTE.txt?" fullword ascii
+      $s7 = " Type Descriptor'" fullword ascii
+      $s8 = "operator co_await" fullword ascii
+      $s9 = "User clicked OK." fullword ascii
+      $s10 = "api-ms-win-appmodel-runtime-l1-1-2" fullword wide
+      $s11 = "User clicked Cancel or closed the MessageBox." fullword ascii
+      $s12 = " Class Hierarchy Descriptor'" fullword ascii
+      $s13 = " Base Class Descriptor at (" fullword ascii
+      $s14 = "COM256" fullword ascii
+      $s15 = "F9]%c%" fullword ascii
+      $s16 = " Complete Object Locator'" fullword ascii
+      $s17 = "\"^4]%* " fullword ascii
+      $s18 = "(- d|X" fullword ascii
+      $s19 = "USERPROFILE" fullword ascii /* Goodware String - occured 154 times */
+      $s20 = "network down" fullword ascii /* Goodware String - occured 567 times */
+   condition:
+      ( uint16(0) == 0x5a4d and filesize < 1000KB and ( 8 of them )
+      ) or ( all of them )
+}
