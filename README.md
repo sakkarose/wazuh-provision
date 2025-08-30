@@ -15,6 +15,7 @@ Current version: v4.12.0
 - Updating CDB lists
 - Updating decoders
 - Updating rules
+- Updating YARA rules
 
 ### Done
 
@@ -22,15 +23,18 @@ Current version: v4.12.0
     - CDB lists
     - Decoders
     - Rules
+    - Active responses
     - SCA policies
-    - Dashboard
+    - Dashboards
     - Environment file for credentials
+- API:
+    - VirusTotal (Disabled by default)
 - Windows agent provisioning:
-    - Setup Sysmon
-    - Setup YARA & rules
-    - Enable PowerShell logs gathering
-    - Provision ransomware active responses (through YARA, CDB lists & VirusTotal)
-    - Hyper-V
+    - Sysmon
+    - YARA
+    - Enable PowerShell logs
+    - VSS restore
+    - Hyper-V (Disabled by default)
 - Linux agent provisioning:
     - Sysmon
     - AppArmor
@@ -43,6 +47,7 @@ Current version: v4.12.0
 
 ### To-do
 
+- Separate this single doc file into many
 - YARA on Linux agents
 - Provisioning for AIO setup
 - API setup script
@@ -164,7 +169,16 @@ systemctl restart wazuh-agent
 #### Misc
 
 ##### CCMC Compliance - Account Brute Force
+
 - Check Hyper-V setup (From step 5 to 8).
+
+##### VirusTotal API
+
+1. Search for comment `<!-- VirusTotal Integration` in `wazuh_manager.conf`.
+
+2. Fill in the `<api_key>`.
+
+3. At the end of the API block, move the `-->` to the end of the comment on top.
 
 ## Credits
 
