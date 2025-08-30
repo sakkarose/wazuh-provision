@@ -83,7 +83,7 @@ The environment takes about 1 minute to get up (depending on your Docker host) f
 
 #### Windows
 
-1. Install agent on the endpoint with default group being `windows`.
+1. Install agent on the `windows` endpoint group.
 
 2. Install [Microsoft Visual C++ 2015 Redistributable](https://aka.ms/vs/17/release/vc_redist.x64.exe).
 
@@ -91,9 +91,9 @@ The environment takes about 1 minute to get up (depending on your Docker host) f
 
 4. Run the `./single-node/config/wazuh_endpoint/windows/agent_provisioning.ps1` script.
 
-##### Hyper-V
+##### Hyper-V (Disabled by default)
 
-1. Navigate to *Indexer management > Dev Tools*, run `GET _cat/indices/wazuh-alerts-*`.
+1. Navigate to **Indexer management > Dev Tools**, run `GET _cat/indices/wazuh-alerts-*`.
 
 2. From the output, check for the date of the latest indice, then run `POST <RECENT_ALERTS_INDEX>/_doc` (.e.g: `POST wazuh-alerts-4.x-2025.04.28/_doc`).
 
@@ -103,7 +103,7 @@ The environment takes about 1 minute to get up (depending on your Docker host) f
 
 #### Linux
 
-1. Install agent on the endpoint with default group being `linux`.
+1. Install agent on the `linux` endpoint group.
 
 2. Install Sysmon based on your agent operating system at [SysmonForLinux](https://github.com/microsoft/SysmonForLinux/blob/main/INSTALL.md).
 
@@ -140,7 +140,7 @@ systemctl restart wazuh-agent
 
 #### MacOS
 
-1. Install agent on the endpoint with default group being `macos`.
+1. Install agent on the `macos` endpoint group.
 
 2. Restart agent service
 
