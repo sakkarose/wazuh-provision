@@ -23,11 +23,13 @@ Current version: v4.12.0
     - Decoders
     - Rules
     - SCA policies
+    - Dashboard
 - Windows agent provisioning
     - Setup Sysmon
     - Setup YARA & rules
     - Enable PowerShell logs gathering
     - Provision ransomware active responses (through YARA, CDB lists & VirusTotal)
+    - Hyper-V
 - Linux agent provisioning
     - Sysmon
     - AppArmor
@@ -37,7 +39,6 @@ Current version: v4.12.0
 
 ### To-do
 
-- Hyper-V on Windows agents (WiP)
 - YARA on Linux agents
 - Provisioning for AIO setup
 - API setup script
