@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-08-29 21:17
+    Retrieved: 2025-08-30 21:16
     Generated for User: demo
     Number of Rules: 2698
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "pe"
 import "math"
+import "pe"
 
 rule SUSP_EXPL_CommVault_CVE_2025_57791_Aug25_1_RID342F : CVE_2025_57791 DEMO EXE EXPLOIT FILE SUSP {
    meta:
@@ -61306,4 +61306,81 @@ hash1= "90ae0c693f6ffd6dc5bb2d5a5ef078629c3d77f874b2d2ebd9e109d8ca049f2c"
    condition:
       uint16(0) == 0x5a4d and filesize < 7000KB and
       1 of ($x*) and 4 of them
+}
+
+/* DOGE Big Balls ransomware */
+rule _DOGE_Big_Balls_Ransomware {
+   meta:
+      description = "DOGE Big Balls ransomware executable detection"
+      author = "Anthony Faruna"
+      reference = "https://github.com/Neo23x0/yarGen"
+      date = "2025-05-19"
+   strings:
+      $s1 = "Failed to open file. ShellExecute error: %d" fullword ascii
+      $s2 = "AppPolicyGetProcessTerminationMethod" fullword ascii
+      $s3 = "\\RANSOMNOTE.txt" fullword ascii
+      $s4 = "Failed to get Desktop path." fullword ascii
+      $s5 = "%s\\Desktop\\RANSOMNOTE.txt" fullword ascii
+      $s6 = "Open RANSOMNOTE.txt?" fullword ascii
+      $s7 = " Type Descriptor'" fullword ascii
+      $s8 = "operator co_await" fullword ascii
+      $s9 = "User clicked OK." fullword ascii
+      $s10 = "api-ms-win-appmodel-runtime-l1-1-2" fullword wide
+      $s11 = "User clicked Cancel or closed the MessageBox." fullword ascii
+      $s12 = " Class Hierarchy Descriptor'" fullword ascii
+      $s13 = " Base Class Descriptor at (" fullword ascii
+      $s14 = "COM256" fullword ascii
+      $s15 = "F9]%c%" fullword ascii
+      $s16 = " Complete Object Locator'" fullword ascii
+      $s17 = "\"^4]%* " fullword ascii
+      $s18 = "(- d|X" fullword ascii
+      $s19 = "USERPROFILE" fullword ascii /* Goodware String - occured 154 times */
+      $s20 = "network down" fullword ascii /* Goodware String - occured 567 times */
+   condition:
+      ( uint16(0) == 0x5a4d and filesize < 1000KB and ( 8 of them )
+      ) or ( all of them )
+}
+
+/* Mamona ransomware */
+rule Mamona_ransomware {
+    meta:
+        description = "Detects Mamona ransomware or similar variants"
+        author = "Oluwaseyi Soneye"
+        reference = "Strings output analysis"
+        date = "2025-05-22"
+
+    strings:
+        $s1 = "YOUR FILES HAVE BEEN ENCRYPTED!" nocase
+        $s2 = "CHECK README." nocase
+        $s3 = "README." nocase
+        $s4 = "password OK" nocase
+        $s5 = "wrong pass" nocase
+        $s6 = "provide pass" nocase
+        $s7 = "encryption mode" nocase
+        $s8 = "Mamona" nocase
+        $s9 = "cleared event logs" nocase
+        $s10 = "WinDefend" nocase
+        $s11 = "SecurityHealthService" nocase
+        $s12 = "TerminateProcess" nocase
+        $s13 = "killed process" nocase
+        $s14 = "killed service" nocase
+        $s15 = "WNetAddConnection2W" nocase
+        $s16 = "NetShareEnum" nocase
+        $s17 = "\\%s\\IPC$" nocase
+        $s18 = "encrypting file" nocase
+        $s19 = "encrypting directory" nocase
+        $s20 = "Del /f /q" nocase
+        $s21 = "cmd.exe /C ping 127.0.0.7 -n 3 > Nul & Del /f /q" nocase
+        $s22 = "PrintMe22" nocase
+        $s23 = "printed note to printer" nocase
+
+    condition:
+        (uint16(0) == 0x5A4D) and  // PE header check
+        (
+            any of ($s*) or
+            (3 of ($s1, $s2, $s3, $s4, $s5, $s6, $s7, $s8)) or
+            (2 of ($s9, $s10, $s11, $s12, $s13, $s14)) or
+            (2 of ($s15, $s16, $s17)) or
+            (2 of ($s18, $s19, $s20, $s21, $s22, $s23))
+        )
 }
