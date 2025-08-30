@@ -97,7 +97,7 @@ The environment takes about 1 minute to get up (depending on your Docker host) f
 
 2. From the output, check for the date of the latest indice, then run `POST <RECENT_ALERTS_INDEX>/_doc` (.e.g: `POST wazuh-alerts-4.x-2025.04.28/_doc`).
 
-3. Navigate to *Dashboard Management > Dashboard Management > Index patterns > wazuh-alerts-\**, click refresh button in the top-right corner.
+3. Navigate to **Dashboard Management > Dashboard Management > Index patterns > wazuh-alerts-\***, click refresh button in the top-right corner.
 
 4. In `./single-node/config/wazuh_endpoint/windows/agent.conf`, set <disabled> to no for the `hyper-v_metrics` command.
 
