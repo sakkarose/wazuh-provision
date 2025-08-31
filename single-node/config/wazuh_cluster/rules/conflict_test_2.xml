@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <group name="conflict-test">
   <rule id="200100" level="3">
     <decoded_as>json</decoded_as>
