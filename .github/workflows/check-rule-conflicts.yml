@@ -1,4 +1,4 @@
-name: Check Wazuh Rule Conflicts
+name: Check Wazuh rule conflicts
 
 on:
   schedule:
