@@ -46,16 +46,5 @@
     <options>no_full_log</options>
   </rule>
 
-  <rule id="100186" level="13">
-    <if_sid>657</if_sid>
-    <match>Successfully removed threat</match>
-    <description>$(parameters.program): Successfully removed threat $(parameters.alert.syscheck.path) whose SHA256 hash appears in a malware blacklist.</description>
-  </rule>
-
-  <rule id="100187" level="13">
-    <if_sid>657</if_sid>
-    <match>Error removing threat</match>
-    <description>$(parameters.program): Error removing threat $(parameters.alert.syscheck.path) whose SHA256 hash appears in a malware blacklist.</description>
-  </rule> 
 </group>
 
