@@ -34,7 +34,13 @@ def extract_rule_ids_from_xml(content):
 
     ids = []
     try:
-        root = ET.fromstring(content) if isinstance(content, str) else ET.parse(content).getroot()
+            # Read file content if a Path or file object is passed
+            if not isinstance(content, str):
+                with open(content, 'r', encoding='utf-8') as f:
+                    content = f.read()
+            # Wrap in dummy root to allow multiple <group> elements
+            wrapped = f'<rules>\n{content}\n</rules>'
+            root = ET.fromstring(wrapped)
         for rule in root.findall(".//rule"):
             rule_id = rule.get("id")
             if rule_id and rule_id.isdigit():
