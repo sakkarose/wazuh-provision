@@ -44,7 +44,7 @@ Current version: v4.12.0
     - VALHALLA YARA managed rule update
     - Checking for conflict rule ID
 - Misc:
-    - CCMC Compliance
+    - CMMC Compliance
 
 ### To-do
 
