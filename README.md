@@ -39,6 +39,7 @@ Current version: v4.12.0
 - Linux agent provisioning:
     - Sysmon
     - AppArmor
+    - MariaDB
 - MacOS agent provisioning
 - Github Action:
     - VALHALLA YARA managed rule update
@@ -165,6 +166,16 @@ chown wazuh:wazuh /var/ossec/etc/custom-sca-files/*
 
 ```
 systemctl restart wazuh-agent
+```
+
+##### MariaDB
+
+1. Append the content from `./linux/mariadb/my.cnf` to `/etc/my.cnf`. Make sure the Wazuh agent is already installed.
+
+2. Restart the database service
+
+```
+systemctl restart mariadb.service
 ```
 
 #### MacOS
