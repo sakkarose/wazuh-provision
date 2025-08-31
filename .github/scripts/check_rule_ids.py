@@ -1,6 +1,65 @@
 import subprocess
 import xml.etree.ElementTree as ET
-from pathlib importdef main():
+import subprocess
+import xml.etree.ElementTree as ET
+from pathlib import Path
+import sys
+from collections import defaultdict, Counter
+
+def run_git_command(args):
+    result = subprocess.run(args, capture_output=True, text=True, check=True)
+    return result.stdout
+
+def get_changed_rule_files():
+    try:
+        # Get the last successful commit hash from the previous run
+        last_run = run_git_command(["git", "rev-list", "-n", "1", "HEAD"])
+        # Get changes between the last run and current state
+        output = run_git_command(["git", "diff", "--name-status", f"{last_run.strip()}...HEAD"])
+        
+        changed_files = []
+        rules_path = "single-node/config/wazuh_cluster/rules"
+        
+        for line in output.strip().splitlines():
+            parts = line.strip().split(maxsplit=1)
+            if len(parts) != 2:
+                continue
+            status, file_path = parts
+            if file_path.startswith(f"{rules_path}/") and file_path.endswith(".xml"):
+                changed_files.append((status, Path(file_path)))
+        return changed_files
+    except subprocess.CalledProcessError as e:
+        print("❌ Failed to get changed files:", e)
+        sys.exit(1)
+
+def extract_rule_ids_from_xml(content):
+    ids = []
+    try:
+        root = ET.fromstring(content) if isinstance(content, str) else ET.parse(content).getroot()
+        for rule in root.findall(".//rule"):
+            rule_id = rule.get("id")
+            if rule_id and rule_id.isdigit():
+                ids.append(int(rule_id))
+    except ET.ParseError as e:
+        print(f"⚠️ XML Parse Error: {e}")
+    return ids
+
+def get_all_rule_ids():
+    rules_path = Path("single-node/config/wazuh_cluster/rules")
+    rule_id_to_files = defaultdict(set)
+    
+    for xml_file in rules_path.glob("*.xml"):
+        try:
+            rule_ids = extract_rule_ids_from_xml(xml_file)
+            for rule_id in rule_ids:
+                rule_id_to_files[rule_id].add(xml_file.name)
+        except Exception as e:
+            print(f"⚠️ Error processing {xml_file}: {e}")
+            continue
+    
+    return rule_id_to_files
+
+def main():
     print("🔍 Starting rule check process...")
     print("📁 Listing all rule files in workspace:")
     rules_path = Path("single-node/config/wazuh_cluster/rules")
