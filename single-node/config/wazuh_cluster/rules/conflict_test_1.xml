@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<group name="conflict-test">
+  <rule id="200100" level="3">
+    <decoded_as>json</decoded_as>
+    <field name="type">test</field>
+    <description>Test rule 1 from first conflict file</description>
+  </rule>
+
+  <rule id="200101" level="3">
+    <decoded_as>json</decoded_as>
+    <field name="type">test</field>
+    <description>Test rule 2 from first conflict file</description>
+  </rule>
+</group>
