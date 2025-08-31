@@ -77,27 +77,18 @@ def main():
     rule_id_to_files = get_all_rule_ids()
     print("\n🔢 Rule IDs found:")
     for rule_id, files in rule_id_to_files.items():
-        print(f"  Rule ID {rule_id} in files: {', '.join(files)}")ort sys
-from collections import defaultdict, Counter
+        print(f"  Rule ID {rule_id} in files: {', '.join(files)}")
 
-def run_git_command(args):
-    result = subprocess.run(args, capture_output=True, text=True, check=True)
-    return result.stdout
-
-def get_changed_rule_files():
-    try:
-        # Get the last successful commit hash from the previous run
-        last_run = run_git_command(["git", "rev-list", "-n", "1", "HEAD"])
-        # Get changes between the last run and current state
-        output = run_git_command(["git", "diff", "--name-status", f"{last_run.strip()}...HEAD"])
-        
-        changed_files = []
-        rules_path = "single-node/config/wazuh_cluster/rules"
-        
-        for line in output.strip().splitlines():
-            parts = line.strip().split(maxsplit=1)
-            if len(parts) != 2:
-                continue
+    # Check for duplicate rule IDs
+    duplicate_ids = {rule_id: files for rule_id, files in rule_id_to_files.items() if len(files) > 1}
+    if duplicate_ids:
+        print("\n⚠️ WARNING: Duplicate rule IDs found:")
+        for rule_id, files in duplicate_ids.items():
+            print(f"  Rule ID {rule_id} is used in multiple files: {', '.join(files)}")
+        sys.exit(1)
+    else:
+        print("\n✅ No duplicate rule IDs found!")
+        sys.exit(0)
             status, file_path = parts
             if file_path.startswith(f"{rules_path}/") and file_path.endswith(".xml"):
                 changed_files.append((status, Path(file_path)))
