@@ -1,7 +1,26 @@
 import subprocess
 import xml.etree.ElementTree as ET
-from pathlib import Path
-import sys
+from pathlib importdef main():
+    print("🔍 Starting rule check process...")
+    print("📁 Listing all rule files in workspace:")
+    rules_path = Path("single-node/config/wazuh_cluster/rules")
+    all_files = list(rules_path.glob("*.xml"))
+    print(f"Found {len(all_files)} rule files:")
+    for file in all_files:
+        print(f"  • {file.name}")
+
+    changed_files = get_changed_rule_files()
+    print("\n📋 Git change status:")
+    if not changed_files:
+        print("No files were changed in this run.")
+    else:
+        print(f"Changed files: {[f.name for _, f in changed_files]}")
+    
+    # Get existing rule IDs from all files
+    rule_id_to_files = get_all_rule_ids()
+    print("\n🔢 Rule IDs found:")
+    for rule_id, files in rule_id_to_files.items():
+        print(f"  Rule ID {rule_id} in files: {', '.join(files)}")ort sys
 from collections import defaultdict, Counter
 
 def run_git_command(args):
