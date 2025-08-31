@@ -1,10 +1,10 @@
-<group name="BlackSuit, ransomware,">
+<group name="blacksuit, ransomware,">
 
 <!-- Ransomware execution -->
   <rule id="100011" level="12">
     <if_sid>61603</if_sid>
     <field name="win.eventdata.CommandLine" type="pcre2">(?i).*.exe\s+-name\s\d{32}$</field>
-     <description>Possible BlackSuit ransomware executed.</description>
+    <description>Possible BlackSuit ransomware executed.</description>
     <mitre>
        <id>T1059</id>
        <id>T1086</id>

@@ -19,18 +19,14 @@
       <id>T1486</id>
     </mitre>
   </rule>
- </group>
 
-<group name="ransomware,ransomware_detection">
   <rule id="100104" level="12" timeframe="300" frequency="2" ignore="300">
     <if_matched_group>lynx</if_matched_group>
     <if_sid>100101,100102</if_sid>
     <description>Ransomware activity detected.</description>
   </rule>
-</group>
 
 <!--  CDB List Rule -->
-<group name="lynx,ransomware,">
 <!-- Detects Lynx ransomware executable -->
   <rule id="100103" level="15">
     <if_sid>554,550</if_sid>
@@ -40,9 +36,7 @@
       <id>T1204.002</id>
     </mitre>
   </rule>
-</group>
 
-<group name="lynx,ransomware,">
   <rule id="100105" level="13">
     <if_sid>657</if_sid>
     <match>Successfully removed threat</match>

@@ -1,4 +1,4 @@
-<group name="razr, ransomware, malware">
+<group name="razr, ransomware,">
 
 <!-- Encryption of system files -->
   <rule id="111900" level="2">

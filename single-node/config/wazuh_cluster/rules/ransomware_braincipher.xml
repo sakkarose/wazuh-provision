@@ -1,4 +1,4 @@
-<group name="Brain Cipher, ransomware,">
+<group name="brain_cipher, ransomware,">
 
 <!-- Brain Cipher ransomware loaded -->
   <rule id="100121" level="12">

@@ -117,7 +117,6 @@
     </mitre>
   </rule>
 
-
 <!-- Persistence detection --> 
   <rule id="100612" level="10">
     <if_sid>92300</if_sid>
@@ -129,7 +128,6 @@
       <id>T1547.001</id>
     </mitre>
   </rule>
-    
  
  <rule id="100613" level="10">
     <if_sid>61613</if_sid>
@@ -238,8 +236,6 @@
   </rule>
 
 <!-- Ransom note file creation -->
-
-  
   <rule id="100626" level="10" timeframe="50" frequency="3" ignore="300">
     <if_matched_sid>554</if_matched_sid>
     <same_field>md5</same_field>
@@ -263,17 +259,12 @@
 
   </rule>
 
-</group>
-
-<group name="ransomware,ransomware_detection">
   <rule id="100628" level="12" timeframe="300" frequency="2" ignore="300">
     <if_matched_group>ransomware_pre_detection</if_matched_group>
     <if_sid>100626,100627,100615,100616,100617,100618,100619</if_sid>
     <description>Ransomware activity detected.</description>
   </rule>
-</group>
 
-<group name="ransomware,ransomware_rollback,">
   <rule id="100800" level="5">
     <field name="rollback_status">completed</field>
     <description>Wazuh_Ransomware_Protection: Files restored successfully.</description>

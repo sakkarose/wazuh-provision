@@ -23,11 +23,7 @@
     <field name="win.system.providerName" type="pcre2">^Microsoft-Windows-Hyper-V</field>
     <description>Hyper-V: $(win.system.message).</description>
   </rule>
-
-</group>
-
-<group name="hyper-v,">
-
+  
   <rule id="110074" level="0">
     <location>command_hyper-v_metrics</location>
     <decoded_as>json</decoded_as>
