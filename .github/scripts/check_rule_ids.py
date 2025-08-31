@@ -89,15 +89,9 @@ def main():
     else:
         print("\n✅ No duplicate rule IDs found!")
         sys.exit(0)
-            status, file_path = parts
-            if file_path.startswith(f"{rules_path}/") and file_path.endswith(".xml"):
-                changed_files.append((status, Path(file_path)))
-        return changed_files
-    except subprocess.CalledProcessError as e:
-        print("❌ Failed to get changed files:", e)
-        sys.exit(1)
 
-def extract_rule_ids_from_xml(content):
+if __name__ == "__main__":
+    main()
     ids = []
     try:
         root = ET.fromstring(content) if isinstance(content, str) else ET.parse(content).getroot()
