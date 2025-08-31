@@ -1,5 +1,5 @@
 <group name="doge_big_balls,ransomware,">
-  <rule id="100020" level="10">
+  <rule id="100181" level="10">
     <if_sid>61613</if_sid>
     <field name="win.eventdata.image" type="pcre2">(?i)[C-Z]:.*\\\\.*.exe</field>
     <field name="win.eventdata.targetFilename" type="pcre2">(?i)[C-Z]:.*.\\\\DbgLog.sys</field>
@@ -9,7 +9,7 @@
     </mitre>
   </rule>
 
-  <rule id="100021" level="8" timeframe="300" frequency="2">  
+  <rule id="100182" level="8" timeframe="300" frequency="2">  
     <if_sid>61603</if_sid>  
     <list field="win.eventdata.commandLine" lookup="match_key">etc/lists/doge-big-balls-ransomware</list>  
     <description>The command $(win.eventdata.commandLine) is executed for reconnaissance activities. Suspicious activity detected.</description>  
@@ -17,7 +17,7 @@
   </rule>
 
 <!-- Ransom note file creation -->
-  <rule id="100022" level="15" timeframe="300" frequency="2">
+  <rule id="100183" level="15" timeframe="300" frequency="2">
     <if_sid>61613</if_sid>
     <field name="win.eventdata.image" type="pcre2">(?i)[C-Z]:.*\\\\.*.exe</field>
     <field name="win.eventdata.targetFilename" type="pcre2">(?i)[C-Z]:.*.\\\\readme.txt</field>
@@ -27,13 +27,35 @@
     </mitre>
   </rule>
 
-  <rule id="100023" level="15" timeframe="300" frequency="2" ignore="100">
-    <if_matched_sid>100020</if_matched_sid>
-    <if_sid>100021</if_sid>
+  <rule id="100184" level="15" timeframe="300" frequency="2" ignore="100">
+    <if_matched_sid>100181</if_matched_sid>
+    <if_sid>100182</if_sid>
     <description>Possible DOGE Big Balls ransomware detected.</description>
     <mitre>
       <id>T1486</id>
     </mitre>
+  </rule>
+
+  <rule id="100185" level="13">
+    <if_sid>554,550</if_sid>
+    <list field="sha256" lookup="match_key">etc/lists/ransomware_doge-big-balls</list>
+    <description>A known DOGE Big Balls ransomware hash detected: $(file)</description>
+    <mitre>
+      <id>T1204.002</id>
+    </mitre>
+    <options>no_full_log</options>
+  </rule>
+
+  <rule id="100186" level="13">
+    <if_sid>657</if_sid>
+    <match>Successfully removed threat</match>
+    <description>$(parameters.program): Successfully removed threat $(parameters.alert.syscheck.path) whose SHA256 hash appears in a malware blacklist.</description>
+  </rule>
+
+  <rule id="100187" level="13">
+    <if_sid>657</if_sid>
+    <match>Error removing threat</match>
+    <description>$(parameters.program): Error removing threat $(parameters.alert.syscheck.path) whose SHA256 hash appears in a malware blacklist.</description>
   </rule> 
 </group>
 

@@ -1,7 +1,7 @@
 <group name="blacksuit, ransomware,">
 
 <!-- Ransomware execution -->
-  <rule id="100011" level="12">
+  <rule id="100170" level="12">
     <if_sid>61603</if_sid>
     <field name="win.eventdata.CommandLine" type="pcre2">(?i).*.exe\s+-name\s\d{32}$</field>
     <description>Possible BlackSuit ransomware executed.</description>
@@ -12,7 +12,7 @@
   </rule>
   
 <!-- Inhibit system recovery -->
-  <rule id="100012" level="12">
+  <rule id="100171" level="12">
     <if_sid>61603</if_sid>
     <field name="win.eventdata.CommandLine" type="pcre2">(?i)vssadmin.exe\\"\sDelete\sShadows\s\/All\s\/Quiet</field>
     <description>Volume shadow copy deleted using $(win.eventdata.originalFileName). Potential ransomware activity detected.</description>
@@ -23,7 +23,7 @@
   </rule>
  
 <!-- Ransom note file creation -->
-  <rule id="100013" level="15" timeframe="100" frequency="2">
+  <rule id="100172" level="15" timeframe="100" frequency="2">
     <if_sid>61613</if_sid>
     <field name="win.eventdata.image" type="pcre2">\.exe</field>
     <field name="win.eventdata.targetFilename" type="pcre2">(?i)[C-Z]:.*.\\README.BlackSuit.txt</field>

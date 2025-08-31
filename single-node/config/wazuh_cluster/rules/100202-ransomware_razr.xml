@@ -1,7 +1,7 @@
 <group name="razr, ransomware,">
 
 <!-- Encryption of system files -->
-  <rule id="111900" level="2">
+  <rule id="100202" level="2">
     <if_sid>61613</if_sid>
     <field name="win.eventdata.image" type="pcre2">(?i)[C-Z]:.*\\\\.*.exe</field>
     <field name="win.eventdata.targetFilename" type="pcre2">(?i)[C-Z]:.*\\\\.*.raz</field>
@@ -13,8 +13,8 @@
   </rule>
  
  <!-- Encryption of system files -->
-  <rule id="111901" level="15" timeframe="100" frequency="5" ignore="30">
-    <if_matched_sid>111900</if_matched_sid>
+  <rule id="100203" level="15" timeframe="100" frequency="5" ignore="30">
+    <if_matched_sid>100202</if_matched_sid>
     <description>Multiple files have been encrypted by Razr ransomware $(win.eventdata.image) using the ".raz" extension.</description>
     <mitre>
       <id>T1486</id>
@@ -23,7 +23,7 @@
   </rule>
 
 <!-- Ransome note file creation -->
-  <rule id="111902" level="2">
+  <rule id="100204" level="2">
     <if_sid>61613</if_sid>
     <field name="win.eventdata.image" type="pcre2">(?i)[C-Z]:.*\\\\.*.exe</field>
     <field name="win.eventdata.targetFilename" type="pcre2">(?i)[C-Z]:.*\\\\README.txt</field>
@@ -34,8 +34,8 @@
   </rule>
  
  <!-- Ransome note file creation -->
-  <rule id="111903" level="12" timeframe="100" frequency="5" ignore="30">
-    <if_matched_sid>111902</if_matched_sid>
+  <rule id="100205" level="12" timeframe="100" frequency="5" ignore="30">
+    <if_matched_sid>100204</if_matched_sid>
     <description>Possible Razr ransomware detected. Multiple ramsomeware notes (README.txt) have been created by $(win.eventdata.image).</description>
     <mitre>
       <id>T1486</id>

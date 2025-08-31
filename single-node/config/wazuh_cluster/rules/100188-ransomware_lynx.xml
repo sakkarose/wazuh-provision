@@ -1,6 +1,7 @@
 <group name="lynx,ransomware,">
+
   <!-- Detects when Lynx creates ransom notes -->
-  <rule id="100101" level="12" timeframe="100" frequency="2" ignore="300">
+  <rule id="100188" level="12" timeframe="100" frequency="2" ignore="300">
     <if_sid>61613</if_sid>
     <field name="win.eventdata.image" type="pcre2">(?i)[C-Z]:.*\\\\.*.exe</field>
     <field name="win.eventdata.targetFilename" type="pcre2">(?i)\C:.*.README.txt</field>
@@ -11,7 +12,7 @@
   </rule>
 
   <!-- Detects when Lynx encrypts a file in a monitored directory -->
-  <rule id="100102" level="15" timeframe="100" frequency="2" ignore="300">
+  <rule id="100189" level="15" timeframe="100" frequency="2" ignore="300">
     <if_sid>550,554</if_sid>
     <field name="file" type="pcre2">(?i).LYNX</field>
     <description>File encrypted by Ransomware. Lynx ransomware detected.</description>
@@ -20,15 +21,15 @@
     </mitre>
   </rule>
 
-  <rule id="100104" level="12" timeframe="300" frequency="2" ignore="300">
+  <rule id="100190" level="12" timeframe="300" frequency="2" ignore="300">
     <if_matched_group>lynx</if_matched_group>
-    <if_sid>100101,100102</if_sid>
+    <if_sid>100188,100189</if_sid>
     <description>Ransomware activity detected.</description>
   </rule>
 
 <!--  CDB List Rule -->
 <!-- Detects Lynx ransomware executable -->
-  <rule id="100103" level="15">
+  <rule id="100191" level="15">
     <if_sid>554,550</if_sid>
     <list field="sha256" lookup="match_key">etc/lists/ransomware_lynx</list>
     <description>Lynx ransomware executable detected: $(file)</description>
@@ -37,15 +38,16 @@
     </mitre>
   </rule>
 
-  <rule id="100105" level="13">
+  <rule id="100192" level="13">
     <if_sid>657</if_sid>
     <match>Successfully removed threat</match>
     <description>$(parameters.program): Successfully removed threat $(parameters.alert.syscheck.path) whose SHA256 hash appears in a malware blacklist.</description>
   </rule>
 
-  <rule id="100106" level="13">
+  <rule id="100193" level="13">
     <if_sid>657</if_sid>
     <match>Error removing threat</match>
     <description>$(parameters.program): Error removing threat $(parameters.alert.syscheck.path) whose SHA256 hash appears in a malware blacklist.</description>
-  </rule>  
+  </rule>
+
 </group>

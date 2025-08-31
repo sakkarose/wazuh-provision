@@ -59,3 +59,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    print("\n📝 Use ID numbers between 100000 and 120000 for custom rules.")

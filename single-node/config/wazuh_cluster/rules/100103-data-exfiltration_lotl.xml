@@ -1,6 +1,6 @@
 <group name="lotl,powershell,">
 
-  <rule id="100017" level="8">
+  <rule id="100103" level="8">
     <if_sid>61603</if_sid>
     <field name="win.eventdata.originalFileName" type="pcre2">(?i)(bitsadmin\.exe)</field>
     <field name="win.eventdata.commandLine" type="pcre2">(?i)(transfer|addfile|upload|http)</field>
@@ -12,7 +12,7 @@
     </mitre>
   </rule>
 
-  <rule id="100018" level="8">
+  <rule id="100104" level="8">
     <if_sid>61603</if_sid>
     <field name="win.eventdata.originalFileName" type="pcre2">(?i)(curl\.exe)</field>
     <field name="win.eventdata.commandLine" type="pcre2">(?i)(curl\s+-T\s+.*C:\\.*http)</field>
@@ -24,7 +24,7 @@
     </mitre>
   </rule>
 
-  <rule id="100019" level="9">
+  <rule id="100105" level="9">
     <if_sid>60009</if_sid>
     <field name="win.eventdata.contextInfo" type="pcre2">(?i)Invoke-WebRequest</field>
     <field name="win.eventdata.payload" type="pcre2">(?i)(Uri|http|Post|InFile|C:\\)</field>
@@ -35,7 +35,7 @@
     </mitre>
   </rule>
  
-  <rule id="100020" level="9">
+  <rule id="100106" level="9">
     <if_sid>61603</if_sid>
     <field name="win.eventdata.originalFileName" type="pcre2">(?i)(certreq\.exe)</field>
     <field name="win.eventdata.commandLine" type="pcre2">(?i)(post|config|http|C:\\)</field>

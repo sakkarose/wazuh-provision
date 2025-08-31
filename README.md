@@ -16,6 +16,7 @@ Current version: v4.12.0
 - Updating decoders
 - Updating rules
 - Updating YARA rules
+- Resolving conflict rule IDs
 
 ### Done
 
@@ -40,8 +41,8 @@ Current version: v4.12.0
     - AppArmor
 - MacOS agent provisioning
 - Github Action:
-    - VALHALLA YARA managed rule update automation
-    - Checking for conflict rule ID (WIP)
+    - VALHALLA YARA managed rule update
+    - Checking for conflict rule ID
 - Misc:
     - CCMC Compliance
 
