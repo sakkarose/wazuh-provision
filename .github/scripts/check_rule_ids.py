@@ -31,7 +31,7 @@ def get_changed_rule_files():
         sys.exit(1)
 
 def extract_rule_ids_from_xml(content):
-def extract_rule_ids_from_xml(content):
+
     ids = []
     try:
         root = ET.fromstring(content) if isinstance(content, str) else ET.parse(content).getroot()
@@ -44,9 +44,9 @@ def extract_rule_ids_from_xml(content):
     return ids
 
 def get_all_rule_ids():
+
     rules_path = Path("single-node/config/wazuh_cluster/rules")
     rule_id_to_files = defaultdict(set)
-    
     for xml_file in rules_path.glob("*.xml"):
         try:
             rule_ids = extract_rule_ids_from_xml(xml_file)
@@ -55,7 +55,6 @@ def get_all_rule_ids():
         except Exception as e:
             print(f"⚠️ Error processing {xml_file}: {e}")
             continue
-    
     return rule_id_to_files
 
 def get_all_rule_ids():
