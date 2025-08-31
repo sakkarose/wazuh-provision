@@ -57,6 +57,7 @@ Current version: v4.12.0
 - Malware hash sample CDB lists update automation
 - Velociraptor integration with SIGMA rules
 - VALHALLA SIGMA managed rule update through Github Action
+- Linux agent provision script
 
 ## Note
 
@@ -151,7 +152,16 @@ chmod 750 /var/ossec/active-response/bin/remove-threat.py
 chown root:wazuh /var/ossec/active-response/bin/remove-threat.py 
 ```
 
-8. Restart agent service
+8. Copy files in `./linux/agent_config/policies/*` to `/var/ossec/etc/custom-sca-files/`
+
+9. Set permission
+
+```
+chmod 660 /var/ossec/etc/custom-sca-files/*
+chown wazuh:wazuh /var/ossec/etc/custom-sca-files/*
+```
+
+10. Restart agent service
 
 ```
 systemctl restart wazuh-agent
