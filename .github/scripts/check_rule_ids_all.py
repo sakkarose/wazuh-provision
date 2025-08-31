@@ -13,10 +13,10 @@ def extract_rule_ids_from_xml(content):
             # Wrap in dummy root to allow multiple <group> elements
             wrapped = f'<rules>\n{content}\n</rules>'
             root = ET.fromstring(wrapped)
-        for rule in root.findall(".//rule"):
-            rule_id = rule.get("id")
-            if rule_id and rule_id.isdigit():
-                ids.append(int(rule_id))
+            for rule in root.findall(".//rule"):
+                rule_id = rule.get("id")
+                if rule_id and rule_id.isdigit():
+                    ids.append(int(rule_id))
     except ET.ParseError as e:
         print(f"⚠️ XML Parse Error: {e}")
     return ids
