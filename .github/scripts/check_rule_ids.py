@@ -31,6 +31,7 @@ def get_changed_rule_files():
         sys.exit(1)
 
 def extract_rule_ids_from_xml(content):
+def extract_rule_ids_from_xml(content):
     ids = []
     try:
         root = ET.fromstring(content) if isinstance(content, str) else ET.parse(content).getroot()
@@ -56,52 +57,6 @@ def get_all_rule_ids():
             continue
     
     return rule_id_to_files
-
-def main():
-    print("🔍 Starting rule check process...")
-    print("📁 Listing all rule files in workspace:")
-    rules_path = Path("single-node/config/wazuh_cluster/rules")
-    all_files = list(rules_path.glob("*.xml"))
-    print(f"Found {len(all_files)} rule files:")
-    for file in all_files:
-        print(f"  • {file.name}")
-
-    changed_files = get_changed_rule_files()
-    print("\n📋 Git change status:")
-    if not changed_files:
-        print("No files were changed in this run.")
-    else:
-        print(f"Changed files: {[f.name for _, f in changed_files]}")
-    
-    # Get existing rule IDs from all files
-    rule_id_to_files = get_all_rule_ids()
-    print("\n🔢 Rule IDs found:")
-    for rule_id, files in rule_id_to_files.items():
-        print(f"  Rule ID {rule_id} in files: {', '.join(files)}")
-
-    # Check for duplicate rule IDs
-    duplicate_ids = {rule_id: files for rule_id, files in rule_id_to_files.items() if len(files) > 1}
-    if duplicate_ids:
-        print("\n⚠️ WARNING: Duplicate rule IDs found:")
-        for rule_id, files in duplicate_ids.items():
-            print(f"  Rule ID {rule_id} is used in multiple files: {', '.join(files)}")
-        sys.exit(1)
-    else:
-        print("\n✅ No duplicate rule IDs found!")
-        sys.exit(0)
-
-if __name__ == "__main__":
-    main()
-    ids = []
-    try:
-        root = ET.fromstring(content) if isinstance(content, str) else ET.parse(content).getroot()
-        for rule in root.findall(".//rule"):
-            rule_id = rule.get("id")
-            if rule_id and rule_id.isdigit():
-                ids.append(int(rule_id))
-    except ET.ParseError as e:
-        print(f"⚠️ XML Parse Error: {e}")
-    return ids
 
 def get_all_rule_ids():
     rules_path = Path("single-node/config/wazuh_cluster/rules")
