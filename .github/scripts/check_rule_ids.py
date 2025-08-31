@@ -1,7 +1,5 @@
 import subprocess
 import xml.etree.ElementTree as ET
-import subprocess
-import xml.etree.ElementTree as ET
 from pathlib import Path
 import sys
 from collections import defaultdict, Counter
