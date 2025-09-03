@@ -262,3 +262,22 @@ rule Mamona_ransomware {
             (2 of ($s18, $s19, $s20, $s21, $s22, $s23))
         )
 }
+
+/* Mint Stealer malware */
+rule MintStealer
+{
+meta:
+        Author = "Benjamin Nworah"
+        Description = "Detect Mint Stealer malware"
+        Date = "13-09-2024"
+        Hash1 = "1064ab9e734628e74c580c5aba71e4660ee3ed68db71f6aa81e30f148a5080fa" // SHA-256 Hash
+        Hash2 = "cc93a4627a459d505c46de6fac342f856fb8f95b6a4fdcbd5e48be59aa4cbb7b" // SHA-256 Hash
+
+    strings:
+        $a1 = "FindResource"
+        $a2 = "GetSystemTimeAsFileTime"
+        $a3 = /NUITKA.{1,15}/
+     
+    condition:
+        all of ($a*)
+}
