@@ -36,6 +36,7 @@ Current version: v4.12.0
     - Enable PowerShell logs
     - VSS restore
     - Hyper-V (Disabled by default)
+    - Admin By Request
 - Linux agent provisioning:
     - Sysmon
     - AppArmor
