@@ -168,7 +168,6 @@ chown wazuh:wazuh /var/ossec/etc/custom-sca-files/*
 ```
 systemctl restart wazuh-agent
 ```
-##### Docker
 
 ##### MariaDB
 

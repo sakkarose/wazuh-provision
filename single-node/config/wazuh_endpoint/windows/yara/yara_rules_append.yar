@@ -281,3 +281,21 @@ meta:
     condition:
         all of ($a*)
 }
+
+/* Daolpu malware */
+rule Daolpu_infostealer 
+{
+    meta:
+        Author = "Benjamin Nworah"
+        Description = "Detect Daolpu malware"
+        Date = "16-08-2024"
+        Hash1 = "3a9323a939fbecbc6d0ceb5c1e1f3ebde91e9f186b46fdf3ba1aee03d1d41cd8"
+        Hash2 = "4ad9845e691dd415420e0c253ba452772495c0b971f48294b54631e79a22644a"
+
+    strings:
+        $a1 = "D:\\c++\\Mal_Cookie_x64\\x64\\Release\\mscorsvc.pdb"
+        $a2 = "C:\\Windows\\Temp\\result.txt"
+     
+    condition:
+        all of ($a*)
+}
