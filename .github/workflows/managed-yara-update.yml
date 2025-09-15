@@ -28,7 +28,6 @@ jobs:
           pip install -r requirements.txt
 
       - name: execute py script
-        working-directory: ./single-node/config/wazuh_endpoint/windows/yara
         run: python .github/scripts/download_yara_rules.py
 
       - name: commit and push changes
