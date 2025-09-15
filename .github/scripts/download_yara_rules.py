@@ -1,7 +1,7 @@
 from valhallaAPI.valhalla import ValhallaAPI
 import os
 
-os.chdir(./single-node/config/wazuh_endpoint/windows/yara)
+os.chdir(/home/runner/work/wazuh-provision/wazuh-provision/single-node/config/wazuh_endpoint/windows/yara)
 
 # Initialize ValhallaAPI with the API key
 v = ValhallaAPI(api_key="1111111111111111111111111111111111111111111111111111111111111111")
@@ -17,5 +17,5 @@ with open('yara_rules.yar', 'w') as fh:
 with open('yara_rules_append.yar', 'r') as append_fh:
     append_content = append_fh.read()
 
-with open('yara_rules.yar', 'a') as fh: 
+with open('yara_rules.yar', 'a') as fh:
     fh.write(append_content)
