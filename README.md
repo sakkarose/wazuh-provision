@@ -40,6 +40,7 @@ Current version: v4.12.0
     - Sysmon
     - AppArmor
     - MariaDB
+    - Docker
 - MacOS agent provisioning
 - Github Action:
     - VALHALLA YARA managed rule update
@@ -167,6 +168,7 @@ chown wazuh:wazuh /var/ossec/etc/custom-sca-files/*
 ```
 systemctl restart wazuh-agent
 ```
+##### Docker
 
 ##### MariaDB
 

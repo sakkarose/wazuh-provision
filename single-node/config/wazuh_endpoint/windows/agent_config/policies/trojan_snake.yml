@@ -9,7 +9,7 @@
 policy:
   id: "trojan_snake"
   file: "trojan_snake.yml"
-  name: "Snake keylogger Windows OS check"
+  name: "Snake trojan - Windows"
   description: "Detecting Snake keylogger"
 
 requirements:
