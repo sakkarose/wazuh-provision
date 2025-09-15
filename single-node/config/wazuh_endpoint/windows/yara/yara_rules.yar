@@ -1,6 +1,6 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-09-15 06:52
+    Retrieved: 2025-09-15 21:14
     Generated for User: demo
     Number of Rules: 2702
     
@@ -9,6 +9,27 @@
 
 import "pe"
 import "math"
+
+rule MAL_JS_NPM_SupplyChain_Attack_Sep25_RID33A5 : DEMO MAL OBFUS T1059_007 {
+   meta:
+      description = "Detects obfuscated JavaScript in NPM packages used in supply chain crypto stealer attacks in September 2025"
+      author = "Florian Roth"
+      reference = "https://www.linkedin.com/feed/update/urn:li:activity:7370889385992437760/"
+      date = "2025-09-09 14:56:41"
+      score = 85
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "16f6c756bc8ce5ef5d9aa1ded0f811ec0c9cee3d8f85cc151b8ca1df7b8a4337"
+      tags = "DEMO, MAL, OBFUS, T1059_007"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "const _0x112fa8=_0x180f;(function(_0x13c8b9" ascii
+      $fp1 = "<html" 
+      $fp2 = "<xml " 
+   condition: 
+      filesize < 200KB and 1 of ( $x* ) and not 1 of ( $fp* )
+}
 
 rule SUSP_LNX_Sindoor_ELF_Obfuscation_Aug25_RID34DF : DEMO FILE LINUX OBFUS SUSP {
    meta:
@@ -322,26 +343,6 @@ rule SUSP_JAVA_Class_Allatori_Obfuscator_Aug25_RID3623 : DEMO FILE OBFUS SUSP {
       $x1 = "Obfuscation by Allatori Obfuscator" ascii fullword
    condition: 
       uint16 ( 0 ) == 0x4b50 and filesize < 500KB and $x1
-}
-
-rule MAL_LNX_PLAGUE_BACKDOOR_Jul25_RID2FEE : DEMO FILE LINUX MAL {
-   meta:
-      description = "Detects Plague backdoor ELF binaries, related to PAM authentication alteration."
-      author = "Pezier Pierre-Henri"
-      reference = "Internal Research"
-      date = "2025-07-25 12:18:11"
-      score = 80
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, FILE, LINUX, MAL"
-      minimum_yara = "3.2.0"
-      
-   strings:
-      $s1 = "decrypt_phrase" 
-      $s2 = "init_phrases" 
-   condition: 
-      uint32be ( 0 ) == 0x7f454c46 and filesize < 1MB and all of them
 }
 
 rule WEBSHELL_ASPX_Sharepoint_Drop_CVE_2025_53770_Jul25_RID372D : CVE_2025_53770 DEMO SCRIPT T1505_003 WEBSHELL {
@@ -61485,6 +61486,24 @@ meta:
         $a1 = "FindResource"
         $a2 = "GetSystemTimeAsFileTime"
         $a3 = /NUITKA.{1,15}/
+     
+    condition:
+        all of ($a*)
+}
+
+/* Daolpu malware */
+rule Daolpu_infostealer 
+{
+    meta:
+        Author = "Benjamin Nworah"
+        Description = "Detect Daolpu malware"
+        Date = "16-08-2024"
+        Hash1 = "3a9323a939fbecbc6d0ceb5c1e1f3ebde91e9f186b46fdf3ba1aee03d1d41cd8"
+        Hash2 = "4ad9845e691dd415420e0c253ba452772495c0b971f48294b54631e79a22644a"
+
+    strings:
+        $a1 = "D:\\c++\\Mal_Cookie_x64\\x64\\Release\\mscorsvc.pdb"
+        $a2 = "C:\\Windows\\Temp\\result.txt"
      
     condition:
         all of ($a*)
