@@ -41,6 +41,7 @@ Current version: v4.12.0
     - AppArmor
     - MariaDB
     - Docker
+    - Rsyslog
 - MacOS agent provisioning
 - Github Action:
     - VALHALLA YARA managed rule update
@@ -177,6 +178,37 @@ systemctl restart wazuh-agent
 
 ```
 systemctl restart mariadb.service
+```
+
+##### Rsyslog
+
+1. Search for comment `<!-- Rsyslog` in `wazuh_manager.conf`.
+
+2. Fill in the `port, protocol, allowed-ips & local_ip` fields.
+
+3. At the end of the block, move the `-->` to the end of the comment on top.
+
+4. On endpoints, edit the `/etc/rsyslog.conf` file with Wazuh's IP and port.
+
+```
+# TCP
+*.* action(type="omfwd" target="<WAZUH_SERVER_IP>" port="<PORT>" protocol="tcp")
+
+# UDP
+*.* action(type="omfwd" target="<WAZUH_SERVER_IP>" port="<PORT>")
+
+# Specific log (the *.* part)
+if $programname == 'cron' or $programname == 'crond' or $programname == 'crontab' then {
+    action(type="omfwd" target="<WAZUH_SERVER_IP>" port="<PORT>" protocol="tcp")
+ }
+& ~
+```
+
+5. Enable and start Rsyslog
+
+```
+systemctl start rsyslog
+systemctl enable rsyslog
 ```
 
 #### MacOS
