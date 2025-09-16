@@ -62,6 +62,7 @@ Current version: v4.12.0
 - Velociraptor integration with SIGMA rules
 - VALHALLA SIGMA managed rule update through Github Action
 - Linux agent provision script
+- Notification channel (Not really a good to-do since SOAR pretty does this job better than a SIEM)
 
 ## Note
 
