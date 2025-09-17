@@ -48,6 +48,7 @@ services:
       - ./config/wazuh_endpoint/windows/agent_config:/var/ossec/etc/shared/windows
       - ./config/wazuh_endpoint/linux/agent_config:/var/ossec/etc/shared/linux
       - ./config/wazuh_endpoint/macos/agent_config:/var/ossec/etc/shared/macos
+      - ./config/wazuh_endpoint/suricata:/var/ossec/etc/shared/suricata
       - ./config/wazuh_cluster/local_internal_options.conf:/var/ossec/etc/local_internal_options.conf
 
   wazuh.indexer:
