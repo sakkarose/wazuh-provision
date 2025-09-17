@@ -299,3 +299,36 @@ rule Daolpu_infostealer
     condition:
         all of ($a*)
 }
+
+/* Apos malware */
+rule Apos_malware {
+   meta:
+      description = "Detects Apos malware"
+      author = "Aishat Awujola"
+      reference = "https://github.com/Neo23x0/yarGen"
+      date = "2025-08-26"
+   strings:
+      $x1 = "srvcli.dll" fullword wide /* reversed goodware string 'lld.ilcvrs' */
+      $x2 = "devrtl.dll" fullword wide /* reversed goodware string 'lld.ltrved' */
+      $x3 = "dfscli.dll" fullword wide /* reversed goodware string 'lld.ilcsfd' */
+      $x4 = "browcli.dll" fullword wide /* reversed goodware string 'lld.ilcworb' */
+      $x5 = "linkinfo.dll" fullword wide /* reversed goodware string 'lld.ofniknil' */
+      $s6 = "atl.dll" fullword wide /* reversed goodware string 'lld.lta' */
+      $s7 = "api-ms-win-core-synch-l1-2-0.dll" fullword wide /* reversed goodware string 'lld.0-2-1l-hcnys-eroc-niw-sm-ipa' */
+      $s8 = "SSPICLI.DLL" fullword wide
+      $s9 = "UXTheme.dll" fullword wide
+      $s10 = "oleaccrc.dll" fullword wide
+      $s11 = "dnsapi.DLL" fullword wide
+      $s12 = "iphlpapi.DLL" fullword wide
+      $s13 = "WINNSI.DLL" fullword wide
+      $s14 = "sfxrar.exe" fullword ascii
+      $s15 = "Cannot create folder %sHChecksum error in the encrypted file %s. Corrupt file or wrong password." fullword wide
+      $s16 = "libffi-8.dll" fullword ascii
+      $s17 = "libpcre2-8-0.dll" fullword ascii
+      $s18 = "D:\\Projects\\WinRAR\\sfx\\build\\sfxrar64\\Release\\sfxrar.pdb" fullword ascii
+      $s19 = "233333333333333333" ascii /* hex encoded string '#33333333' */
+      $s20 = "$GETPASSWORD1:IDC_PASSWORDENTER" fullword ascii
+   condition:
+      uint16(0) == 0x5a4d and filesize < 8000KB and
+      1 of ($x*) and 4 of them
+}

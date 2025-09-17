@@ -30,20 +30,21 @@ Current version: v4.12.0
     - Environment file for credentials
 - API:
     - VirusTotal (Disabled by default)
-- Windows agent provisioning:
+- Windows agent group:
     - Sysmon
     - YARA
     - Enable PowerShell logs
     - VSS restore
     - Hyper-V (Disabled by default)
     - Admin By Request
-- Linux agent provisioning:
+- Linux agent group:
     - Sysmon
     - AppArmor
     - MariaDB
     - Docker
-    - Rsyslog
-- MacOS agent provisioning
+    - Rsyslog (Disabled by default)
+- Suricata agent group
+- MacOS agent group
 - Github Action:
     - VALHALLA YARA managed rule update
     - Checking for conflict rule ID
