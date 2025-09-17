@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-09-16 21:14
+    Retrieved: 2025-09-17 21:13
     Generated for User: demo
-    Number of Rules: 2702
+    Number of Rules: 2703
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "pe"
 import "math"
+import "pe"
 
 rule MAL_JS_NPM_SupplyChain_Attack_Sep25_RID33A5 : DEMO MAL OBFUS T1059_007 {
    meta:
@@ -343,6 +343,30 @@ rule SUSP_JAVA_Class_Allatori_Obfuscator_Aug25_RID3623 : DEMO FILE OBFUS SUSP {
       $x1 = "Obfuscation by Allatori Obfuscator" ascii fullword
    condition: 
       uint16 ( 0 ) == 0x4b50 and filesize < 500KB and $x1
+}
+
+rule MAL_LNX_PLAGUE_BACKDOOR_Jul25_RID2FEE : DEMO FILE LINUX MAL {
+   meta:
+      description = "Detects Plague backdoor ELF binaries, related to PAM authentication alteration."
+      author = "Pezier Pierre-Henri"
+      reference = "Internal Research"
+      date = "2025-07-25 12:18:11"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2025-09-17"
+      tags = "DEMO, FILE, LINUX, MAL"
+      minimum_yara = "3.2.0"
+      
+   strings:
+      $s1 = "decrypt_phrase" 
+      $s2 = "init_phrases" 
+      $x1 = "captured_password" 
+      $x2 = "updateklog" 
+      $x3 = "init_cred_structs" 
+      $xop1 = { 48 8b [4] 00 8b 00 3d ca b2 e9 f1 74 } 
+   condition: 
+      uint32be ( 0 ) == 0x7f454c46 and filesize < 1MB and 2 of them
 }
 
 rule WEBSHELL_ASPX_Sharepoint_Drop_CVE_2025_53770_Jul25_RID372D : CVE_2025_53770 DEMO SCRIPT T1505_003 WEBSHELL {
@@ -61507,4 +61531,37 @@ rule Daolpu_infostealer
      
     condition:
         all of ($a*)
+}
+
+/* Apos malware */
+rule Apos_malware {
+   meta:
+      description = "Detects Apos malware"
+      author = "Aishat Awujola"
+      reference = "https://github.com/Neo23x0/yarGen"
+      date = "2025-08-26"
+   strings:
+      $x1 = "srvcli.dll" fullword wide /* reversed goodware string 'lld.ilcvrs' */
+      $x2 = "devrtl.dll" fullword wide /* reversed goodware string 'lld.ltrved' */
+      $x3 = "dfscli.dll" fullword wide /* reversed goodware string 'lld.ilcsfd' */
+      $x4 = "browcli.dll" fullword wide /* reversed goodware string 'lld.ilcworb' */
+      $x5 = "linkinfo.dll" fullword wide /* reversed goodware string 'lld.ofniknil' */
+      $s6 = "atl.dll" fullword wide /* reversed goodware string 'lld.lta' */
+      $s7 = "api-ms-win-core-synch-l1-2-0.dll" fullword wide /* reversed goodware string 'lld.0-2-1l-hcnys-eroc-niw-sm-ipa' */
+      $s8 = "SSPICLI.DLL" fullword wide
+      $s9 = "UXTheme.dll" fullword wide
+      $s10 = "oleaccrc.dll" fullword wide
+      $s11 = "dnsapi.DLL" fullword wide
+      $s12 = "iphlpapi.DLL" fullword wide
+      $s13 = "WINNSI.DLL" fullword wide
+      $s14 = "sfxrar.exe" fullword ascii
+      $s15 = "Cannot create folder %sHChecksum error in the encrypted file %s. Corrupt file or wrong password." fullword wide
+      $s16 = "libffi-8.dll" fullword ascii
+      $s17 = "libpcre2-8-0.dll" fullword ascii
+      $s18 = "D:\\Projects\\WinRAR\\sfx\\build\\sfxrar64\\Release\\sfxrar.pdb" fullword ascii
+      $s19 = "233333333333333333" ascii /* hex encoded string '#33333333' */
+      $s20 = "$GETPASSWORD1:IDC_PASSWORDENTER" fullword ascii
+   condition:
+      uint16(0) == 0x5a4d and filesize < 8000KB and
+      1 of ($x*) and 4 of them
 }
