@@ -28,7 +28,7 @@
     <description>ABR: Privilege elevation request.</description>
     <mitre>
       <id>T1548.002</id>
-    </mitre
+    </mitre>
   </rule>
 
 <!-- Detects multiple privilege elevation requests -->
@@ -60,6 +60,6 @@
     <description>ABR: $(win.eventdata.data)</description>
     <mitre>
       <id>T1098</id>
-    </mitre
+    </mitre>
   </rule>
 </group>
