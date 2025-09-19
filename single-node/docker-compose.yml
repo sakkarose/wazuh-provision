@@ -1,7 +1,7 @@
 # Wazuh App Copyright (C) 2017, Wazuh Inc. (License GPLv2)
 services:
   wazuh.manager:
-    image: wazuh/wazuh-manager:4.12.0
+    image: wazuh/wazuh-manager:4.13.0
     hostname: wazuh.manager
     restart: always
     ulimits:
@@ -36,23 +36,23 @@ services:
       - wazuh_active_response:/var/ossec/active-response/bin
       - wazuh_agentless:/var/ossec/agentless
       - wazuh_wodles:/var/ossec/wodles
-      - ./config/wazuh_cluster/filebeat_etc:/etc/filebeat
+      - filebeat_etc:/etc/filebeat
       - filebeat_var:/var/lib/filebeat
       - ./config/wazuh_indexer_ssl_certs/root-ca-manager.pem:/etc/ssl/root-ca.pem
       - ./config/wazuh_indexer_ssl_certs/wazuh.manager.pem:/etc/ssl/filebeat.pem
       - ./config/wazuh_indexer_ssl_certs/wazuh.manager-key.pem:/etc/ssl/filebeat.key
       - ./config/wazuh_cluster/wazuh_manager.conf:/wazuh-config-mount/etc/ossec.conf
-      - ./config/wazuh_cluster/rules:/var/ossec/etc/rules
-      - ./config/wazuh_cluster/decoders:/var/ossec/etc/decoders
-      - ./config/wazuh_cluster/lists:/var/ossec/etc/lists
-      - ./config/wazuh_endpoint/windows/agent_config:/var/ossec/etc/shared/windows
-      - ./config/wazuh_endpoint/linux/agent_config:/var/ossec/etc/shared/linux
-      - ./config/wazuh_endpoint/macos/agent_config:/var/ossec/etc/shared/macos
-      - ./config/wazuh_endpoint/suricata:/var/ossec/etc/shared/suricata
-      - ./config/wazuh_cluster/local_internal_options.conf:/var/ossec/etc/local_internal_options.conf
+      - ./config/wazuh_cluster/rules:/wazuh-config-mount/etc/rules
+      - ./config/wazuh_cluster/decoders:/wazuh-config-mount/etc/decoders
+      - ./config/wazuh_cluster/lists:/wazuh-config-mount/etc/lists
+      - ./config/wazuh_endpoint/windows/agent_config:/wazuh-config-mount/etc/shared/windows
+      - ./config/wazuh_endpoint/linux/agent_config:/wazuh-config-mount/etc/shared/linux
+      - ./config/wazuh_endpoint/macos/agent_config:/wazuh-config-mount/etc/shared/macos
+      - ./config/wazuh_endpoint/suricata:/wazuh-config-mount/etc/shared/suricata
+      - ./config/wazuh_cluster/local_internal_options.conf:/wazuh-config-mount/etc/local_internal_options.conf
 
   wazuh.indexer:
-    image: wazuh/wazuh-indexer:4.12.0
+    image: wazuh/wazuh-indexer:4.13.0
     hostname: wazuh.indexer
     restart: always
     ports:
@@ -77,7 +77,7 @@ services:
       - ./config/wazuh_indexer/internal_users.yml:/usr/share/wazuh-indexer/opensearch-security/internal_users.yml
 
   wazuh.dashboard:
-    image: wazuh/wazuh-dashboard:4.12.0
+    image: wazuh/wazuh-dashboard:4.13.0
     hostname: wazuh.dashboard
     restart: always
     ports:
@@ -118,3 +118,4 @@ volumes:
   wazuh-indexer-data:
   wazuh-dashboard-config:
   wazuh-dashboard-custom:
+  filebeat_etc:

@@ -111,7 +111,28 @@ The environment takes about 1 minute to get up (depending on your Docker host) f
 
 ##### Hyper-V (Disabled by default)
 
-1. Navigate to **Indexer management > Dev Tools**, run `GET _cat/indices/wazuh-alerts-*`.
+1. Update `/etc/filebeat/wazuh-template.json` with this part at the `data` section, under `properties`.
+
+```
+      "data": {
+        "properties": {
+          "hyper-v.free_gb": {
+            "type": "double"
+          },
+          "hyper-v.free_percent": {
+            "type": "double"
+          },
+          "hyper-v.used_gb": {
+            "type": "double"
+          },
+          "hyper-v.used_percent": {
+            "type": "double"
+          },
+          "audit": {
+            "properties": {
+```
+
+Navigate to **Indexer management > Dev Tools**, run `GET _cat/indices/wazuh-alerts-*`.
 
 2. From the output, check for the date of the latest indices, then run `POST <RECENT_ALERTS_INDEX>/_doc` (.e.g: `POST wazuh-alerts-4.x-2025.04.28/_doc`).
 
