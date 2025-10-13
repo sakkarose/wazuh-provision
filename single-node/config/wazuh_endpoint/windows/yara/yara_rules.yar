@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-10-12 21:13
+    Retrieved: 2025-10-13 21:13
     Generated for User: demo
     Number of Rules: 2705
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "math"
 import "pe"
+import "math"
 
 rule HKTL_EDR_Freeze_Sep25_2_RID2EBD : DEMO EXE HKTL {
    meta:
@@ -759,31 +759,6 @@ rule SUSP_SVG_JS_Payload_Mar25_RID2FB6 : DEMO GEN SUSP T1059_007 {
       $a1 in ( 0 .. 1024 ) and ( filesize < 100KB and 1 of ( $sx* ) or filesize < 1MB and 2 of ( $s* ) )
 }
 
-rule MAL_PHISH_Final_Payload_Feb25_RID310B : DEMO MAL T1203 T1566_001 {
-   meta:
-      description = "Detects possible final payload of phishing-delivered malware, where embedded shellcode is used to decrypt and execute the payload after user-supplied password input."
-      author = "X__Junior"
-      reference = "https://x.com/dtcert/status/1890384162818802135"
-      date = "2025-02-14 13:05:41"
-      score = 80
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, MAL, T1203, T1566_001"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "%lu: %s %s" wide
-      $s2 = "(Direct Inbound)" wide
-      $s3 = "(Primary Domain)" wide
-      $s4 = "(Forest Tree Root" wide
-      $s5 = "(Native Mode)" wide
-      $s6 = "(In Forest)" wide
-      $s7 = "(None)" wide
-   condition: 
-      all of them
-}
-
 rule SUSP_Sysinternals_Desktops_Anomaly_Feb25_RID3679 : ANOMALY DEMO EXE FILE SUSP {
    meta:
       description = "Detects anomalies in Sysinternals Desktops binaries"
@@ -824,6 +799,31 @@ rule SUSP_PE_Compromised_Certificate_Feb25_RID34C6 : DEMO EXE FILE SUSP T1203 T1
       $sb3 = { 40 A3 62 E3 50 68 91 19 F5 2E C3 4C } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 20MB and 1 of them
+}
+
+rule MAL_PHISH_Final_Payload_Feb25_RID310B : DEMO MAL T1203 T1566_001 {
+   meta:
+      description = "Detects possible final payload of phishing-delivered malware, where embedded shellcode is used to decrypt and execute the payload after user-supplied password input."
+      author = "X__Junior"
+      reference = "https://x.com/dtcert/status/1890384162818802135"
+      date = "2025-02-14 13:05:41"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, MAL, T1203, T1566_001"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "%lu: %s %s" wide
+      $s2 = "(Direct Inbound)" wide
+      $s3 = "(Primary Domain)" wide
+      $s4 = "(Forest Tree Root" wide
+      $s5 = "(Native Mode)" wide
+      $s6 = "(In Forest)" wide
+      $s7 = "(None)" wide
+   condition: 
+      all of them
 }
 
 rule SUSP_LNK_Suspicious_Folders_Jan25_RID3343 : DEMO FILE SUSP T1210 T1547_009 {
@@ -5532,25 +5532,6 @@ rule LOG_EXPL_ProxyToken_Exploitation_Aug21_1_RID35DB : CVE_2021_33766 DEMO EXPL
       all of ( $ss* ) and ( all of ( $sa* ) or all of ( $sb* ) )
 }
 
-rule SUSP_WEBSHELL_ASPX_ProxyShell_Exploitation_Aug21_1_RID38F3 : DEMO SUSP T1505_003 WEBSHELL {
-   meta:
-      description = "Detects an indicator for unknown malicious loaders noticed in August 2021"
-      author = "Florian Roth"
-      reference = "https://twitter.com/VirITeXplorer/status/1430206853733097473"
-      date = "2021-08-25 18:43:01"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2023-05-12"
-      tags = "DEMO, SUSP, T1505_003, WEBSHELL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = ");eval/*asf" ascii
-   condition: 
-      filesize < 600KB and 1 of them
-}
-
 rule SUSP_IIS_Config_ProxyShell_Artifacts_RID34CE : DEMO SUSP {
    meta:
       description = "Detects suspicious virtual directory configured in IIS pointing to a ProgramData folder (as found in attacks against Exchange servers in August 2021)"
@@ -5570,6 +5551,25 @@ rule SUSP_IIS_Config_ProxyShell_Artifacts_RID34CE : DEMO SUSP {
       $s1 = " physicalPath=\"C:\\ProgramData\\" ascii
    condition: 
       filesize < 500KB and all of ( $a* ) and 1 of ( $s* )
+}
+
+rule SUSP_WEBSHELL_ASPX_ProxyShell_Exploitation_Aug21_1_RID38F3 : DEMO SUSP T1505_003 WEBSHELL {
+   meta:
+      description = "Detects an indicator for unknown malicious loaders noticed in August 2021"
+      author = "Florian Roth"
+      reference = "https://twitter.com/VirITeXplorer/status/1430206853733097473"
+      date = "2021-08-25 18:43:01"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2023-05-12"
+      tags = "DEMO, SUSP, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = ");eval/*asf" ascii
+   condition: 
+      filesize < 600KB and 1 of them
 }
 
 rule WEBSHELL_ASPX_ProxyShell_Aug21_3_RID31EC : DEMO FILE T1505_003 WEBSHELL {
@@ -6568,25 +6568,6 @@ rule HKTL_Nishang_PS1_Invoke_PowerShellTcpOneLine_RID379E : DEMO HKTL SCRIPT T10
       all of them
 }
 
-rule EXPL_CVE_2021_27065_Exchange_Forensic_Artefacts_Mar21_1_RID3996 : CVE_2021_27065 DEMO EXPLOIT G0125 SCRIPT {
-   meta:
-      description = "Detects forensic artefacts found in HAFNIUM intrusions exploiting CVE-2021-27065"
-      author = "Florian Roth"
-      reference = "https://www.volexity.com/blog/2021/03/02/active-exploitation-of-microsoft-exchange-zero-day-vulnerabilities/"
-      date = "2021-03-02 19:10:11"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2023-12-01"
-      tags = "CVE_2021_27065, DEMO, EXPLOIT, G0125, SCRIPT"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "S:CMD=Set-OabVirtualDirectory.ExternalUrl='" ascii wide fullword
-   condition: 
-      1 of them
-}
-
 rule APT_HAFNIUM_Forensic_Artefacts_Mar21_1_RID3463 : APT DEMO G0125 {
    meta:
       description = "Detects forensic artefacts found in HAFNIUM intrusions"
@@ -6604,6 +6585,25 @@ rule APT_HAFNIUM_Forensic_Artefacts_Mar21_1_RID3463 : APT DEMO G0125 {
       $s1 = "lsass.exe C:\\windows\\temp\\lsass" ascii wide fullword
       $s2 = "c:\\ProgramData\\it.zip" ascii wide fullword
       $s3 = "powercat.ps1'); powercat -c" ascii wide fullword
+   condition: 
+      1 of them
+}
+
+rule EXPL_CVE_2021_27065_Exchange_Forensic_Artefacts_Mar21_1_RID3996 : CVE_2021_27065 DEMO EXPLOIT G0125 SCRIPT {
+   meta:
+      description = "Detects forensic artefacts found in HAFNIUM intrusions exploiting CVE-2021-27065"
+      author = "Florian Roth"
+      reference = "https://www.volexity.com/blog/2021/03/02/active-exploitation-of-microsoft-exchange-zero-day-vulnerabilities/"
+      date = "2021-03-02 19:10:11"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2023-12-01"
+      tags = "CVE_2021_27065, DEMO, EXPLOIT, G0125, SCRIPT"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "S:CMD=Set-OabVirtualDirectory.ExternalUrl='" ascii wide fullword
    condition: 
       1 of them
 }
@@ -8588,6 +8588,24 @@ rule SUSP_PDB_CN_Threat_Actor_May19_1_RID3220 : CHINA DEMO EXE FILE SUSP {
       uint16 ( 0 ) == 0x5a4d and filesize < 400KB and 1 of them
 }
 
+rule HKTL_CN_ProcHook_May19_1_RID2F38 : CHINA DEMO EXE FILE HKTL {
+   meta:
+      description = "Detects hacktool used by Chinese threat groups"
+      author = "Florian Roth"
+      reference = "https://www.guardicore.com/2019/05/nansh0u-campaign-hackers-arsenal-grows-stronger/"
+      date = "2019-05-31 11:47:51"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "02ebdc1ff6075c15a44711ccd88be9d6d1b47607fea17bef7e5e17f8da35293e"
+      tags = "CHINA, DEMO, EXE, FILE, HKTL"
+      required_modules = "pe"
+      minimum_yara = "3.2.0"
+      
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 300KB and pe.imphash ( ) == "343d580dd50ee724746a5c28f752b709"
+}
+
 rule MAL_XMR_Miner_May19_1_RID2E1B : DEMO EXE FILE HIGHVOL MAL {
    meta:
       description = "Detects Monero Crypto Coin Miner"
@@ -8671,24 +8689,6 @@ rule MAL_Parite_Malware_May19_2_RID3058 : DEMO EXE FILE MAL {
       
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 18000KB and ( pe.imphash ( ) == "b132a2719be01a6ef87d9939d785e19e" or pe.imphash ( ) == "78f4f885323ffee9f8fa011455d0523d" )
-}
-
-rule HKTL_CN_ProcHook_May19_1_RID2F38 : CHINA DEMO EXE FILE HKTL {
-   meta:
-      description = "Detects hacktool used by Chinese threat groups"
-      author = "Florian Roth"
-      reference = "https://www.guardicore.com/2019/05/nansh0u-campaign-hackers-arsenal-grows-stronger/"
-      date = "2019-05-31 11:47:51"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "02ebdc1ff6075c15a44711ccd88be9d6d1b47607fea17bef7e5e17f8da35293e"
-      tags = "CHINA, DEMO, EXE, FILE, HKTL"
-      required_modules = "pe"
-      minimum_yara = "3.2.0"
-      
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 300KB and pe.imphash ( ) == "343d580dd50ee724746a5c28f752b709"
 }
 
 rule HKTL_LNX_Pnscan_RID2C57 : DEMO HKTL LINUX T1046 {
@@ -12726,24 +12726,6 @@ rule MAL_Sednit_DelphiDownloader_Apr18_3_RID33F2 : DEMO EXE FILE G0007 MAL {
       uint16 ( 0 ) == 0x5a4d and filesize < 2000KB and 3 of them
 }
 
-rule MAL_GandCrab_Apr18_1_RID2DB7 : DEMO EXE FILE MAL {
-   meta:
-      description = "Detects GandCrab malware"
-      author = "Florian Roth"
-      reference = "https://twitter.com/MarceloRivero/status/988455516094550017"
-      date = "2018-04-23 10:43:41"
-      score = 90
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "6fafe7bb56fd2696f2243fc305fe0c38f550dffcfc5fca04f70398880570ffff"
-      tags = "DEMO, EXE, FILE, MAL"
-      required_modules = "pe"
-      minimum_yara = "3.2.0"
-      
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 800KB and pe.imphash ( ) == "7936b0e9491fd747bf2675a7ec8af8ba"
-}
-
 rule ProcessInjector_Gen_RID2EA7 : DEMO EXE GEN HIGHVOL HKTL {
    meta:
       description = "Detects a process injection utility that can be used ofr good and bad purposes"
@@ -12766,6 +12748,24 @@ rule ProcessInjector_Gen_RID2EA7 : DEMO EXE GEN HIGHVOL HKTL {
       $s17 = "[-] An app path is required when not injecting!" fullword ascii
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 50KB and ( pe.imphash ( ) == "d27e0fa013d7ae41be12aaf221e41f9b" or 1 of them ) or 3 of them
+}
+
+rule MAL_GandCrab_Apr18_1_RID2DB7 : DEMO EXE FILE MAL {
+   meta:
+      description = "Detects GandCrab malware"
+      author = "Florian Roth"
+      reference = "https://twitter.com/MarceloRivero/status/988455516094550017"
+      date = "2018-04-23 10:43:41"
+      score = 90
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "6fafe7bb56fd2696f2243fc305fe0c38f550dffcfc5fca04f70398880570ffff"
+      tags = "DEMO, EXE, FILE, MAL"
+      required_modules = "pe"
+      minimum_yara = "3.2.0"
+      
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 800KB and pe.imphash ( ) == "7936b0e9491fd747bf2675a7ec8af8ba"
 }
 
 rule MAL_WebMonitor_RAT_RID2D96 : DEMO EXE FILE MAL T1047 T1057 {
@@ -18541,27 +18541,6 @@ rule CACTUSTORCH_RID2A54 : DEMO HKTL T1218_011 {
       ( filesize < 800KB and ( 1 of ( $x* ) or ( 1 of ( $a* ) and 1 of ( $s* ) ) ) ) or ( 3 of them )
 }
 
-rule SUSP_MyWScript_RID2C4D : DEMO EXE FILE MAL SUSP {
-   meta:
-      description = "Detects files generated with Script2Exe"
-      author = "Florian Roth"
-      reference = "Internal Research"
-      date = "2017-07-27 09:43:21"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "515f5188ba6d039b8c38f60d3d868fa9c9726e144f593066490c7c97bf5090c8"
-      tags = "DEMO, EXE, FILE, MAL, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "C:\\Projets\\vbsedit_source\\script2exe\\Release\\mywscript.pdb" fullword ascii
-      $s1 = "mywscript2" fullword wide
-      $s2 = "MYWSCRIPT2" fullword wide
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 800KB and ( $x1 or 2 of them )
-}
-
 rule AllTheThings_RID2BB8 : DEMO EXE FILE HKTL {
    meta:
       description = "Detects AllTheThings_RID2BB8"
@@ -18625,6 +18604,27 @@ rule PowerShell_Emp_Eval_Jul17_A2_RID3142 : DEMO EXE FILE HKTL SCRIPT T1059_001 
       $s2 = "powershell.exe" ascii fullword
    condition: 
       ( uint16 ( 0 ) == 0x5a4d and filesize < 200KB and all of them )
+}
+
+rule SUSP_MyWScript_RID2C4D : DEMO EXE FILE MAL SUSP {
+   meta:
+      description = "Detects files generated with Script2Exe"
+      author = "Florian Roth"
+      reference = "Internal Research"
+      date = "2017-07-27 09:43:21"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "515f5188ba6d039b8c38f60d3d868fa9c9726e144f593066490c7c97bf5090c8"
+      tags = "DEMO, EXE, FILE, MAL, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "C:\\Projets\\vbsedit_source\\script2exe\\Release\\mywscript.pdb" fullword ascii
+      $s1 = "mywscript2" fullword wide
+      $s2 = "MYWSCRIPT2" fullword wide
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 800KB and ( $x1 or 2 of them )
 }
 
 rule WiltedTulip_Tools_back_RID2FE8 : APT DEMO EXE FILE T1003 {
@@ -19047,6 +19047,26 @@ rule Unspecified_Malware_Jul17_2C_RID316E : CHINA DEMO EXE FILE MAL T1047 {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 400KB and ( 1 of ( $x* ) or 4 of ( $s* ) ) ) or ( all of them )
 }
 
+rule CHAOS_Payload_RID2BA8 : DEMO EXE FILE HKTL {
+   meta:
+      description = "Detects a CHAOS back connect payload"
+      author = "Florian Roth"
+      reference = "https://github.com/tiagorlampert/CHAOS"
+      date = "2017-07-15 09:15:51"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "0962fcfcb1b52df148720c2112b036e75755f09279e3ebfce1636739af9b4448"
+      hash2 = "5c3553345f824b7b6de09ccb67d834e428b8df17443d98816471ca28f5a11424"
+      tags = "DEMO, EXE, FILE, HKTL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = { 2F 43 48 41 4F 53 00 02 73 79 6E 63 2F 61 74 6F 6D 69 63 } 
+   condition: 
+      ( uint16 ( 0 ) == 0x5a4d and filesize < 15000KB and all of them )
+}
+
 rule POSHSPY_Malware_RID2C6F : DEMO MAL {
    meta:
       description = "Detects POSHSPY malware"
@@ -19069,26 +19089,6 @@ rule POSHSPY_Malware_RID2C6F : DEMO MAL {
       $x6 = "ZgB1AG4AYwB0AGkAbwBuACAAcAB1AHIAZgBDAHIA" 
    condition: 
       1 of them
-}
-
-rule CHAOS_Payload_RID2BA8 : DEMO EXE FILE HKTL {
-   meta:
-      description = "Detects a CHAOS back connect payload"
-      author = "Florian Roth"
-      reference = "https://github.com/tiagorlampert/CHAOS"
-      date = "2017-07-15 09:15:51"
-      score = 80
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "0962fcfcb1b52df148720c2112b036e75755f09279e3ebfce1636739af9b4448"
-      hash2 = "5c3553345f824b7b6de09ccb67d834e428b8df17443d98816471ca28f5a11424"
-      tags = "DEMO, EXE, FILE, HKTL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = { 2F 43 48 41 4F 53 00 02 73 79 6E 63 2F 61 74 6F 6D 69 63 } 
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d and filesize < 15000KB and all of them )
 }
 
 rule SecurityXploded_Producer_String_RID33B2 : DEMO EXE FILE HKTL {
@@ -19477,87 +19477,6 @@ rule Molerats_Jul17_Sample_Dropper_RID3246 : APT DEMO EXE FILE G0021 {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and all of them )
 }
 
-rule HDRoot_Sample_Jul17_1_RID2E84 : DEMO EXE FILE MAL {
-   meta:
-      description = "Detects HDRoot samples"
-      author = "Florian Roth"
-      reference = "Winnti HDRoot VT"
-      date = "2017-07-07 11:17:51"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "6d2ad82f455becc8c830d000633a370857928c584246a7f41fe722cc46c0d113"
-      tags = "DEMO, EXE, FILE, MAL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "gleupdate.dll" fullword ascii
-      $s2 = "\\DosDevices\\%ws\\system32\\%ws" wide
-      $s3 = "l\\Driver\\nsiproxy" fullword wide
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d and filesize < 60KB and 3 of them )
-}
-
-rule HDRoot_Sample_Jul17_2_RID2E85 : DEMO EXE FILE MAL {
-   meta:
-      description = "Detects HDRoot samples"
-      author = "Florian Roth"
-      reference = "Winnti HDRoot VT"
-      date = "2017-07-07 11:18:01"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "1c302ed9786fc600073cc6f3ed2e50e7c23785c94a2908f74f92971d978b704b"
-      hash2 = "3b7cfa40e26fb6b079b55ec030aba244a6429e263a3d9832e32ab09e7a3c4a9c"
-      hash3 = "71eddf71a94c5fd04c9f3ff0ca1eb6b1770df1a3a8f29689fb8588427b5c9e8e"
-      tags = "DEMO, EXE, FILE, MAL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "http://microsoftcompanywork.htm" fullword ascii
-      $x2 = "compose.aspx?s=%4X%4X%4X%4X%4X%4X" fullword ascii
-      $t1 = "http://babelfish.yahoo.com/translate_url?" fullword ascii
-      $t2 = "http://translate.google.com/translate?prev=hp&hl=en&js=n&u=%s?%d&sl=es&tl=en" fullword ascii
-      $u1 = "User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident/4.0; SLCC1; .NET CLR 2.0.50727; InfoPath.2; .NET CLR 3.5." ascii
-      $u2 = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; Maxthon)" fullword ascii
-      $u3 = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; Maxthon; TERA:" fullword ascii
-      $s1 = "\\system32\\ntoskrnl.exe" ascii
-      $s2 = "Schedsvc.dll" fullword wide
-      $s3 = "dllserver64.dll" fullword ascii
-      $s4 = "C:\\TERA_SR.txt" fullword ascii
-      $s5 = "updatevnsc.dat" fullword wide
-      $s6 = "tera dll service global event" fullword ascii
-      $s7 = "Referer: http://%s/%s" fullword ascii
-      $s8 = "tera replace dll config" fullword ascii
-      $s9 = "SetupDll64.dll" fullword ascii
-      $s10 = "copy %%ComSpec%% \"%s\"" fullword ascii
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 300KB and ( 1 of ( $x* ) or all of ( $u* ) or 8 of them )
-}
-
-rule Unspecified_Malware_Jul17_1A_RID316B : DEMO EXE FILE MAL {
-   meta:
-      description = "Detects samples of an unspecified malware - July 2017"
-      author = "Florian Roth"
-      reference = "Winnti HDRoot VT"
-      date = "2017-07-07 13:21:41"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "e1c38142b6194237a4cd4603829aa6edb6436e7bba15e3e6b0c9e8c6b629b42b"
-      tags = "DEMO, EXE, FILE, MAL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "%SystemRoot%\\System32\\wuauserv.dll" fullword ascii
-      $s2 = "systemroot%\\system32\\wuauserv.dll" fullword ascii
-      $s3 = "ocgen.logIN" fullword wide
-      $s4 = "ocmsn.logIN" fullword wide
-      $s5 = "Install.log" fullword wide
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d and filesize < 900KB and all of them )
-}
-
 rule Disclosed_0day_POCs_exploit_RID3190 : DEMO EXE EXPLOIT FILE HKTL {
    meta:
       description = "Detects POC code from disclosed 0day hacktool set"
@@ -19688,6 +19607,87 @@ rule Disclosed_0day_POCs_shellcodegenerator_RID3605 : DEMO EXE FILE HKTL {
       $x1 = "\\Release\\shellcodegenerator.pdb" ascii
    condition: 
       ( uint16 ( 0 ) == 0x5a4d and filesize < 40KB and all of them )
+}
+
+rule HDRoot_Sample_Jul17_1_RID2E84 : DEMO EXE FILE MAL {
+   meta:
+      description = "Detects HDRoot samples"
+      author = "Florian Roth"
+      reference = "Winnti HDRoot VT"
+      date = "2017-07-07 11:17:51"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "6d2ad82f455becc8c830d000633a370857928c584246a7f41fe722cc46c0d113"
+      tags = "DEMO, EXE, FILE, MAL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "gleupdate.dll" fullword ascii
+      $s2 = "\\DosDevices\\%ws\\system32\\%ws" wide
+      $s3 = "l\\Driver\\nsiproxy" fullword wide
+   condition: 
+      ( uint16 ( 0 ) == 0x5a4d and filesize < 60KB and 3 of them )
+}
+
+rule HDRoot_Sample_Jul17_2_RID2E85 : DEMO EXE FILE MAL {
+   meta:
+      description = "Detects HDRoot samples"
+      author = "Florian Roth"
+      reference = "Winnti HDRoot VT"
+      date = "2017-07-07 11:18:01"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "1c302ed9786fc600073cc6f3ed2e50e7c23785c94a2908f74f92971d978b704b"
+      hash2 = "3b7cfa40e26fb6b079b55ec030aba244a6429e263a3d9832e32ab09e7a3c4a9c"
+      hash3 = "71eddf71a94c5fd04c9f3ff0ca1eb6b1770df1a3a8f29689fb8588427b5c9e8e"
+      tags = "DEMO, EXE, FILE, MAL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "http://microsoftcompanywork.htm" fullword ascii
+      $x2 = "compose.aspx?s=%4X%4X%4X%4X%4X%4X" fullword ascii
+      $t1 = "http://babelfish.yahoo.com/translate_url?" fullword ascii
+      $t2 = "http://translate.google.com/translate?prev=hp&hl=en&js=n&u=%s?%d&sl=es&tl=en" fullword ascii
+      $u1 = "User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident/4.0; SLCC1; .NET CLR 2.0.50727; InfoPath.2; .NET CLR 3.5." ascii
+      $u2 = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; Maxthon)" fullword ascii
+      $u3 = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; Maxthon; TERA:" fullword ascii
+      $s1 = "\\system32\\ntoskrnl.exe" ascii
+      $s2 = "Schedsvc.dll" fullword wide
+      $s3 = "dllserver64.dll" fullword ascii
+      $s4 = "C:\\TERA_SR.txt" fullword ascii
+      $s5 = "updatevnsc.dat" fullword wide
+      $s6 = "tera dll service global event" fullword ascii
+      $s7 = "Referer: http://%s/%s" fullword ascii
+      $s8 = "tera replace dll config" fullword ascii
+      $s9 = "SetupDll64.dll" fullword ascii
+      $s10 = "copy %%ComSpec%% \"%s\"" fullword ascii
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 300KB and ( 1 of ( $x* ) or all of ( $u* ) or 8 of them )
+}
+
+rule Unspecified_Malware_Jul17_1A_RID316B : DEMO EXE FILE MAL {
+   meta:
+      description = "Detects samples of an unspecified malware - July 2017"
+      author = "Florian Roth"
+      reference = "Winnti HDRoot VT"
+      date = "2017-07-07 13:21:41"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "e1c38142b6194237a4cd4603829aa6edb6436e7bba15e3e6b0c9e8c6b629b42b"
+      tags = "DEMO, EXE, FILE, MAL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "%SystemRoot%\\System32\\wuauserv.dll" fullword ascii
+      $s2 = "systemroot%\\system32\\wuauserv.dll" fullword ascii
+      $s3 = "ocgen.logIN" fullword wide
+      $s4 = "ocmsn.logIN" fullword wide
+      $s5 = "Install.log" fullword wide
+   condition: 
+      ( uint16 ( 0 ) == 0x5a4d and filesize < 900KB and all of them )
 }
 
 rule TeleDoor_Backdoor_RID2DB3 : DEMO EXE FILE MAL RANSOM {
@@ -25579,82 +25579,6 @@ rule karmaSMB_RID29FF : DEMO EXE FILE HKTL {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 17000KB and all of them )
 }
 
-rule Quasar_RAT_1_RID2B54 : DEMO EXE FILE MAL QuasarRAT {
-   meta:
-      description = "Detects Quasar RAT"
-      author = "Florian Roth"
-      reference = "https://www.pwc.co.uk/cyber-security/pdf/cloud-hopper-annex-b-final.pdf"
-      date = "2017-04-07 09:01:51"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "0774d25e33ca2b1e2ee2fafe3fdbebecefbf1d4dd99e6460f0bc8713dd0fd740"
-      hash2 = "1ce40a89ef9d56fd32c00db729beecc17d54f4f7c27ff22f708a957cd3f9a4ec"
-      hash3 = "515c1a68995557035af11d818192f7866ef6a2018aa13112fefbe08395732e89"
-      tags = "DEMO, EXE, FILE, MAL, QuasarRAT"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "DoUploadAndExecute" fullword ascii
-      $s2 = "DoDownloadAndExecute" fullword ascii
-      $s3 = "DoShellExecute" fullword ascii
-      $s4 = "set_Processname" fullword ascii
-      $op1 = { 04 1e fe 02 04 16 fe 01 60 } 
-      $op2 = { 00 17 03 1f 20 17 19 15 28 } 
-      $op3 = { 00 04 03 69 91 1b 40 } 
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d and filesize < 5000KB and all of ( $s* ) or all of ( $op* ) )
-}
-
-rule Quasar_RAT_2_RID2B55 : DEMO EXE FILE MAL QuasarRAT {
-   meta:
-      description = "Detects Quasar RAT"
-      author = "Florian Roth"
-      reference = "https://www.pwc.co.uk/cyber-security/pdf/cloud-hopper-annex-b-final.pdf"
-      date = "2017-04-07 09:02:01"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "0774d25e33ca2b1e2ee2fafe3fdbebecefbf1d4dd99e6460f0bc8713dd0fd740"
-      hash2 = "515c1a68995557035af11d818192f7866ef6a2018aa13112fefbe08395732e89"
-      hash3 = "f08db220df716de3d4f63f3007a03f902601b9b32099d6a882da87312f263f34"
-      tags = "DEMO, EXE, FILE, MAL, QuasarRAT"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "GetKeyloggerLogsResponse" fullword ascii
-      $x2 = "get_Keylogger" fullword ascii
-      $x3 = "HandleGetKeyloggerLogsResponse" fullword ascii
-      $s1 = "DoShellExecuteResponse" fullword ascii
-      $s2 = "GetPasswordsResponse" fullword ascii
-      $s3 = "GetStartupItemsResponse" fullword ascii
-      $s4 = "<GetGenReader>b__7" fullword ascii
-      $s5 = "RunHidden" fullword ascii
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d and filesize < 5000KB and $x1 ) or ( all of them )
-}
-
-rule Malware_Floxif_mpsvc_dll_RID30C4 : DEMO EXE FILE HIGHVOL MAL {
-   meta:
-      description = "Malware - Floxif"
-      author = "Florian Roth"
-      reference = "Internal Research"
-      date = "2017-04-07 12:53:51"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "1e654ee1c4736f4ccb8b5b7aa604782cfb584068df4d9e006de8009e60ab5a14"
-      tags = "DEMO, EXE, FILE, HIGHVOL, MAL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $op1 = { 04 80 7a 03 01 75 04 8d 42 04 c3 8d 42 04 53 8b } 
-      $op2 = { 88 19 74 03 41 eb ea c6 42 03 01 5b c3 8b 4c 24 } 
-      $op3 = { ff 03 8d 00 f9 ff ff 88 01 eb a1 } 
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and all of them )
-}
-
 rule Impacket_Tools_wmiexec_RID3000 : DEMO EXE FILE HKTL {
    meta:
       description = "Compiled Impacket Tools"
@@ -26105,6 +26029,82 @@ rule Impacket_Tools_Generic_1_RID305B : DEMO EXE FILE GEN HKTL {
       $s3 = "impacket" ascii
    condition: 
       ( uint16 ( 0 ) == 0x5a4d and filesize < 21000KB and all of ( $s* ) ) or ( all of them )
+}
+
+rule Quasar_RAT_1_RID2B54 : DEMO EXE FILE MAL QuasarRAT {
+   meta:
+      description = "Detects Quasar RAT"
+      author = "Florian Roth"
+      reference = "https://www.pwc.co.uk/cyber-security/pdf/cloud-hopper-annex-b-final.pdf"
+      date = "2017-04-07 09:01:51"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "0774d25e33ca2b1e2ee2fafe3fdbebecefbf1d4dd99e6460f0bc8713dd0fd740"
+      hash2 = "1ce40a89ef9d56fd32c00db729beecc17d54f4f7c27ff22f708a957cd3f9a4ec"
+      hash3 = "515c1a68995557035af11d818192f7866ef6a2018aa13112fefbe08395732e89"
+      tags = "DEMO, EXE, FILE, MAL, QuasarRAT"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "DoUploadAndExecute" fullword ascii
+      $s2 = "DoDownloadAndExecute" fullword ascii
+      $s3 = "DoShellExecute" fullword ascii
+      $s4 = "set_Processname" fullword ascii
+      $op1 = { 04 1e fe 02 04 16 fe 01 60 } 
+      $op2 = { 00 17 03 1f 20 17 19 15 28 } 
+      $op3 = { 00 04 03 69 91 1b 40 } 
+   condition: 
+      ( uint16 ( 0 ) == 0x5a4d and filesize < 5000KB and all of ( $s* ) or all of ( $op* ) )
+}
+
+rule Quasar_RAT_2_RID2B55 : DEMO EXE FILE MAL QuasarRAT {
+   meta:
+      description = "Detects Quasar RAT"
+      author = "Florian Roth"
+      reference = "https://www.pwc.co.uk/cyber-security/pdf/cloud-hopper-annex-b-final.pdf"
+      date = "2017-04-07 09:02:01"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "0774d25e33ca2b1e2ee2fafe3fdbebecefbf1d4dd99e6460f0bc8713dd0fd740"
+      hash2 = "515c1a68995557035af11d818192f7866ef6a2018aa13112fefbe08395732e89"
+      hash3 = "f08db220df716de3d4f63f3007a03f902601b9b32099d6a882da87312f263f34"
+      tags = "DEMO, EXE, FILE, MAL, QuasarRAT"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "GetKeyloggerLogsResponse" fullword ascii
+      $x2 = "get_Keylogger" fullword ascii
+      $x3 = "HandleGetKeyloggerLogsResponse" fullword ascii
+      $s1 = "DoShellExecuteResponse" fullword ascii
+      $s2 = "GetPasswordsResponse" fullword ascii
+      $s3 = "GetStartupItemsResponse" fullword ascii
+      $s4 = "<GetGenReader>b__7" fullword ascii
+      $s5 = "RunHidden" fullword ascii
+   condition: 
+      ( uint16 ( 0 ) == 0x5a4d and filesize < 5000KB and $x1 ) or ( all of them )
+}
+
+rule Malware_Floxif_mpsvc_dll_RID30C4 : DEMO EXE FILE HIGHVOL MAL {
+   meta:
+      description = "Malware - Floxif"
+      author = "Florian Roth"
+      reference = "Internal Research"
+      date = "2017-04-07 12:53:51"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "1e654ee1c4736f4ccb8b5b7aa604782cfb584068df4d9e006de8009e60ab5a14"
+      tags = "DEMO, EXE, FILE, HIGHVOL, MAL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $op1 = { 04 80 7a 03 01 75 04 8d 42 04 c3 8d 42 04 53 8b } 
+      $op2 = { 88 19 74 03 41 eb ea c6 42 03 01 5b c3 8b 4c 24 } 
+      $op3 = { ff 03 8d 00 f9 ff ff 88 01 eb a1 } 
+   condition: 
+      ( uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and all of them )
 }
 
 rule OpCloudHopper_Malware_1_RID2FED : DEMO EXE FILE MAL {
@@ -27444,6 +27444,77 @@ rule RottenPotato_Potato_RID2EDA : DEMO EXE FILE HKTL T1053_005 T1068 T1134 {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 200KB and 1 of ( $x* ) ) or ( 2 of them )
 }
 
+rule CN_APT_ZeroT_nflogger_RID2EEC : APT CHINA DEMO EXE FILE {
+   meta:
+      description = "Chinese APT by Proofpoint ZeroT RAT  - file nflogger.dll"
+      author = "Florian Roth"
+      reference = "https://www.proofpoint.com/us/threat-insight/post/APT-targets-russia-belarus-zerot-plugx"
+      date = "2017-02-04 11:35:11"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "946adbeb017616d56193a6d43fe9c583be6ad1c7f6a22bab7df9db42e6e8ab10"
+      tags = "APT, CHINA, DEMO, EXE, FILE"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "\\LoaderDll.VS2010\\Release\\" ascii
+   condition: 
+      ( uint16 ( 0 ) == 0x5a4d and filesize < 200KB and all of them )
+}
+
+rule CN_APT_ZeroT_extracted_Go_RID3071 : APT CHINA DEMO EXE FILE {
+   meta:
+      description = "Chinese APT by Proofpoint ZeroT RAT  - file Go.exe"
+      author = "Florian Roth"
+      reference = "https://www.proofpoint.com/us/threat-insight/post/APT-targets-russia-belarus-zerot-plugx"
+      date = "2017-02-04 12:40:01"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2023-01-06"
+      hash1 = "83ddc69fe0d3f3d2f46df7e72995d59511c1bfcca1a4e14c330cb71860b4806b"
+      tags = "APT, CHINA, DEMO, EXE, FILE"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "%s\\cmd.exe /c %s\\Zlh.exe" fullword ascii
+      $x2 = "\\BypassUAC.VS2010\\Release\\" ascii
+      $s1 = "Zjdsf.exe" fullword ascii
+      $s2 = "SS32prep.exe" fullword ascii
+      $s3 = "windowsgrep.exe" fullword ascii
+      $s4 = "Sysdug.exe" fullword ascii
+      $s5 = "Proessz.exe" fullword ascii
+      $s6 = "%s\\Zlh.exe" fullword ascii
+      $s7 = "/C %s\\%s" fullword ascii
+   condition: 
+      ( uint16 ( 0 ) == 0x5a4d and filesize < 100KB and ( 1 of ( $x* ) or 3 of ( $s* ) ) ) or ( 7 of them )
+}
+
+rule CN_APT_ZeroT_extracted_Mcutil_RID3229 : APT CHINA DEMO EXE FILE {
+   meta:
+      description = "Chinese APT by Proofpoint ZeroT RAT  - file Mcutil.dll"
+      author = "Florian Roth"
+      reference = "https://www.proofpoint.com/us/threat-insight/post/APT-targets-russia-belarus-zerot-plugx"
+      date = "2017-02-04 13:53:21"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "266c06b06abbed846ebabfc0e683f5d20dadab52241bc166b9d60e9b8493b500"
+      tags = "APT, CHINA, DEMO, EXE, FILE"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "LoaderDll.dll" fullword ascii
+      $s2 = "QageBox1USER" fullword ascii
+      $s3 = "xhmowl" fullword ascii
+      $s4 = "?KEYKY" fullword ascii
+      $s5 = "HH:mm:_s" fullword ascii
+      $s6 = "=licni] has maX0t" fullword ascii
+   condition: 
+      ( uint16 ( 0 ) == 0x5a4d and filesize < 90KB and 3 of them ) or ( all of them )
+}
+
 rule Ysoserial_Payload_MozillaRhino1_RID335D : DEMO EXPLOIT FILE T1203 T1566_001 {
    meta:
       description = "Ysoserial Payloads - file MozillaRhino1.bin"
@@ -27550,77 +27621,6 @@ rule Ysoserial_Payload_3_RID2E87 : DEMO EXPLOIT FILE T1203 T1566_001 {
       $s5 = "PRE_DESTROYsq" fullword ascii
    condition: 
       ( uint16 ( 0 ) == 0xedac and filesize < 10KB and $x1 ) or ( all of them )
-}
-
-rule CN_APT_ZeroT_nflogger_RID2EEC : APT CHINA DEMO EXE FILE {
-   meta:
-      description = "Chinese APT by Proofpoint ZeroT RAT  - file nflogger.dll"
-      author = "Florian Roth"
-      reference = "https://www.proofpoint.com/us/threat-insight/post/APT-targets-russia-belarus-zerot-plugx"
-      date = "2017-02-04 11:35:11"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "946adbeb017616d56193a6d43fe9c583be6ad1c7f6a22bab7df9db42e6e8ab10"
-      tags = "APT, CHINA, DEMO, EXE, FILE"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "\\LoaderDll.VS2010\\Release\\" ascii
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d and filesize < 200KB and all of them )
-}
-
-rule CN_APT_ZeroT_extracted_Go_RID3071 : APT CHINA DEMO EXE FILE {
-   meta:
-      description = "Chinese APT by Proofpoint ZeroT RAT  - file Go.exe"
-      author = "Florian Roth"
-      reference = "https://www.proofpoint.com/us/threat-insight/post/APT-targets-russia-belarus-zerot-plugx"
-      date = "2017-02-04 12:40:01"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2023-01-06"
-      hash1 = "83ddc69fe0d3f3d2f46df7e72995d59511c1bfcca1a4e14c330cb71860b4806b"
-      tags = "APT, CHINA, DEMO, EXE, FILE"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "%s\\cmd.exe /c %s\\Zlh.exe" fullword ascii
-      $x2 = "\\BypassUAC.VS2010\\Release\\" ascii
-      $s1 = "Zjdsf.exe" fullword ascii
-      $s2 = "SS32prep.exe" fullword ascii
-      $s3 = "windowsgrep.exe" fullword ascii
-      $s4 = "Sysdug.exe" fullword ascii
-      $s5 = "Proessz.exe" fullword ascii
-      $s6 = "%s\\Zlh.exe" fullword ascii
-      $s7 = "/C %s\\%s" fullword ascii
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d and filesize < 100KB and ( 1 of ( $x* ) or 3 of ( $s* ) ) ) or ( 7 of them )
-}
-
-rule CN_APT_ZeroT_extracted_Mcutil_RID3229 : APT CHINA DEMO EXE FILE {
-   meta:
-      description = "Chinese APT by Proofpoint ZeroT RAT  - file Mcutil.dll"
-      author = "Florian Roth"
-      reference = "https://www.proofpoint.com/us/threat-insight/post/APT-targets-russia-belarus-zerot-plugx"
-      date = "2017-02-04 13:53:21"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "266c06b06abbed846ebabfc0e683f5d20dadab52241bc166b9d60e9b8493b500"
-      tags = "APT, CHINA, DEMO, EXE, FILE"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "LoaderDll.dll" fullword ascii
-      $s2 = "QageBox1USER" fullword ascii
-      $s3 = "xhmowl" fullword ascii
-      $s4 = "?KEYKY" fullword ascii
-      $s5 = "HH:mm:_s" fullword ascii
-      $s6 = "=licni] has maX0t" fullword ascii
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d and filesize < 90KB and 3 of them ) or ( all of them )
 }
 
 rule PP_CN_APT_ZeroT_1_RID2CC8 : APT CHINA DEMO EXE FILE {
@@ -30565,33 +30565,6 @@ rule WebShell_Generic_1609_A_RID2F12 : DEMO FILE GEN T1505_003 WEBSHELL {
       ( uint16 ( 0 ) == 0x3f3c and 1 of them )
 }
 
-rule Pirpi_1609_B_RID2AE5 : DEMO EXE FILE G0022 MAL {
-   meta:
-      description = "Detects Pirpi Backdoor"
-      author = "Florian Roth"
-      reference = "https://community.broadcom.com/home"
-      date = "2016-09-08 09:13:21"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2024-07-19"
-      hash1 = "498b98c02e19f4b03dc6a3a8b6ff8761ef2c0fedda846ced4b6f1c87b52468e7"
-      tags = "DEMO, EXE, FILE, G0022, MAL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "tconn <ip> <port> //set temp connect value, and disconnect." fullword ascii
-      $s2 = "E* ListenCheckSsl SslRecv fd(%d) Error ret:%d %d" fullword ascii
-      $s3 = "%s %s L* ListenCheckSsl fd(%d) SslV(-%d-)" fullword ascii
-      $s4 = "S:%d.%d-%d.%d V(%d.%d) Listen On %d Ok." fullword ascii
-      $s5 = "E* ListenCheckSsl fd(%d) SslAccept Err %d" fullword ascii
-      $s6 = "%s-%s N110 Ssl Connect Ok(%s:%d)." fullword ascii
-      $s7 = "%s-%s N110 Basic Connect Ok(%s:%d)." fullword ascii
-      $s8 = "tconn <ip> <port>" fullword ascii
-   condition: 
-      ( uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and 2 of them ) or ( 4 of them )
-}
-
 rule pstgdump_RID2A85 : DEMO EXE FILE HKTL {
    meta:
       description = "Detects a tool used by APT groups - file pstgdump_RID2A85.exe"
@@ -30744,6 +30717,33 @@ rule PwDump_B_RID2A0F : DEMO EXE FILE HKTL T1003 {
       $s3 = "servpw.exe" fullword ascii
    condition: 
       ( uint16 ( 0 ) == 0x5a4d and filesize < 400KB and 1 of ( $x* ) ) or ( 3 of them )
+}
+
+rule Pirpi_1609_B_RID2AE5 : DEMO EXE FILE G0022 MAL {
+   meta:
+      description = "Detects Pirpi Backdoor"
+      author = "Florian Roth"
+      reference = "https://community.broadcom.com/home"
+      date = "2016-09-08 09:13:21"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2024-07-19"
+      hash1 = "498b98c02e19f4b03dc6a3a8b6ff8761ef2c0fedda846ced4b6f1c87b52468e7"
+      tags = "DEMO, EXE, FILE, G0022, MAL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "tconn <ip> <port> //set temp connect value, and disconnect." fullword ascii
+      $s2 = "E* ListenCheckSsl SslRecv fd(%d) Error ret:%d %d" fullword ascii
+      $s3 = "%s %s L* ListenCheckSsl fd(%d) SslV(-%d-)" fullword ascii
+      $s4 = "S:%d.%d-%d.%d V(%d.%d) Listen On %d Ok." fullword ascii
+      $s5 = "E* ListenCheckSsl fd(%d) SslAccept Err %d" fullword ascii
+      $s6 = "%s-%s N110 Ssl Connect Ok(%s:%d)." fullword ascii
+      $s7 = "%s-%s N110 Basic Connect Ok(%s:%d)." fullword ascii
+      $s8 = "tconn <ip> <port>" fullword ascii
+   condition: 
+      ( uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and 2 of them ) or ( 4 of them )
 }
 
 rule HKTL_RemoteCmd_Sep16_RID2E11 : DEMO EXE FILE HKTL T1569_002 {
@@ -33068,6 +33068,27 @@ rule Furtim_nativeDLL_RID2D4A : DEMO EXE FILE MAL {
       uint16 ( 0 ) == 0x5a4d and filesize < 900KB and $s1 or all of ( $op* )
 }
 
+rule SharpCat_RID2A27 : DEMO EXE FILE HKTL {
+   meta:
+      description = "Detects Hack Tool SharpCat_RID2A27 - file SharpCat_RID2A27.exe"
+      author = "Florian Roth"
+      reference = "https://github.com/Cn33liz/SharpCat_RID2A27"
+      date = "2016-06-10 03:56:41"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "96dcdf68b06c3609f486f9d560661f4fec9fe329e78bd300ad3e2a9f07e332e9"
+      tags = "DEMO, EXE, FILE, HKTL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "ShellZz" fullword ascii
+      $s2 = "C:\\Windows\\System32\\cmd.exe" fullword wide
+      $s3 = "currentDirectory" fullword ascii
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 20KB and all of them
+}
+
 rule Dubnium_Sample_1_RID2D36 : DEMO EXE FILE G0012 MAL {
    meta:
       description = "Detects sample mentioned in the Dubnium Report"
@@ -33201,27 +33222,6 @@ rule Dubnium_Sample_SSHOpenSSL_RID3077 : DEMO EXE FILE G0012 MAL {
       $s2 = "OpenSSL: FATAL" fullword ascii
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 9000KB and all of them
-}
-
-rule SharpCat_RID2A27 : DEMO EXE FILE HKTL {
-   meta:
-      description = "Detects Hack Tool SharpCat_RID2A27 - file SharpCat_RID2A27.exe"
-      author = "Florian Roth"
-      reference = "https://github.com/Cn33liz/SharpCat_RID2A27"
-      date = "2016-06-10 03:56:41"
-      score = 80
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "96dcdf68b06c3609f486f9d560661f4fec9fe329e78bd300ad3e2a9f07e332e9"
-      tags = "DEMO, EXE, FILE, HKTL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "ShellZz" fullword ascii
-      $s2 = "C:\\Windows\\System32\\cmd.exe" fullword wide
-      $s3 = "currentDirectory" fullword ascii
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 20KB and all of them
 }
 
 rule RUAG_APT_srsvc_RID2C14 : APT DEMO EXE FILE {
@@ -35873,6 +35873,30 @@ rule Winnti_malware_StreamPortal_Gen_RID3388 : CHINA DEMO EXE FILE G0044 GEN MAL
       uint16 ( 0 ) == 0x5a4d and filesize < 275KB and all of them
 }
 
+rule VSSown_VBS_RID2AAB : DEMO HKTL SCRIPT T1047 {
+   meta:
+      description = "Detects VSSown.vbs script - used to export shadow copy elements like NTDS to take away and crack elsewhere"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2015-10-01 07:36:41"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, HKTL, SCRIPT, T1047"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "Select * from Win32_Service Where Name ='VSS'" ascii
+      $s1 = "Select * From Win32_ShadowCopy" ascii
+      $s2 = "cmd /C mklink /D " ascii
+      $s3 = "ClientAccessible" ascii
+      $s4 = "WScript.Shell" ascii
+      $s5 = "Win32_Process" ascii
+   condition: 
+      all of them
+}
+
 rule Indetectables_RAT_RID2D8E : DEMO EXE FILE MAL {
    meta:
       description = "Detects Indetectables RAT based on strings found in research by Paul Rascagneres & Ronan Mouchoux"
@@ -35927,30 +35951,6 @@ rule BergSilva_Malware_RID2DB8 : DEMO EXE FILE MAL {
       $s5 = "https://dl.dropbox.com/u/105015858" wide
    condition: 
       uint16 ( 0 ) == 0x5a4d and ( 1 of ( $x* ) or 2 of ( $s* ) )
-}
-
-rule VSSown_VBS_RID2AAB : DEMO HKTL SCRIPT T1047 {
-   meta:
-      description = "Detects VSSown.vbs script - used to export shadow copy elements like NTDS to take away and crack elsewhere"
-      author = "Florian Roth"
-      reference = "-"
-      date = "2015-10-01 07:36:41"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, HKTL, SCRIPT, T1047"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "Select * from Win32_Service Where Name ='VSS'" ascii
-      $s1 = "Select * From Win32_ShadowCopy" ascii
-      $s2 = "cmd /C mklink /D " ascii
-      $s3 = "ClientAccessible" ascii
-      $s4 = "WScript.Shell" ascii
-      $s5 = "Win32_Process" ascii
-   condition: 
-      all of them
 }
 
 rule QuarksPwDump_Gen_RID2D5E : DEMO GEN HKTL {
@@ -37666,6 +37666,421 @@ rule CN_Honker_Arp_EMP_v1_0_RID2EC0 : CHINA DEMO EXE FILE HKTL {
       uint16 ( 0 ) == 0x5a4d and filesize < 400KB and all of them
 }
 
+rule CN_Honker_mafix_root_RID2EFF : CHINA DEMO SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file root"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 11:38:21"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "echo \"# vbox (voice box) getty\" >> /tmp/.init1" fullword ascii
+      $s1 = "cp /var/log/tcp.log $HOMEDIR/.owned/bex2/snifflog" fullword ascii
+      $s2 = "if [ -f /sbin/xlogin ]; then" fullword ascii
+   condition: 
+      filesize < 96KB and all of them
+}
+
+rule CN_Honker_passwd_dict_3389_RID3092 : CHINA DEMO SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file 3389.txt"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 12:45:31"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "654321" fullword ascii
+      $s1 = "admin123" fullword ascii
+      $s2 = "admin123456" fullword ascii
+      $s3 = "administrator" fullword ascii
+      $s4 = "passwd" fullword ascii
+      $s5 = "password" fullword ascii
+      $s7 = "12345678" fullword ascii
+   condition: 
+      filesize < 1KB and all of them
+}
+
+rule CN_Honker_Perl_serv_U_RID2F2D : CHINA DEMO SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file Perl-serv-U.pl"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 11:46:01"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "$dir = 'C:\\\\WINNT\\\\System32\\\\';" fullword ascii
+      $s2 = "$sock = IO::Socket::INET->new(\"127.0.0.1:$adminport\") || die \"fail\";" fullword ascii
+   condition: 
+      filesize < 8KB and all of them
+}
+
+rule CN_Honker_F4ck_Team_f4ck_RID2FBC : CHINA DEMO SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file f4ck.txt"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 12:09:51"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "PassWord:F4ckTeam!@#" fullword ascii
+      $s1 = "UserName:F4ck" fullword ascii
+      $s2 = "F4ck Team" fullword ascii
+   condition: 
+      filesize < 1KB and all of them
+}
+
+rule CN_Honker_sig_3389_3389_RID2E76 : CHINA DEMO SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file 3389.vbs"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 11:15:31"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "success = obj.run(\"cmd /c takeown /f %SystemRoot%\\system32\\sethc.exe&echo y| " ascii
+   condition: 
+      filesize < 10KB and all of them
+}
+
+rule CN_Honker_sig_3389_3389_2_RID2F07 : CHINA DEMO SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file 3389.bat"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 11:39:41"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "@del c:\\termsrvhack.dll" fullword ascii
+      $s2 = "@del c:\\3389.txt" fullword ascii
+   condition: 
+      filesize < 3KB and all of them
+}
+
+rule CN_Honker_Injection_Transit_jmCook_RID3470 : CHINA DEMO SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file jmCook.asp"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 15:30:31"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = ".Open \"POST\",PostUrl,False" fullword ascii
+      $s2 = "JmdcwName=request(\"jmdcw\")" fullword ascii
+   condition: 
+      filesize < 9KB and all of them
+}
+
+rule CN_Honker_portRecall_pr_RID3020 : CHINA DEMO SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file pr"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 12:26:31"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "Usage: Same as lcx.exe in win32 :)" fullword ascii
+      $s2 = "connect to client" fullword ascii
+      $s3 = "PR(Packet redirection) for linux " fullword ascii
+   condition: 
+      filesize < 70KB and all of them
+}
+
+rule CN_Honker_sig_3389_3389_3_RID2F08 : CHINA DEMO SCRIPT SUSP T1543_003 {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file 3389.bat"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 11:39:51"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, SCRIPT, SUSP, T1543_003"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "echo \"fDenyTSConnections\"=dword:00000000>>3389.reg " fullword ascii
+      $s2 = "echo \"PortNumber\"=dword:00000d3d>>3389.reg " fullword ascii
+      $s3 = "echo [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server]>>" ascii
+   condition: 
+      filesize < 2KB and all of them
+}
+
+rule CN_Honker_Alien_D_RID2D53 : CHINA DEMO SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file D.ASP"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 10:27:01"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "Paths_str=\"c:\\windows\\\"&chr(13)&chr(10)&\"c:\\Documents and Settings\\\"&chr" ascii
+      $s1 = "CONST_FSO=\"Script\"&\"ing.Fil\"&\"eSyst\"&\"emObject\"" fullword ascii
+      $s2 = "Response.Write \"<form id='form1' name='form1' method='post' action=''>\"" fullword ascii
+      $s3 = "set getAtt=FSO.GetFile(filepath)" fullword ascii
+      $s4 = "Response.Write \"<input name='NoCheckTemp' type='checkbox' id='NoCheckTemp' chec" ascii
+   condition: 
+      filesize < 30KB and 2 of them
+}
+
+rule CN_Honker_ChinaChopper_db_RID30A0 : CHINA DEMO SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file db.mdb"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 12:47:51"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "http://www.maicaidao.com/server.phpcaidao" fullword wide
+      $s2 = "<O>act=login</O>" fullword wide
+      $s3 = "<H>localhost</H>" fullword wide
+   condition: 
+      filesize < 340KB and 2 of them
+}
+
+rule CN_Honker_syconfig_RID2E29 : CHINA DEMO FILE SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file syconfig.dll"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 11:02:41"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, FILE, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s9 = "Hashq.CrackHost+FormUnit" fullword ascii
+   condition: 
+      uint16 ( 0 ) == 0x0100 and filesize < 18KB and all of them
+}
+
+rule CN_Honker_linux_bin_RID2E8F : CHINA DEMO LINUX SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file linux_bin"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 11:19:41"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, LINUX, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "client.sin_port = htons(atoi(argv[3]));" fullword ascii
+      $s2 = "printf(\"\\n\\n*********Waiting Client connect*****\\n\\n\");" fullword ascii
+   condition: 
+      filesize < 20KB and all of them
+}
+
+rule CN_Honker_Intersect2_Beta_RID3085 : CHINA DEMO FILE SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file Intersect2-Beta.py"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 12:43:21"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, FILE, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "os.system(\"ls -alhR /home > AllUsers.txt\")" fullword ascii
+      $s2 = "os.system('getent passwd > passwd.txt')" fullword ascii
+      $s3 = "os.system(\"rm -rf credentials/\")" fullword ascii
+   condition: 
+      uint16 ( 0 ) == 0x2123 and filesize < 50KB and 2 of them
+}
+
+rule CN_Honker_IIS_logcleaner1_0_readme_RID33B4 : CHINA DEMO SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file readme.txt"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 14:59:11"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s2 = "LogCleaner.exe <ip> [Logpath]" fullword ascii
+      $s3 = "http://l-y.vicp.net" fullword ascii
+   condition: 
+      filesize < 7KB and all of them
+}
+
+rule CN_Honker_Alien_command_RID2FEE : CHINA DEMO SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file command.txt"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 12:18:11"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "for /d %i in (E:\\freehost\\*) do @echo %i" fullword ascii
+      $s1 = "/c \"C:\\windows\\temp\\cscript\" C:\\windows\\temp\\iis.vbs" fullword ascii
+   condition: 
+      filesize < 8KB and all of them
+}
+
+rule CN_Honker_portRecall_bc_RID3003 : CHINA DEMO SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file bc.pl"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 12:21:41"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "print \"[*] Connected to remote host \\n\"; " fullword ascii
+      $s1 = "print \"Usage: $0 [Host] [Port] \\n\\n\";  " fullword ascii
+      $s5 = "print \"[*] Resolving HostName\\n\"; " fullword ascii
+   condition: 
+      filesize < 10KB and all of them
+}
+
+rule CN_Honker_Tuoku_script_MSSQL__RID3221 : CHINA DEMO SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file MSSQL_.asp"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 13:52:01"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "GetLoginCookie = Request.Cookies(Cookie_Login)" fullword ascii
+      $s2 = "if ShellPath=\"\" Then ShellPath = \"c:\\\\windows\\\\system32\\\\cmd.exe\"" fullword ascii
+      $s8 = "Set DD=CM.exec(ShellPath&\" /c \"&DefCmd)" fullword ascii
+   condition: 
+      filesize < 100KB and all of them
+}
+
+rule CN_Honker_nc_MOVE_RID2D2E : CHINA DEMO SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file MOVE.txt"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 10:20:51"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "Destination: http://202.113.20.235/gj/images/2.asp" fullword ascii
+      $s1 = "HOST: 202.113.20.235" fullword ascii
+      $s2 = "MOVE /gj/images/A.txt HTTP/1.1" fullword ascii
+   condition: 
+      filesize < 1KB and all of them
+}
+
+rule CN_Honker_mssqlpw_scan_RID2FE2 : CHINA DEMO SCRIPT SUSP {
+   meta:
+      description = "Script from disclosed CN Honker Pentest Toolset - file mssqlpw scan.txt"
+      author = "Florian Roth"
+      reference = "Disclosed CN Honker Pentest Toolset"
+      date = "2015-06-23 12:16:11"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "response.Write(\"I Get it ! Password is <font color=red>\" & str & \"</font><BR>" ascii
+      $s1 = "response.Write \"Done!<br>Process \" & tTime & \" s\"" fullword ascii
+   condition: 
+      filesize < 6KB and all of them
+}
+
 rule CN_Honker_Webshell_PHP_php5_RID3120 : CHINA DEMO FILE T1505_003 WEBSHELL {
    meta:
       description = "Webshell from CN Honker Pentest Toolset - file php5.txt"
@@ -39018,421 +39433,6 @@ rule CN_Honker_Webshell_ASP_asp1_RID3114 : CHINA DEMO T1505_003 WEBSHELL {
       $s3 = "Server.ScriptTimeout=" ascii
    condition: 
       filesize < 200KB and all of them
-}
-
-rule CN_Honker_mafix_root_RID2EFF : CHINA DEMO SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file root"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 11:38:21"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "echo \"# vbox (voice box) getty\" >> /tmp/.init1" fullword ascii
-      $s1 = "cp /var/log/tcp.log $HOMEDIR/.owned/bex2/snifflog" fullword ascii
-      $s2 = "if [ -f /sbin/xlogin ]; then" fullword ascii
-   condition: 
-      filesize < 96KB and all of them
-}
-
-rule CN_Honker_passwd_dict_3389_RID3092 : CHINA DEMO SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file 3389.txt"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 12:45:31"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "654321" fullword ascii
-      $s1 = "admin123" fullword ascii
-      $s2 = "admin123456" fullword ascii
-      $s3 = "administrator" fullword ascii
-      $s4 = "passwd" fullword ascii
-      $s5 = "password" fullword ascii
-      $s7 = "12345678" fullword ascii
-   condition: 
-      filesize < 1KB and all of them
-}
-
-rule CN_Honker_Perl_serv_U_RID2F2D : CHINA DEMO SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file Perl-serv-U.pl"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 11:46:01"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "$dir = 'C:\\\\WINNT\\\\System32\\\\';" fullword ascii
-      $s2 = "$sock = IO::Socket::INET->new(\"127.0.0.1:$adminport\") || die \"fail\";" fullword ascii
-   condition: 
-      filesize < 8KB and all of them
-}
-
-rule CN_Honker_F4ck_Team_f4ck_RID2FBC : CHINA DEMO SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file f4ck.txt"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 12:09:51"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "PassWord:F4ckTeam!@#" fullword ascii
-      $s1 = "UserName:F4ck" fullword ascii
-      $s2 = "F4ck Team" fullword ascii
-   condition: 
-      filesize < 1KB and all of them
-}
-
-rule CN_Honker_sig_3389_3389_RID2E76 : CHINA DEMO SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file 3389.vbs"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 11:15:31"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "success = obj.run(\"cmd /c takeown /f %SystemRoot%\\system32\\sethc.exe&echo y| " ascii
-   condition: 
-      filesize < 10KB and all of them
-}
-
-rule CN_Honker_sig_3389_3389_2_RID2F07 : CHINA DEMO SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file 3389.bat"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 11:39:41"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "@del c:\\termsrvhack.dll" fullword ascii
-      $s2 = "@del c:\\3389.txt" fullword ascii
-   condition: 
-      filesize < 3KB and all of them
-}
-
-rule CN_Honker_Injection_Transit_jmCook_RID3470 : CHINA DEMO SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file jmCook.asp"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 15:30:31"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = ".Open \"POST\",PostUrl,False" fullword ascii
-      $s2 = "JmdcwName=request(\"jmdcw\")" fullword ascii
-   condition: 
-      filesize < 9KB and all of them
-}
-
-rule CN_Honker_portRecall_pr_RID3020 : CHINA DEMO SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file pr"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 12:26:31"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "Usage: Same as lcx.exe in win32 :)" fullword ascii
-      $s2 = "connect to client" fullword ascii
-      $s3 = "PR(Packet redirection) for linux " fullword ascii
-   condition: 
-      filesize < 70KB and all of them
-}
-
-rule CN_Honker_sig_3389_3389_3_RID2F08 : CHINA DEMO SCRIPT SUSP T1543_003 {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file 3389.bat"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 11:39:51"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, SCRIPT, SUSP, T1543_003"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "echo \"fDenyTSConnections\"=dword:00000000>>3389.reg " fullword ascii
-      $s2 = "echo \"PortNumber\"=dword:00000d3d>>3389.reg " fullword ascii
-      $s3 = "echo [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server]>>" ascii
-   condition: 
-      filesize < 2KB and all of them
-}
-
-rule CN_Honker_Alien_D_RID2D53 : CHINA DEMO SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file D.ASP"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 10:27:01"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "Paths_str=\"c:\\windows\\\"&chr(13)&chr(10)&\"c:\\Documents and Settings\\\"&chr" ascii
-      $s1 = "CONST_FSO=\"Script\"&\"ing.Fil\"&\"eSyst\"&\"emObject\"" fullword ascii
-      $s2 = "Response.Write \"<form id='form1' name='form1' method='post' action=''>\"" fullword ascii
-      $s3 = "set getAtt=FSO.GetFile(filepath)" fullword ascii
-      $s4 = "Response.Write \"<input name='NoCheckTemp' type='checkbox' id='NoCheckTemp' chec" ascii
-   condition: 
-      filesize < 30KB and 2 of them
-}
-
-rule CN_Honker_ChinaChopper_db_RID30A0 : CHINA DEMO SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file db.mdb"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 12:47:51"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "http://www.maicaidao.com/server.phpcaidao" fullword wide
-      $s2 = "<O>act=login</O>" fullword wide
-      $s3 = "<H>localhost</H>" fullword wide
-   condition: 
-      filesize < 340KB and 2 of them
-}
-
-rule CN_Honker_syconfig_RID2E29 : CHINA DEMO FILE SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file syconfig.dll"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 11:02:41"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, FILE, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s9 = "Hashq.CrackHost+FormUnit" fullword ascii
-   condition: 
-      uint16 ( 0 ) == 0x0100 and filesize < 18KB and all of them
-}
-
-rule CN_Honker_linux_bin_RID2E8F : CHINA DEMO LINUX SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file linux_bin"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 11:19:41"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, LINUX, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "client.sin_port = htons(atoi(argv[3]));" fullword ascii
-      $s2 = "printf(\"\\n\\n*********Waiting Client connect*****\\n\\n\");" fullword ascii
-   condition: 
-      filesize < 20KB and all of them
-}
-
-rule CN_Honker_Intersect2_Beta_RID3085 : CHINA DEMO FILE SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file Intersect2-Beta.py"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 12:43:21"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, FILE, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "os.system(\"ls -alhR /home > AllUsers.txt\")" fullword ascii
-      $s2 = "os.system('getent passwd > passwd.txt')" fullword ascii
-      $s3 = "os.system(\"rm -rf credentials/\")" fullword ascii
-   condition: 
-      uint16 ( 0 ) == 0x2123 and filesize < 50KB and 2 of them
-}
-
-rule CN_Honker_IIS_logcleaner1_0_readme_RID33B4 : CHINA DEMO SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file readme.txt"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 14:59:11"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s2 = "LogCleaner.exe <ip> [Logpath]" fullword ascii
-      $s3 = "http://l-y.vicp.net" fullword ascii
-   condition: 
-      filesize < 7KB and all of them
-}
-
-rule CN_Honker_Alien_command_RID2FEE : CHINA DEMO SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file command.txt"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 12:18:11"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "for /d %i in (E:\\freehost\\*) do @echo %i" fullword ascii
-      $s1 = "/c \"C:\\windows\\temp\\cscript\" C:\\windows\\temp\\iis.vbs" fullword ascii
-   condition: 
-      filesize < 8KB and all of them
-}
-
-rule CN_Honker_portRecall_bc_RID3003 : CHINA DEMO SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file bc.pl"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 12:21:41"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "print \"[*] Connected to remote host \\n\"; " fullword ascii
-      $s1 = "print \"Usage: $0 [Host] [Port] \\n\\n\";  " fullword ascii
-      $s5 = "print \"[*] Resolving HostName\\n\"; " fullword ascii
-   condition: 
-      filesize < 10KB and all of them
-}
-
-rule CN_Honker_Tuoku_script_MSSQL__RID3221 : CHINA DEMO SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file MSSQL_.asp"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 13:52:01"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "GetLoginCookie = Request.Cookies(Cookie_Login)" fullword ascii
-      $s2 = "if ShellPath=\"\" Then ShellPath = \"c:\\\\windows\\\\system32\\\\cmd.exe\"" fullword ascii
-      $s8 = "Set DD=CM.exec(ShellPath&\" /c \"&DefCmd)" fullword ascii
-   condition: 
-      filesize < 100KB and all of them
-}
-
-rule CN_Honker_nc_MOVE_RID2D2E : CHINA DEMO SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file MOVE.txt"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 10:20:51"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "Destination: http://202.113.20.235/gj/images/2.asp" fullword ascii
-      $s1 = "HOST: 202.113.20.235" fullword ascii
-      $s2 = "MOVE /gj/images/A.txt HTTP/1.1" fullword ascii
-   condition: 
-      filesize < 1KB and all of them
-}
-
-rule CN_Honker_mssqlpw_scan_RID2FE2 : CHINA DEMO SCRIPT SUSP {
-   meta:
-      description = "Script from disclosed CN Honker Pentest Toolset - file mssqlpw scan.txt"
-      author = "Florian Roth"
-      reference = "Disclosed CN Honker Pentest Toolset"
-      date = "2015-06-23 12:16:11"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CHINA, DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "response.Write(\"I Get it ! Password is <font color=red>\" & str & \"</font><BR>" ascii
-      $s1 = "response.Write \"Done!<br>Process \" & tTime & \" s\"" fullword ascii
-   condition: 
-      filesize < 6KB and all of them
 }
 
 rule CN_Honker_MAC_IPMAC_RID2D61 : CHINA DEMO EXE FILE HKTL {
@@ -47047,38 +47047,6 @@ rule APT17_Sample_FXSST_DLL_RID2E51 : APT DEMO EXE FILE G0025 {
       uint16 ( 0 ) == 0x5a4d and filesize < 800KB and ( all of ( $x* ) or all of ( $y* ) ) and all of ( $s* )
 }
 
-rule MAL_PoisonIvy_Generic_3_RID2FA8 : DEMO EXE FILE GEN MAL {
-   meta:
-      description = "PoisonIvy RAT Generic Rule"
-      author = "Florian Roth"
-      reference = "-"
-      date = "2015-05-14 12:06:31"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, EXE, FILE, GEN, MAL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $k1 = "Tiger324{" fullword ascii
-      $s2 = "WININET.dll" fullword ascii
-      $s3 = "mscoree.dll" fullword wide
-      $s4 = "WS2_32.dll" fullword
-      $s5 = "Explorer.exe" fullword wide
-      $s6 = "USER32.DLL" 
-      $s7 = "CONOUT$" 
-      $s8 = "login.asp" 
-      $h1 = "HTTP/1.0" 
-      $h2 = "POST" 
-      $h3 = "login.asp" 
-      $h4 = "check.asp" 
-      $h5 = "result.asp" 
-      $h6 = "upload.asp" 
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 500KB and ( $k1 or all of ( $s* ) or all of ( $h* ) )
-}
-
 rule custom_ssh_backdoor_server_RID31F3 : DEMO HKTL SCRIPT T1021_004 T1059_006 {
    meta:
       description = "Custome SSH backdoor based on python and paramiko - file server.py"
@@ -47158,6 +47126,38 @@ rule UACElevator_RID2B2C : DEMO EXE FILE HKTL T1548_002 {
       $s9 = "Address: 0x" fullword ascii
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 172KB and ( $x1 or 8 of ( $s* ) )
+}
+
+rule MAL_PoisonIvy_Generic_3_RID2FA8 : DEMO EXE FILE GEN MAL {
+   meta:
+      description = "PoisonIvy RAT Generic Rule"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2015-05-14 12:06:31"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, EXE, FILE, GEN, MAL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $k1 = "Tiger324{" fullword ascii
+      $s2 = "WININET.dll" fullword ascii
+      $s3 = "mscoree.dll" fullword wide
+      $s4 = "WS2_32.dll" fullword
+      $s5 = "Explorer.exe" fullword wide
+      $s6 = "USER32.DLL" 
+      $s7 = "CONOUT$" 
+      $s8 = "login.asp" 
+      $h1 = "HTTP/1.0" 
+      $h2 = "POST" 
+      $h3 = "login.asp" 
+      $h4 = "check.asp" 
+      $h5 = "result.asp" 
+      $h6 = "upload.asp" 
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 500KB and ( $k1 or all of ( $s* ) or all of ( $h* ) )
 }
 
 rule CVE_2015_1701_Taihou_RID2D07 : CVE_2015_1701 DEMO EXE EXPLOIT FILE T1068 {
@@ -50172,6 +50172,78 @@ rule HKTL_BypassUac_EXE_RID2D6F : DEMO HKTL SUSP {
       all of them
 }
 
+rule Jc_WinEggDrop_Shell_RID2E4A : DEMO SCRIPT SUSP {
+   meta:
+      description = "Disclosed hacktool set (old stuff) - file Jc.WinEggDrop Shell.txt"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2014-11-23 11:08:11"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "Sniffer.dll" fullword ascii
+      $s4 = ":Execute net.exe user Administrator pass" fullword ascii
+      $s5 = "Fport.exe or mport.exe " fullword ascii
+      $s6 = ":Password Sniffering Is Running |Not Running " fullword ascii
+      $s9 = ": The Terminal Service Port Has Been Set To NewPort" fullword ascii
+      $s15 = ": Del www.exe                   " fullword ascii
+      $s20 = ":Dir *.exe                    " fullword ascii
+   condition: 
+      2 of them
+}
+
+rule EditKeyLogReadMe_RID2D10 : DEMO SUSP {
+   meta:
+      description = "Disclosed hacktool set (old stuff) - file EditKeyLogReadMe_RID2D10.txt"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2014-11-23 10:15:51"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "editKeyLog.exe KeyLog.exe," fullword ascii
+      $s1 = "WinEggDrop.DLL" fullword ascii
+      $s2 = "nc.exe" fullword ascii
+      $s3 = "KeyLog.exe" fullword ascii
+      $s4 = "EditKeyLog.exe" fullword ascii
+      $s5 = "wineggdrop" fullword ascii
+   condition: 
+      3 of them
+}
+
+rule aspbackdoor_ipclear_RID2ED9 : DEMO SCRIPT SUSP {
+   meta:
+      description = "Disclosed hacktool set (old stuff) - file ipclear.vbs"
+      author = "Florian Roth"
+      reference = "-"
+      date = "2014-11-23 11:32:01"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, SCRIPT, SUSP"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s0 = "Set ServiceObj = GetObject(\"WinNT://\" & objNet.ComputerName & \"/w3svc\")" fullword ascii
+      $s1 = "wscript.Echo \"USAGE:KillLog.vbs LogFileName YourIP.\"" fullword ascii
+      $s2 = "Set txtStreamOut = fso.OpenTextFile(destfile, ForWriting, True)" fullword ascii
+      $s3 = "Set objNet = WScript.CreateObject( \"WScript.Network\" )" fullword ascii
+      $s4 = "Set fso = CreateObject(\"Scripting.FileSystemObject\")" fullword ascii
+   condition: 
+      all of them
+}
+
 rule aspbackdoor_EDIT_RID2D1F : DEMO T1505_003 WEBSHELL {
    meta:
       description = "Disclosed hacktool set (old stuff) - file EDIT.ASP"
@@ -50406,78 +50478,6 @@ rule Webshell_aspbackdoor_asp1_RID3103 : DEMO T1505_003 WEBSHELL {
       $s7 = "<%set Conn = Server.CreateObject(\"ADODB.Connection\") " fullword ascii
       $s10 = "<%dim ktdh,scph,scts,jhqtsj,yhxdsj,yxj,rwbh " fullword ascii
       $s15 = "sql=\"select * from scjh\" " fullword ascii
-   condition: 
-      all of them
-}
-
-rule Jc_WinEggDrop_Shell_RID2E4A : DEMO SCRIPT SUSP {
-   meta:
-      description = "Disclosed hacktool set (old stuff) - file Jc.WinEggDrop Shell.txt"
-      author = "Florian Roth"
-      reference = "-"
-      date = "2014-11-23 11:08:11"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "Sniffer.dll" fullword ascii
-      $s4 = ":Execute net.exe user Administrator pass" fullword ascii
-      $s5 = "Fport.exe or mport.exe " fullword ascii
-      $s6 = ":Password Sniffering Is Running |Not Running " fullword ascii
-      $s9 = ": The Terminal Service Port Has Been Set To NewPort" fullword ascii
-      $s15 = ": Del www.exe                   " fullword ascii
-      $s20 = ":Dir *.exe                    " fullword ascii
-   condition: 
-      2 of them
-}
-
-rule EditKeyLogReadMe_RID2D10 : DEMO SUSP {
-   meta:
-      description = "Disclosed hacktool set (old stuff) - file EditKeyLogReadMe_RID2D10.txt"
-      author = "Florian Roth"
-      reference = "-"
-      date = "2014-11-23 10:15:51"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "editKeyLog.exe KeyLog.exe," fullword ascii
-      $s1 = "WinEggDrop.DLL" fullword ascii
-      $s2 = "nc.exe" fullword ascii
-      $s3 = "KeyLog.exe" fullword ascii
-      $s4 = "EditKeyLog.exe" fullword ascii
-      $s5 = "wineggdrop" fullword ascii
-   condition: 
-      3 of them
-}
-
-rule aspbackdoor_ipclear_RID2ED9 : DEMO SCRIPT SUSP {
-   meta:
-      description = "Disclosed hacktool set (old stuff) - file ipclear.vbs"
-      author = "Florian Roth"
-      reference = "-"
-      date = "2014-11-23 11:32:01"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, SCRIPT, SUSP"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s0 = "Set ServiceObj = GetObject(\"WinNT://\" & objNet.ComputerName & \"/w3svc\")" fullword ascii
-      $s1 = "wscript.Echo \"USAGE:KillLog.vbs LogFileName YourIP.\"" fullword ascii
-      $s2 = "Set txtStreamOut = fso.OpenTextFile(destfile, ForWriting, True)" fullword ascii
-      $s3 = "Set objNet = WScript.CreateObject( \"WScript.Network\" )" fullword ascii
-      $s4 = "Set fso = CreateObject(\"Scripting.FileSystemObject\")" fullword ascii
    condition: 
       all of them
 }
