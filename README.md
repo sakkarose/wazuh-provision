@@ -6,7 +6,7 @@ This forked "wazuh-docker" repository is aimed at provisioning with personal con
 
 Single-node deployment only at the moment.
 
-Current version: v4.12.0
+Current version: v4.13.1
 
 ## Task
 
