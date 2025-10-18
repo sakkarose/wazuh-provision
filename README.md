@@ -71,31 +71,78 @@ Current version: v4.13.1
 
 ## How-to
 
-### Single-node Wazuh Cluster
+### Setup
 
 This deployment is defined in the `docker-compose.yml` file with a Wazuh manager, indexer and dashboard container. It can be deployed by following these steps: 
 
-1. Increase max_map_count on your host (Linux). This command must be run with root permissions:
+1) Check the current max_map_count and increase if it's below 262,144:
 ```
-$ sysctl -w vm.max_map_count=262144
-```
-2) Run the certificate creation script:
-```
-$ docker compose -f generate-indexer-certs.yml run --rm generator
-```
-3) Start the environment with docker-compose:
-
-- In the foreground:
-```
-$ docker compose up
-```
-- In the background:
-```
-$ docker compose up -d
+sysctl vm.max_map_count
+echo "vm.max_map_count=262144" | tee -a /etc/sysctl.conf
+systemctl reboot
+sysctl vm.max_map_count
 ```
 
-The environment takes about 1 minute to get up (depending on your Docker host) for the first time since Wazuh Indexer must be started for the first time and the indexes and index patterns must be generated.
+2) Initial setup:
+```
+git clone https://github.com/sakkarose/wazuh-docker.git
+cd wazuh-docker/single-node/
+docker compose -f generate-indexer-certs.yml run --rm generator
+```
 
+3) Credential preparation:
+```
+# Generate hash for each password (API, indexer, dashboard)
+docker run --rm -ti wazuh/wazuh-indexer:4.13.0 bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/hash.sh
+
+# Update hashed password for admin user (indexer) and kibanaserver (dashboard)
+cd wazuh-docker/single-node
+nano config/wazuh_indexer/internal_users.yml
+
+# Update hashed password for API
+nano config/wazuh_dashboard/wazuh.yml
+
+# Update plain password
+cp env.example .env
+nano .env
+
+# Start the environment with docker compose
+docker compose up -d
+```
+
+4) Certificate setup:
+```
+docker exec -it single-node-wazuh.indexer-1 bash
+export INSTALLATION_DIR=/usr/share/wazuh-indexer
+CACERT=$INSTALLATION_DIR/certs/root-ca.pem
+KEY=$INSTALLATION_DIR/certs/admin-key.pem
+CERT=$INSTALLATION_DIR/certs/admin.pem
+export JAVA_HOME=/usr/share/wazuh-indexer/jdk
+
+# Wait for 5 minutes 
+bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/securityadmin.sh -cd /usr/share/wazuh-indexer/opensearch-security/ -nhnv -cacert  $CACERT -cert $CERT -key $KEY -p 9200 -icl
+```
+
+### Update
+
+```
+cd wazuh-docker/single-node
+docker compose down
+cd ../
+git fetch
+
+# In case there are files that don't exist on main branch
+git stash push -u -m "Temporary stash of local environment changes"
+
+# Only do this once if you updated your credential
+git update-index --assume-unchanged ./single-node/config/wazuh_indexer/internal_users.yml
+git update-index --assume-unchanged ./single-node/config/wazuh_dashboard/wazuh.yml
+
+git pull
+cd single-node
+docker compose pull
+docker compose up -d
+```
 
 ### Wazuh Agents
 
