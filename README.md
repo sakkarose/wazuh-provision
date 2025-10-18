@@ -53,6 +53,7 @@ Current version: v4.13.1
 
 ### To-do
 
+- SOAR provisioning (Shuffle)
 - Separate this single doc file into many
 - YARA on Linux agents
 - Provisioning for AIO setup

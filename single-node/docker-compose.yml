@@ -50,6 +50,7 @@ services:
       - ./config/wazuh_endpoint/macos/agent_config:/wazuh-config-mount/etc/shared/macos
       - ./config/wazuh_endpoint/suricata:/wazuh-config-mount/etc/shared/suricata
       - ./config/wazuh_cluster/local_internal_options.conf:/wazuh-config-mount/etc/local_internal_options.conf
+      - ./config/wazuh_endpoint/shared/rootkit_files.txt:/wazuh-config-mount/etc/shared/rootkit_files.txt
 
   wazuh.indexer:
     image: wazuh/wazuh-indexer:4.13.1
