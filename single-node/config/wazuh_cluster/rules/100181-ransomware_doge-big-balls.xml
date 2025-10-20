@@ -11,7 +11,7 @@
 
   <rule id="100182" level="8" timeframe="300" frequency="2">  
     <if_sid>61603</if_sid>  
-    <list field="win.eventdata.commandLine" lookup="match_key">etc/lists/doge-big-balls-ransomware</list>  
+    <list field="win.eventdata.commandLine" lookup="match_key">etc/lists/ransomware_doge-big-balls</list>  
     <description>The command $(win.eventdata.commandLine) is executed for reconnaissance activities. Suspicious activity detected.</description>  
     <options>no_full_log</options>  
   </rule>
