@@ -4,7 +4,7 @@ $yaraPath = "$ossecPath\active-response\bin\yara"
 $scaPath = "C:\Program Files (x86)\sca_policies"
 
 $sysmonUrl = "https://download.sysinternals.com/files/Sysmon.zip"
-$yaraUrl = "https://github.com/VirusTotal/yara/releases/download/v4.5.2/yara-v4.5.2-2326-win64.zip"
+$yaraUrl = "https://github.com/VirusTotal/yara/releases/download/v4.5.4/yara-master-v4.5.4-win64.zip"
 $yararuleURL = "https://github.com/sakkarose/wazuh-docker/blob/main/single-node/config/wazuh_endpoint/windows/yara/yara_rules.yar"
 
 function Enable-PSLogging {
@@ -64,10 +64,10 @@ Start-Process -FilePath ".\Sysmon64.exe" -ArgumentList @("-accepteula", "-i", ".
 Set-Location -Path $PSScriptRoot
 
 # Download the latest YARA binary
-Invoke-WebRequest -Uri $yaraUrl -OutFile "$PSScriptRoot\yara-v4.5.2-2326-win64.zip"
+Invoke-WebRequest -Uri $yaraUrl -OutFile "$PSScriptRoot\yara-master-v4.5.4-win64.zip"
 
 # Extract the YARA binary
-Expand-Archive -Path "$PSScriptRoot\yara-v4.5.2-2326-win64.zip" -DestinationPath $PSScriptRoot
+Expand-Archive -Path "$PSScriptRoot\yara-master-v4.5.4-win64.zip" -DestinationPath $PSScriptRoot
 
 # Create the YARA directory
 if (-Not (Test-Path -Path $yaraPath)) {
