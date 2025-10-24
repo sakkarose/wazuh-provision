@@ -291,7 +291,7 @@ zeekctl deploy
 
 1. Install [Tetragon](https://tetragon.io/docs/installation/package/).
 
-2. Copy tracing policies from `./linux/tetragon/*.yaml` to `/etc/tetragon/tetragon.tp.d/` and restart the service. You can get more example policies at https://github.com/cilium/tetragon/tree/main/examples.
+2. Copy tracing policies from `./linux/tetragon/*.yaml` to `/etc/tetragon/tetragon.tp.d/` and restart the service. You can get more example policies at [there](https://github.com/cilium/tetragon/tree/main/examples).
 
 ##### MariaDB
 
