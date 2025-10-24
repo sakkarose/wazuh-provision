@@ -43,6 +43,8 @@ Current version: v4.13.1
     - MariaDB
     - Docker
     - Rsyslog (Disabled by default)
+    - Zeek
+    - Tetragon
 - Suricata agent group
 - MacOS agent group
 - Github Action:
@@ -241,6 +243,55 @@ chown wazuh:wazuh /var/ossec/etc/custom-sca-files/*
 ```
 systemctl restart wazuh-agent
 ```
+
+##### Zeek
+
+1. Install [Zeek](https://docs.zeek.org/en/master/install.html#) based on your agent operating system.
+
+2. Set the packet capture interface in `/opt/zeek/etc/node.cfg`
+
+```
+[zeek]​
+type=standalone​
+host=localhost​
+interface=eth0
+```
+
+3. Set the network subnet in `/opt/zeek/etc/networks.cfg`
+
+```
+# List of local networks in CIDR notation, optionally followed by a descriptive
+# tag. Private address space defined by Zeek's Site::private_address_space set
+# (see scripts/base/utils/site.zeek) is automatically considered local. You can
+# disable this auto-inclusion by setting zeekctl's PrivateAddressSpaceIsLocal
+# option to 0.
+#
+# Examples of valid prefixes:
+#
+# 1.2.3.0/24        Admin network
+# 2607:f140::/32    Student network
+<NETWORK_SUBNET>
+```
+
+4. Add the following line to enable JSON log generation in `/opt/zeek/share/zeek/site/local.zeek`
+
+```
+@load policy/tuning/json-logs.zeek
+```
+
+5. Do a configuration check and start Zeek
+
+```
+zeekctl check
+zeekctl deploy
+
+```
+
+##### Tetragon
+
+1. Install [Tetragon](https://tetragon.io/docs/installation/package/).
+
+2. Copy tracing policies from `./linux/tetragon/*.yaml` to `/etc/tetragon/tetragon.tp.d/` and restart the service. You can get more example policies at https://github.com/cilium/tetragon/tree/main/examples.
 
 ##### MariaDB
 
