@@ -45,9 +45,7 @@ services:
       - ./config/wazuh_cluster/rules:/wazuh-config-mount/etc/rules
       - ./config/wazuh_cluster/decoders:/wazuh-config-mount/etc/decoders
       - ./config/wazuh_cluster/lists:/wazuh-config-mount/etc/lists
-      #- ./config/wazuh_endpoint/windows/agent_config/agent.conf:/wazuh-config-mount/etc/shared/windows/agent.conf
-      #- ./config/wazuh_endpoint/windows/agent_config/agent.conf:/var/ossec/etc/shared/windows/agent.conf
-      - ./config/wazuh_endpoint/windows/agent_config:/var/ossec/etc/shared/windows
+      - ./config/wazuh_endpoint/windows/agent_config/agent.conf:/wazuh-config-mount/etc/shared/windows/agent.conf
       - ./config/wazuh_endpoint/linux/agent_config/agent.conf:/wazuh-config-mount/etc/shared/linux/agent.conf
       - ./config/wazuh_endpoint/macos/agent_config/agent.conf:/wazuh-config-mount/etc/shared/macos/agent.conf
       - ./config/wazuh_endpoint/suricata/agent.conf:/wazuh-config-mount/etc/shared/suricata/agent.conf
