@@ -246,9 +246,11 @@ systemctl restart wazuh-agent
 
 ##### Suricata
 
-1. Install Suricata
+1. Setup Wazuh agent and add to `suricata & linux` groups.
 
-2. Configure suricata in `/etc/suricata/suricata.yaml`
+2. Install [Suricata](https://docs.suricata.io/en/latest/install.html).
+
+3. Configure suricata in `/etc/suricata/suricata.yaml`.
 
 ```
 HOME_NET: "<INTERNAL_NET>"
@@ -266,9 +268,9 @@ af-packet:
   - interface: eth0
 ```
 
-3. Copy the `./suricata/local.rules` file to `/etc/suricata/rules/`.
+4. Copy the `./suricata/local.rules` file to `/etc/suricata/rules/`.
 
-4. Start suricata
+5. Start suricata
 
 ```
 systemctl enable suricata
