@@ -367,6 +367,16 @@ systemctl start rsyslog
 systemctl enable rsyslog
 ```
 
+#### Shuffle
+
+1. Setup [Shuffle](https://github.com/Shuffle/Shuffle/blob/main/.github/install-guide.md).
+
+2. Setup [hybrid](https://shuffler.io/docs/organizations#setup) (optional).
+
+3. Search for comment `<!-- Shuffle Integration` in `wazuh_manager.conf`.
+
+4. Fill the `<hook_url>`. At the end of the API block, move the `-->` to the end of the comment on top.
+
 #### MacOS
 
 1. Install agent on the `macos` endpoint group.
@@ -387,9 +397,7 @@ systemctl enable rsyslog
 
 1. Search for comment `<!-- VirusTotal Integration` in `wazuh_manager.conf`.
 
-2. Fill in the `<api_key>`.
-
-3. At the end of the API block, move the `-->` to the end of the comment on top.
+2. Fill in the `<api_key>`. At the end of the API block, move the `-->` to the end of the comment on top.
 
 ## Credits
 
