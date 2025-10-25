@@ -244,6 +244,37 @@ chown wazuh:wazuh /var/ossec/etc/custom-sca-files/*
 systemctl restart wazuh-agent
 ```
 
+##### Suricata
+
+1. Install Suricata
+
+2. Configure suricata in `/etc/suricata/suricata.yaml`
+
+```
+HOME_NET: "<INTERNAL_NET>"
+EXTERNAL_NET: "any"
+
+default-rule-path: /etc/suricata/rules
+rule-files:
+  - "*.rules"
+# Global stats configuration
+stats:
+enabled: yes
+
+# Linux high speed capture support
+af-packet:
+  - interface: eth0
+```
+
+3. Copy the `./suricata/local.rules` file to `/etc/suricata/rules/`.
+
+4. Start suricata
+
+```
+systemctl enable suricata
+systemctl restart suricata
+```
+
 ##### Zeek
 
 1. Install [Zeek](https://docs.zeek.org/en/master/install.html#) based on your agent operating system.

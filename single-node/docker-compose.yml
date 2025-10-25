@@ -45,10 +45,10 @@ services:
       - ./config/wazuh_cluster/rules:/wazuh-config-mount/etc/rules
       - ./config/wazuh_cluster/decoders:/wazuh-config-mount/etc/decoders
       - ./config/wazuh_cluster/lists:/wazuh-config-mount/etc/lists
-      - ./config/wazuh_endpoint/windows/agent_config:/wazuh-config-mount/etc/shared/windows
-      - ./config/wazuh_endpoint/linux/agent_config:/wazuh-config-mount/etc/shared/linux
-      - ./config/wazuh_endpoint/macos/agent_config:/wazuh-config-mount/etc/shared/macos
-      - ./config/wazuh_endpoint/suricata:/wazuh-config-mount/etc/shared/suricata
+      - ./config/wazuh_endpoint/windows/agent_config/agent.conf:/wazuh-config-mount/etc/shared/windows/agent.conf
+      - ./config/wazuh_endpoint/linux/agent_config/agent.conf:/wazuh-config-mount/etc/shared/linux/agent.conf
+      - ./config/wazuh_endpoint/macos/agent_config/agent.conf:/wazuh-config-mount/etc/shared/macos/agent.conf
+      - ./config/wazuh_endpoint/suricata/agent.conf:/wazuh-config-mount/etc/shared/suricata/agent.conf
       - ./config/wazuh_cluster/local_internal_options.conf:/wazuh-config-mount/etc/local_internal_options.conf
       - ./config/wazuh_endpoint/shared/rootkit_files.txt:/wazuh-config-mount/etc/shared/rootkit_files.txt
 
