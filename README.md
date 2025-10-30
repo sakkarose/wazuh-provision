@@ -55,7 +55,8 @@ Current version: v4.14.0
 
 ### To-do
 
-- SOAR provisioning (Shuffle)
+- SOAR provisioning (Tracecat) with example workflow, ...
+- OPNsense provisioning with plugin configuration
 - Separate this single doc file into many
 - YARA on Linux agents
 - Provisioning for AIO setup
