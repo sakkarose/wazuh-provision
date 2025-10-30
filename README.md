@@ -61,13 +61,11 @@ Current version: v4.14.0
 - YARA on Linux agents
 - Provisioning for AIO setup
 - API setup script
-- Recommended SOAR workflows
 - Dashboard provisioning
 - Malware hash sample CDB lists update automation
 - Velociraptor integration with SIGMA rules
 - VALHALLA SIGMA managed rule update through Github Action
 - Linux agent provision script
-- Notification channel (Not really a good to-do since SOAR pretty does this job better than a SIEM)
 
 ## Note
 
