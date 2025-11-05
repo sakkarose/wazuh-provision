@@ -1,8 +1,8 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-11-03 21:15
+    Retrieved: 2025-11-05 21:15
     Generated for User: demo
-    Number of Rules: 2706
+    Number of Rules: 2705
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
@@ -6323,29 +6323,6 @@ rule LOG_F5_BIGIP_Exploitation_Artefacts_CVE_2021_22986_Mar21_1_RID3A2F : CVE_20
       $x2 = "[com.f5.rest.app.RestServerServlet] X-F5-Auth-Token doesn't have value, so skipping" ascii
    condition: 
       1 of them
-}
-
-rule WEBSHELL_ASPX_Mar21_1_RID2D74 : DEMO FILE T1505_003 WEBSHELL {
-   meta:
-      description = "Detects ASPX Web Shells"
-      author = "Florian Roth"
-      reference = "Internal Research"
-      date = "2021-03-12 10:32:31"
-      score = 95
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "10b6e82125a2ddf3cc31a238e0d0c71a64f902e0d77171766713affede03174d"
-      hash2 = "170bee832df176aac0a3c6c7d5aa3fee413b4572030a24c994a97e70f6648ffc"
-      hash3 = "31c4d1fc81c052e269866deff324dffb215e7d481a47a2b6357a572a3e685d90"
-      tags = "DEMO, FILE, T1505_003, WEBSHELL"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = ".StartInfo.FileName = 'cmd.exe';" ascii fullword
-      $s2 = "<xsl:template match=\"\"/root\"\">" ascii fullword
-      $s3 = "<?xml version=\"\"1.0\"\"?><root>test</root>\";" ascii fullword
-   condition: 
-      uint16 ( 0 ) == 0x253c and filesize < 6KB and all of them
 }
 
 rule MAL_CRIME_RANSOM_DearCry_Mar21_1_RID3164 : CRIME DEMO EXE MAL RANSOM {
