@@ -405,9 +405,9 @@ systemctl enable rsyslog
 
 ##### Microsoft Office 365 Audit
 
-1. Register an Azure app with the following guide from Wazuh. Note down the app (client) ID, directory (tenant) ID and client secret.
+1. Register an Azure app with [the following guide from Wazuh](https://documentation.wazuh.com/current/cloud-security/office365/monitoring-office365-activity.html#setting-up-office-365-for-monitoring). Note down the app (client) ID, directory (tenant) ID and client secret.
 
-2. Fill the noted ID to the `<office365>` block in `./single-node/config/wazuh_cluster/wazuh_manager.conf`
+2. Fill the noted ID to the `<office365>` block in `./single-node/config/wazuh_cluster/wazuh_manager.conf`.
 
 3. Change the `<enabled>` block to yes.
 
