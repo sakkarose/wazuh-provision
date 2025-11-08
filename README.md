@@ -30,6 +30,7 @@ Current version: v4.14.0
     - Environment file for credentials
 - API:
     - VirusTotal (Disabled by default)
+    - Microsoft Office 365 Audit
 - Windows agent group:
     - Sysmon
     - YARA
@@ -397,6 +398,10 @@ systemctl enable rsyslog
 1. Search for comment `<!-- VirusTotal Integration` in `wazuh_manager.conf`.
 
 2. Fill in the `<api_key>`. At the end of the API block, move the `-->` to the end of the comment on top.
+
+##### Microsoft Office 365 Audit
+
+
 
 ## Credits
 
