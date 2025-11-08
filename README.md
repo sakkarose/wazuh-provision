@@ -140,6 +140,10 @@ git stash push -u -m "Temporary stash of local environment changes"
 # Only do this once if you updated your credential
 git update-index --assume-unchanged ./single-node/config/wazuh_indexer/internal_users.yml
 git update-index --assume-unchanged ./single-node/config/wazuh_dashboard/wazuh.yml
+git update-index --assume-unchanged ./single-node/config/wazuh_cluster/wazuh_manager.conf
+
+# Manually diff check the following file since they are unchanged on your drive (probably don't need to check credential files)
+git show origin/main:./single-node/config/wazuh_cluster/wazuh_manager.conf | diff - ./single-node/config/wazuh_cluster/wazuh_manager.conf
 
 git pull
 cd single-node
@@ -401,7 +405,11 @@ systemctl enable rsyslog
 
 ##### Microsoft Office 365 Audit
 
+1. Register an Azure app with the following guide from Wazuh. Note down the app (client) ID, directory (tenant) ID and client secret.
 
+2. Fill the noted ID to the `<office365>` block in `./single-node/config/wazuh_cluster/wazuh_manager.conf`
+
+3. Change the `<enabled>` block to yes.
 
 ## Credits
 
