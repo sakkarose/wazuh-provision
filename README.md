@@ -113,19 +113,6 @@ nano .env
 docker compose up -d
 ```
 
-4) Certificate setup:
-```
-docker exec -it single-node-wazuh.indexer-1 bash
-export INSTALLATION_DIR=/usr/share/wazuh-indexer
-CACERT=$INSTALLATION_DIR/certs/root-ca.pem
-KEY=$INSTALLATION_DIR/certs/admin-key.pem
-CERT=$INSTALLATION_DIR/certs/admin.pem
-export JAVA_HOME=/usr/share/wazuh-indexer/jdk
-
-# Wait for 5 minutes 
-bash /usr/share/wazuh-indexer/plugins/opensearch-security/tools/securityadmin.sh -cd /usr/share/wazuh-indexer/opensearch-security/ -nhnv -cacert  $CACERT -cert $CERT -key $KEY -p 9200 -icl
-```
-
 ### Update
 
 ```
