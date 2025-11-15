@@ -1,6 +1,7 @@
 <group name="zeek,">
   <rule id="100298" level="0">
     <decoded_as>json</decoded_as>
+    <field name="uid">\.+</field>
     <description>Zeek alerts</description>
   </rule>
 
