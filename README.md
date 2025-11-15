@@ -56,6 +56,7 @@ Current version: v4.14.0
 
 ### To-do
 
+- Zeek and Office 365 json decoder conflict
 - SOAR provisioning (Tracecat) with example workflow, ...
 - OPNsense provisioning with plugin configuration
 - Separate this single doc file into many
