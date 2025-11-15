@@ -207,7 +207,7 @@
 
 <decoder name="zeek_decoder">
   <parent>json</parent>
-  <regex>"software_type":".*?","host":".*?","name":"(\w+)"</regex>
+  <regex>"name":"(\w+)"</regex>
   <order>software_name</order>
 </decoder>
 
