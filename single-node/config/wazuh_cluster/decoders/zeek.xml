@@ -1,4 +1,3 @@
-<!-- DNS Query -->
 <decoder name="zeek_decoder">
   <parent>json</parent>
   <regex>"ts":\d+</regex>
@@ -19,13 +18,13 @@
 
 <decoder name="zeek_decoder">
   <parent>json</parent>
-  <regex>"id.orig_p":(\d+)</regex>​
+  <regex>"id.orig_p":(\d+)</regex>
   <order>srcport</order>
 </decoder>
 
 <decoder name="zeek_decoder">
   <parent>json</parent>
-  <regex>"id.resp_h":"(\d+.\d+.\d+.\d+)"</regex>​
+  <regex>"id.resp_h":"(\d+.\d+.\d+.\d+)"</regex>
   <order>dstip</order>
 </decoder>
 
@@ -37,13 +36,13 @@
 
 <decoder name="zeek_decoder">
   <parent>json</parent>
-  <regex>"proto":"(\w+)"</regex>​
+  <regex>"proto":"(\w+)"</regex>
   <order>protocol</order>
 </decoder>
 
 <decoder name="zeek_decoder">
   <parent>json</parent>
-  <regex>"trans_id":(\d+)</regex>​
+  <regex>"trans_id":(\d+)</regex>
   <order>DNS_transaction_id</order>
 </decoder>
 
@@ -55,13 +54,13 @@
 
 <decoder name="zeek_decoder">
   <parent>json</parent>
-  <regex>"rcode_name":"(\w+)"</regex>​
+  <regex>"rcode_name":"(\w+)"</regex>
   <order>dns_response_code</order>
 </decoder>
 
 <decoder name="zeek_decoder">
   <parent>json</parent>
-  <regex>"AA":(\w+)</regex>​
+  <regex>"AA":(\w+)</regex>
   <order>authoritative_answer</order>
 </decoder>
 
@@ -91,13 +90,13 @@
 
 <decoder name="zeek_decoder">
   <parent>json</parent>
-  <regex>"answers":(["\.+"])</regex>​
+  <regex>"answers":(["\.+"])</regex>
   <order>resolved_by</order>
 </decoder>
 
 <decoder name="zeek_decoder">
   <parent>json</parent>
-  <regex>"TTLs":([\d+])</regex>​
+  <regex>"TTLs":([\d+])</regex>
   <order>time_to_live</order>
 </decoder>
 
@@ -107,7 +106,6 @@
   <order>query_rejected</order>
 </decoder>
 
-<!-- Additional DNS metadata -->
 <decoder name="zeek_decoder">
   <parent>json</parent>
   <regex>"service":"(\w+)"</regex>
@@ -122,13 +120,13 @@
 
 <decoder name="zeek_decoder">
   <parent>json</parent>
-  <regex>"orig_bytes":(\d+)</regex>​
+  <regex>"orig_bytes":(\d+)</regex>
   <order>byte_send_by_originator</order>
 </decoder>
 
 <decoder name="zeek_decoder">
   <parent>json</parent>
-  <regex>"resp_bytes":(\d+)</regex>​
+  <regex>"resp_bytes":(\d+)</regex>
   <order>byte_sent_by_responder</order>
 </decoder>
 
@@ -176,7 +174,7 @@
 
 <decoder name="zeek_decoder">
   <parent>json</parent>
-  <regex>"resp_pkts":(\d+)</regex>​
+  <regex>"resp_pkts":(\d+)</regex>
   <order>packet_sent_by_responder</order>
 </decoder>
 
@@ -192,7 +190,6 @@
   <order>protocol_number_ip_header</order>
 </decoder>
 
-<!-- Software related -->
 <decoder name="zeek_decoder">
   <parent>json</parent>
   <regex>"host":"(\d+.\d+.\d+.\d+)"</regex>
@@ -207,7 +204,7 @@
 
 <decoder name="zeek_decoder">
   <parent>json</parent>
-  <regex>"name":"(\w+)"</regex>
+  <regex>"software_type":".*?","host":".*?","name":"(\w+)"</regex>
   <order>software_name</order>
 </decoder>
 
@@ -223,7 +220,6 @@
   <order>host_port</order>
 </decoder>
 
-<!-- SSL/TLS Connection Decoders -->
 <decoder name="zeek_decoder">
   <parent>json</parent>
   <regex>"version":"(\.+)"</regex>
