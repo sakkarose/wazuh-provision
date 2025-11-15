@@ -205,10 +205,9 @@
   <order>software_type</order>
 </decoder>
 
-<!-- Re-write regex to avoid conflict with Office 365 decoder -->
 <decoder name="zeek_decoder">
   <parent>json</parent>
-  <regex>"software_type":".*?","name":"(\w+)"</regex>
+  <regex>"name":"(\w+)"</regex>
   <order>software_name</order>
 </decoder>
 
