@@ -151,6 +151,51 @@ docker compose up -d
 
 4. Run the `./single-node/config/wazuh_endpoint/windows/agent_provisioning.ps1` script.
 
+##### Windows Counter (Disabled by default)
+
+1. Update `/etc/filebeat/wazuh-template.json` with this part at the `data` section, under `properties`.
+
+```
+      "data": {
+        "properties": {
+          "winCounter": {
+             "properties": {
+               "CookedValue": {
+                  "type": "long"
+                },
+                "RawValue": {
+                  "type": "long"
+                }
+              }
+          },
+          "audit": {
+            "properties": {
+              "acct": {
+                "type": "keyword"
+```
+
+Navigate to **Indexer management > Dev Tools**, run `GET _cat/indices/wazuh-alerts-*`.
+
+2. Run the following command
+
+```
+sudo filebeat setup -index-management
+
+# Expected output
+ILM policy and write alias loading not enabled. 
+
+Index setup finished.
+```
+
+3. In `./single-node/config/wazuh_endpoint/windows/agent.conf`, set <disabled> to no for the `hyper-v_metrics` command.
+
+4. Navigate to **Indexer management > Dev Tools**, run `GET _cat/indices/wazuh-alerts-*`.
+
+5. From the output, check for the date of the latest indices, then run `POST <RECENT_ALERTS_INDEX>/_doc` (.e.g: `POST wazuh-alerts-4.x-2025.04.28/_doc`).
+
+6. Navigate to **Dashboard Management > Dashboard Management > Index patterns > wazuh-alerts-\***, click refresh button in the top-right corner.
+
+
 ##### Hyper-V (Disabled by default)
 
 1. Update `/etc/filebeat/wazuh-template.json` with this part at the `data` section, under `properties`.
@@ -174,21 +219,21 @@ docker compose up -d
             "properties": {
 ```
 
-Navigate to **Indexer management > Dev Tools**, run `GET _cat/indices/wazuh-alerts-*`.
+2. Navigate to **Indexer management > Dev Tools**, run `GET _cat/indices/wazuh-alerts-*`.
 
-2. From the output, check for the date of the latest indices, then run `POST <RECENT_ALERTS_INDEX>/_doc` (.e.g: `POST wazuh-alerts-4.x-2025.04.28/_doc`).
+3. From the output, check for the date of the latest indices, then run `POST <RECENT_ALERTS_INDEX>/_doc` (.e.g: `POST wazuh-alerts-4.x-2025.04.28/_doc`).
 
-3. Navigate to **Dashboard Management > Dashboard Management > Index patterns > wazuh-alerts-\***, click refresh button in the top-right corner.
+4. Navigate to **Dashboard Management > Dashboard Management > Index patterns > wazuh-alerts-\***, click refresh button in the top-right corner.
 
-4. In `./single-node/config/wazuh_endpoint/windows/agent.conf`, set <disabled> to no for the `hyper-v_metrics` command.
+5. In `./single-node/config/wazuh_endpoint/windows/agent.conf`, set <disabled> to no for the `hyper-v_metrics` command.
 
-5. Check if Wazuh can receive Hyper-V metrics from your Windows agent(s) first, then navigate to **Dashboard Management > Dashboards Management > Saved objects**.
+6. Check if Wazuh can receive Hyper-V metrics from your Windows agent(s) first, then navigate to **Dashboard Management > Dashboards Management > Saved objects**.
 
-6. Click **Import**, tick `Request action on conflict` and select the file `hyper-v.ndjson` in `./config/wazuh_dashboard/custom`.
+7. Click **Import**, tick `Request action on conflict` and select the file `hyper-v.ndjson` in `./config/wazuh_dashboard/custom`.
 
-7. Click **Skip** on the **Overwrite index-pattern?** pop-up then click **Done**.
+8. Click **Skip** on the **Overwrite index-pattern?** pop-up then click **Done**.
 
-8. Navigate to **Dashboard Management > Dashboards Management > Index patterns**, select the `wazuh-alerts-*` index then click the refresh button in the top-right corner.
+9. Navigate to **Dashboard Management > Dashboards Management > Index patterns**, select the `wazuh-alerts-*` index then click the refresh button in the top-right corner.
 
 #### Linux
 
