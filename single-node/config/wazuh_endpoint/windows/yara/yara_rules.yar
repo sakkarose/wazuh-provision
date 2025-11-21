@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-11-20 21:15
+    Retrieved: 2025-11-21 21:15
     Generated for User: demo
     Number of Rules: 2705
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "pe"
 import "math"
+import "pe"
 
 rule EXPL_WSUS_Exploitation_Indicators_Oct25_RID35B5 : CVE_2025_59287 DEMO EXPLOIT T1016 T1033 T1087_002 {
    meta:
@@ -61620,4 +61620,33 @@ rule Apos_malware {
    condition:
       uint16(0) == 0x5a4d and filesize < 8000KB and
       1 of ($x*) and 4 of them
+}
+
+/* Funklocker ransomware */
+rule funklocker_ransomware {
+   meta:
+      description = "Detects Funklocker ransomware or similar variants"
+      author = "Oluwaseyi Soneye"
+      reference = "Strings output analysis"
+      date = "2025-11-10"
+
+   strings:
+      // Ransomware commands
+      $x1 = "Set-MpPreference -DisableRealtimeMonitoring" nocase
+      $x2 = "wevtutil sl Security /e:false" nocase
+      $x3 = "wevtutil sl Application /e:false" nocase
+      $x4 = "Set-ExecutionPolicy Bypass -Scope Process" nocase
+      $x5 = "Set-MpPreference -DisableRealtimeMonitoring $truewevtutil sl Security /e:falsewevtutil sl Application /e:falseSet-ExecutionPolicy" nocase
+      $x6 = "vssadmindelete shadows/all/quiet" nocase
+      $x7 = "taskkill/F/IM" nocase
+      // Ransomware artifacts
+      $x8 = "RansomwarePassword123" nocase
+      $x9 = "device has been successfully infiltrated by funksec ransomware!" nocase
+      $x10 = "funksec" nocase
+   condition:
+      uint16(0) == 0x5a4d and
+        (
+                (5 of ($x1, $x2, $x3, $x4, $x5, $x6, $x7)) or
+                (2 of ($x8, $x9, $x10))
+        )
 }
