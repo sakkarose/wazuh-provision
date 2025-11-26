@@ -1,14 +1,98 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-11-20 21:15
+    Retrieved: 2025-11-25 21:16
     Generated for User: demo
-    Number of Rules: 2705
+    Number of Rules: 2709
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "pe"
 import "math"
+import "pe"
+
+rule MAL_JS_NPM_SupplyChain_Attack_Nov25_RID33B0 : DEMO MAL T1059_007 {
+   meta:
+      description = "Detects malicious JavaScript worm bun_environment.js"
+      author = "Marius Benthin"
+      reference = "https://www.aikido.dev/blog/shai-hulud-strikes-again-hitting-zapier-ensdomains"
+      date = "2025-11-24 14:58:31"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, MAL, T1059_007"
+      minimum_yara = "1.7"
+      
+   strings:
+      $sa1 = "npm publish" 
+      $sb1 = "iamcredentials" 
+      $sb2 = "secretmanager" 
+      $sb3 = "secretsmanager" 
+      $sb4 = "-fips." 
+   condition: 
+      filesize < 20MB and $sa1 and 2 of ( $sb* )
+}
+
+rule SUSP_JS_NPM_Sha1_Hulud_Nov25_RID30A8 : DEMO SUSP T1059_007 {
+   meta:
+      description = "Detects suspicious indicators for Sha1 Hulud worm"
+      author = "Marius Benthin"
+      reference = "https://www.aikido.dev/blog/shai-hulud-strikes-again-hitting-zapier-ensdomains"
+      date = "2025-11-24 12:49:11"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, SUSP, T1059_007"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "Sha1-Hulud:" 
+      $x2 = "SHA1HULUD" 
+   condition: 
+      filesize < 20MB and 1 of them
+}
+
+rule SUSP_JS_NPM_SetupScript_Nov25_RID3180 : DEMO SUSP T1059_007 {
+   meta:
+      description = "Detects suspicious JavaScript which exits silently and checks operating system"
+      author = "Marius Benthin"
+      reference = "https://www.aikido.dev/blog/shai-hulud-strikes-again-hitting-zapier-ensdomains"
+      date = "2025-11-24 13:25:11"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, SUSP, T1059_007"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "require('child_process')" 
+      $s2 = "process.exit(0)" 
+      $s3 = "process.platform ===" 
+      $s4 = "().catch((e" 
+   condition: 
+      filesize < 100KB and all of them
+}
+
+rule MAL_NPM_SupplyChain_Attack_PreInstallScript_Nov25_RID3986 : DEMO MAL SCRIPT {
+   meta:
+      description = "Detects known malicious preinstall script in package.json"
+      author = "Marius Benthin"
+      reference = "https://www.aikido.dev/blog/shai-hulud-strikes-again-hitting-zapier-ensdomains"
+      date = "2025-11-24 19:07:31"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, MAL, SCRIPT"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "\"preinstall\": \"node setup_bun.js\"" 
+   condition: 
+      filesize < 10KB and all of them
+}
 
 rule EXPL_WSUS_Exploitation_Indicators_Oct25_RID35B5 : CVE_2025_59287 DEMO EXPLOIT T1016 T1033 T1087_002 {
    meta:
@@ -61620,4 +61704,33 @@ rule Apos_malware {
    condition:
       uint16(0) == 0x5a4d and filesize < 8000KB and
       1 of ($x*) and 4 of them
+}
+
+/* Funklocker ransomware */
+rule funklocker_ransomware {
+   meta:
+      description = "Detects Funklocker ransomware or similar variants"
+      author = "Oluwaseyi Soneye"
+      reference = "Strings output analysis"
+      date = "2025-11-10"
+
+   strings:
+      // Ransomware commands
+      $x1 = "Set-MpPreference -DisableRealtimeMonitoring" nocase
+      $x2 = "wevtutil sl Security /e:false" nocase
+      $x3 = "wevtutil sl Application /e:false" nocase
+      $x4 = "Set-ExecutionPolicy Bypass -Scope Process" nocase
+      $x5 = "Set-MpPreference -DisableRealtimeMonitoring $truewevtutil sl Security /e:falsewevtutil sl Application /e:falseSet-ExecutionPolicy" nocase
+      $x6 = "vssadmindelete shadows/all/quiet" nocase
+      $x7 = "taskkill/F/IM" nocase
+      // Ransomware artifacts
+      $x8 = "RansomwarePassword123" nocase
+      $x9 = "device has been successfully infiltrated by funksec ransomware!" nocase
+      $x10 = "funksec" nocase
+   condition:
+      uint16(0) == 0x5a4d and
+        (
+                (5 of ($x1, $x2, $x3, $x4, $x5, $x6, $x7)) or
+                (2 of ($x8, $x9, $x10))
+        )
 }
