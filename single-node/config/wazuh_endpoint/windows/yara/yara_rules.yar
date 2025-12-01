@@ -1,6 +1,6 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-11-30 21:14
+    Retrieved: 2025-12-01 21:14
     Generated for User: demo
     Number of Rules: 2709
     
@@ -13712,7 +13712,7 @@ rule TSCookie_RAT_RID2B58 : DEMO EXE FILE MAL {
       uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and ( ( pe.exports ( "DoWork" ) and pe.exports ( "PrintF" ) ) or 1 of them )
 }
 
-rule CrimsonRAT_Mar18_1_RID2D4B : DEMO EXE FILE MAL T1082 T1113 {
+rule CrimsonRAT_Mar18_1_RID2D4B : DEMO EXE FILE MAL T1082 T1113 crimsonrat {
    meta:
       description = "Detects CrimsonRAT malware"
       author = "Florian Roth"
@@ -13724,7 +13724,7 @@ rule CrimsonRAT_Mar18_1_RID2D4B : DEMO EXE FILE MAL T1082 T1113 {
       hash1 = "acf2e8013b6fafcf436d5a05049896504ffa2e982bca05155d19981d1931c611"
       hash2 = "7ca6e5ef1d346ec35993c910128a3526b098a07445131784a9358bf5679e3975"
       hash3 = "be4264973de9886caedae1cb707586588d0da85ac7a2ad277db4258033ea12a8"
-      tags = "DEMO, EXE, FILE, MAL, T1082, T1113"
+      tags = "DEMO, EXE, FILE, MAL, T1082, T1113, crimsonrat"
       minimum_yara = "1.7"
       
    strings:
@@ -33370,7 +33370,7 @@ rule RUAG_APT_Malware_Gen1_RID2E56 : APT DEMO EXE FILE {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 2000KB and ( 2 of ( $x* ) or 8 of ( $s* ) ) ) or ( 12 of them )
 }
 
-rule PlugX_J16_Gen_RID2B8A : DEMO EXE FILE GEN MAL {
+rule PlugX_J16_Gen_RID2B8A : DEMO EXE FILE GEN MAL plugx {
    meta:
       description = "Detects PlugX Malware samples from June 2016"
       author = "Florian Roth"
@@ -33382,7 +33382,7 @@ rule PlugX_J16_Gen_RID2B8A : DEMO EXE FILE GEN MAL {
       hash1 = "00119101c6acdd8f4c5db4a9ac4772957aaf35958daf4a2ba6ad2b3719ab4f34"
       hash2 = "005afae5aa5beec765e74b461177dce8342067c29985ef9c683af7e2d92eeef0"
       hash3 = "0109d7a8d76993ca8af111ff6fcf96021c9250cd59717151fbd4bb3792bedc12"
-      tags = "DEMO, EXE, FILE, GEN, MAL"
+      tags = "DEMO, EXE, FILE, GEN, MAL, plugx"
       minimum_yara = "1.7"
       
    strings:
@@ -33408,7 +33408,7 @@ rule PlugX_J16_Gen_RID2B8A : DEMO EXE FILE GEN MAL {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 600KB and ( 1 of ( $x* ) or 4 of ( $s* ) ) ) or ( 8 of them )
 }
 
-rule PlugX_J16_Gen2_RID2BBC : DEMO EXE FILE MAL {
+rule PlugX_J16_Gen2_RID2BBC : DEMO EXE FILE MAL plugx {
    meta:
       description = "Detects PlugX Malware Samples from June 2016"
       author = "Florian Roth"
@@ -33419,7 +33419,7 @@ rule PlugX_J16_Gen2_RID2BBC : DEMO EXE FILE MAL {
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "5dff1e086c5191a0bd7ac13466b7a81a87e99e51968df2f32570eb031c537ab4"
       hash2 = "710326804b78ccd2782abc16354e389f0e36ba9474ebdced17337a13082ac12f"
-      tags = "DEMO, EXE, FILE, MAL"
+      tags = "DEMO, EXE, FILE, MAL, plugx"
       minimum_yara = "1.7"
       
    strings:
@@ -34596,7 +34596,7 @@ rule Powerkatz_DLL_Generic_RID2F2F : DEMO EXE GEN HKTL S0002 SCRIPT T1003 T1059_
       ( uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and 1 of them ) or 2 of them
 }
 
-rule Codoso_PlugX_3_RID2C59 : DEMO EXE FILE G0073 MAL {
+rule Codoso_PlugX_3_RID2C59 : DEMO EXE FILE G0073 MAL plugx {
    meta:
       description = "Detects Codoso APT PlugX Malware"
       author = "Florian Roth"
@@ -34606,7 +34606,7 @@ rule Codoso_PlugX_3_RID2C59 : DEMO EXE FILE G0073 MAL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "DEMO, EXE, FILE, G0073, MAL"
+      tags = "DEMO, EXE, FILE, G0073, MAL, plugx"
       minimum_yara = "1.7"
       
    strings:
@@ -34618,7 +34618,7 @@ rule Codoso_PlugX_3_RID2C59 : DEMO EXE FILE G0073 MAL {
       uint16 ( 0 ) == 0x5a4d and filesize < 1200KB and all of them
 }
 
-rule Codoso_PlugX_2_RID2C58 : DEMO EXE G0073 MAL {
+rule Codoso_PlugX_2_RID2C58 : DEMO EXE G0073 MAL plugx {
    meta:
       description = "Detects Codoso APT PlugX Malware"
       author = "Florian Roth"
@@ -34628,7 +34628,7 @@ rule Codoso_PlugX_2_RID2C58 : DEMO EXE G0073 MAL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "DEMO, EXE, G0073, MAL"
+      tags = "DEMO, EXE, G0073, MAL, plugx"
       minimum_yara = "1.7"
       
    strings:
@@ -34878,7 +34878,7 @@ rule Codoso_PGV_PVID_4_RID2CE9 : DEMO EXE FILE G0073 MAL T1543_003 {
       uint16 ( 0 ) == 0x5a4d and filesize < 900KB and 2 of ( $x* ) and 2 of ( $s* )
 }
 
-rule Codoso_PlugX_1_RID2C57 : DEMO EXE FILE G0073 MAL {
+rule Codoso_PlugX_1_RID2C57 : DEMO EXE FILE G0073 MAL plugx {
    meta:
       description = "Detects Codoso APT PlugX Malware"
       author = "Florian Roth"
@@ -34890,7 +34890,7 @@ rule Codoso_PlugX_1_RID2C57 : DEMO EXE FILE G0073 MAL {
       hash1 = "0b8cbc9b4761ab35acce2aa12ba2c0a283afd596b565705514fd802c8b1e144b"
       hash2 = "448711bd3f689ceebb736d25253233ac244d48cb766834b8f974c2e9d4b462e8"
       hash3 = "fd22547497ce52049083092429eeff0599d0b11fe61186e91c91e1f76b518fe2"
-      tags = "DEMO, EXE, FILE, G0073, MAL"
+      tags = "DEMO, EXE, FILE, G0073, MAL, plugx"
       minimum_yara = "1.7"
       
    strings:
@@ -36651,7 +36651,7 @@ rule HttpBrowser_RAT_Gen_RID2E54 : APT DEMO EXE FILE G0027 GEN T1574_001 {
       uint16 ( 0 ) == 0x5a4d and filesize < 45KB and filesize > 20KB and all of them
 }
 
-rule PlugX_NvSmartMax_Gen_RID2ECA : APT DEMO EXE FILE G0027 GEN {
+rule PlugX_NvSmartMax_Gen_RID2ECA : APT DEMO EXE FILE G0027 GEN plugx {
    meta:
       description = "Threat Group 3390 APT Sample - PlugX NvSmartMax Generic"
       author = "Florian Roth"
@@ -36663,7 +36663,7 @@ rule PlugX_NvSmartMax_Gen_RID2ECA : APT DEMO EXE FILE G0027 GEN {
       hash1 = "718fc72942b9b706488575c0296017971170463f6f40fa19b08fc84b79bf0cef"
       hash2 = "1c0379481d17fc80b3330f148f1b87ff613cfd2a6601d97920a0bcd808c718d0"
       hash3 = "555952aa5bcca4fa5ad5a7269fece99b1a04816d104ecd8aefabaa1435f65fa5"
-      tags = "APT, DEMO, EXE, FILE, G0027, GEN"
+      tags = "APT, DEMO, EXE, FILE, G0027, GEN, plugx"
       minimum_yara = "1.7"
       
    strings:
