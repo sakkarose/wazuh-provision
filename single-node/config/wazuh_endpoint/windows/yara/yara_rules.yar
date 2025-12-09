@@ -1,14 +1,161 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-12-08 21:15
+    Retrieved: 2025-12-09 21:15
     Generated for User: demo
-    Number of Rules: 2709
+    Number of Rules: 2716
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
 import "math"
 import "pe"
+
+rule EXPL_SUSP_JS_POC_RSC_Detector_Payloads_Dec25_RID367F : CVE_2025_55182 DEMO EXPLOIT SUSP T1059_007 {
+   meta:
+      description = "Detects RCE indicators related to the proof-of-concept code for the React Server Remote Code Execution Vulnerability (CVE-2025-55182) as used in the RSC Detector browser extension but could be used in other JavaScript based PoC code as well"
+      author = "Florian Roth"
+      reference = "https://github.com/mrknow001/RSC_Detector"
+      date = "2025-12-06 16:58:21"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CVE_2025_55182, DEMO, EXPLOIT, SUSP, T1059_007"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "process.mainModule.require('child_process').execSync(" 
+      $s2 = ").toString('base64');" 
+      $f1 = "echo vulnerability_test" 
+   condition: 
+      all of ( $s* ) and not 1 of ( $f* )
+}
+
+rule EXPL_React_Server_CVE_2025_55182_POC_Dec25_RID344A : CVE_2025_55182 DEMO EXPLOIT T1505_003 {
+   meta:
+      description = "Detects in-memory webshell indicators related to the proof-of-concept code for the React Server Remote Code Execution Vulnerability (CVE-2025-55182)"
+      author = "Florian Roth"
+      reference = "https://x.com/pyn3rd/status/1996840827897954542/photo/1"
+      date = "2025-12-05 15:24:11"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CVE_2025_55182, DEMO, EXPLOIT, T1505_003"
+      minimum_yara = "1.7"
+      
+   strings:
+      $xs1 = "{const cmd=p.query.cmd;if(!cmd)(s.writeHead(400);" 
+      $s1 = ";if(p.pathname==" 
+      $s2 = ".writeHead(400);" 
+      $s3 = ".writeHead(200,{'Content-Type':" 
+      $s4 = ".execSync(" 
+      $s5 = ",stdio:'pipe'})" 
+   condition: 
+      1 of ( $x* ) or all of ( $s* )
+}
+
+rule SUSP_WEBSHELL_LOG_Signatures_Dec25_RID32A8 : DEMO FILE LOG SUSP T1033 T1505_003 WEBSHELL {
+   meta:
+      description = "Detects indicators related simple webshells that use the same exec/cmd pattern"
+      author = "Florian Roth"
+      reference = "https://x.com/pyn3rd/status/1996840827897954542/photo/1"
+      date = "2025-12-05 14:14:31"
+      score = 60
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, FILE, LOG, SUSP, T1033, T1505_003, WEBSHELL"
+      minimum_yara = "1.7"
+      
+   strings:
+      $xa1 = "/exec?cmd=ls" 
+      $xa2 = "/exec?cmd=whoami" 
+      $xa3 = "/exec?cmd=id" 
+      $xa4 = "/exec?cmd=uname%20-a" 
+   condition: 
+      1 of them and not uint16 ( 0 ) == 0x3c3f
+}
+
+rule EXPL_RCE_React_Server_CVE_2025_55182_POC_Dec25_RID3583 : CVE_2025_55182 DEMO EXPLOIT FILE {
+   meta:
+      description = "Detects RCE indicators related to the proof-of-concept code for the React Server Remote Code Execution Vulnerability (CVE-2025-55182)"
+      author = "Florian Roth"
+      reference = "https://www.youtube.com/watch?v=MmdwakT-Ve8"
+      date = "2025-12-05 16:16:21"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CVE_2025_55182, DEMO, EXPLOIT, FILE"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "process.mainModule.require('child_process').execSync(" 
+      $s2 = "$1:constructor:constructor" 
+   condition: 
+      all of them and not uint16 ( 0 ) == 0x3c3f
+}
+
+rule EXPL_RCE_React_Server_Next_JS_CVE_2025_66478_Tracebacks_Dec25_RID3B98 : CVE_2025_55182 CVE_2025_66478 DEMO EXPLOIT T1059_007 {
+   meta:
+      description = "Detects traceback indicators caused by the exploitation of the React Server Remote Code Execution Vulnerability (CVE-2025-55182) in Next.js applications (CVE-2025-66478). This can also be caused by vulnerability scanning."
+      author = "Florian Roth"
+      reference = "Internal Research"
+      date = "2025-12-05 20:35:51"
+      score = 55
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CVE_2025_55182, CVE_2025_66478, DEMO, EXPLOIT, T1059_007"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "Unexpected end of form" 
+      $s2 = "/next-server/app-page.runtime.dev.js:2:457" 
+      $s3 = "/app-page.runtime.dev.js:2:472" 
+   condition: 
+      all of them
+}
+
+rule EXPL_RCE_React_Server_Next_JS_CVE_2025_66478_Errors_Dec25_RID3A22 : CVE_2025_55182 CVE_2025_66478 DEMO EXPLOIT T1059_007 {
+   meta:
+      description = "Detects error messages caused by the exploitation of the React Server Remote Code Execution Vulnerability (CVE-2025-55182) in Next.js applications (CVE-2025-66478). This can also be caused by vulnerability scanning."
+      author = "Florian Roth"
+      reference = "https://github.com/Malayke/Next.js-RSC-RCE-Scanner-CVE-2025-66478"
+      date = "2025-12-05 19:33:31"
+      score = 65
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CVE_2025_55182, CVE_2025_66478, DEMO, EXPLOIT, T1059_007"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "[Error: NEXT_REDIRECT]" 
+      $s2 = "digest: 'uid=0(root) gid=0(root)" 
+   condition: 
+      all of them
+}
+
+rule EXPL_SUSP_JS_POC_Dec25_RID2E03 : CVE_2025_55182 DEMO EXPLOIT SUSP T1059_007 {
+   meta:
+      description = "Detects RCE indicators related to the proof-of-concept code for the React Server Remote Code Execution Vulnerability (CVE-2025-55182) but could be used in other JavaScript based PoC code as well"
+      author = "Florian Roth"
+      reference = "https://github.com/msanft/CVE-2025-55182/blob/main/poc.py"
+      date = "2025-12-05 10:56:21"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2025-12-06"
+      tags = "CVE_2025_55182, DEMO, EXPLOIT, SUSP, T1059_007"
+      minimum_yara = "2.2.0"
+      
+   strings:
+      $xr1 = /process\.mainModule\.require\(["']child_process["']\).{5,40}\(["'](whoami|powershell|\/bin\/sh|\/bin\/bash|wget|curl|cat \/etc\/passwd|uname|id["'])/ 
+   condition: 
+      1 of them
+}
 
 rule MAL_JS_NPM_SupplyChain_Attack_Nov25_RID33B0 : DEMO MAL T1059_007 {
    meta:
@@ -171,6 +318,29 @@ rule MAL_JS_NPM_SupplyChain_Compromise_Sep25_RID356B : DEMO FILE MAL T1059_007 {
       $sb2 = " | base64 -w0)" 
    condition: 
       filesize < 20MB and ( 1 of ( $x* ) or ( 1 of ( $sa* ) and 1 of ( $sb* ) ) ) and not uint8 ( 0 ) == 0x7b
+}
+
+rule MAL_JS_NPM_SupplyChain_Attack_Sep25_RID33A5 : DEMO MAL OBFUS T1059_007 {
+   meta:
+      description = "Detects obfuscated JavaScript in NPM packages used in supply chain crypto stealer attacks in September 2025"
+      author = "Florian Roth"
+      reference = "https://www.linkedin.com/feed/update/urn:li:activity:7370889385992437760/"
+      date = "2025-09-09 14:56:41"
+      score = 85
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2025-11-29"
+      hash1 = "16f6c756bc8ce5ef5d9aa1ded0f811ec0c9cee3d8f85cc151b8ca1df7b8a4337"
+      tags = "DEMO, MAL, OBFUS, T1059_007"
+      minimum_yara = "1.7"
+      
+   strings:
+      $x1 = "const _0x112fa8=_0x180f;(function(_0x13c8b9" ascii
+      $fp1 = "<html" 
+      $fp2 = "<xml " 
+      $fp3 = "<?xml" 
+   condition: 
+      filesize < 200KB and 1 of ( $x* ) and not 1 of ( $fp* )
 }
 
 rule SUSP_LNX_Sindoor_ELF_Obfuscation_Aug25_RID34DF : DEMO FILE LINUX OBFUS SUSP {
@@ -379,27 +549,6 @@ rule EXPL_LOG_CommVault_CVE_2025_57791_Indicator_Shell_Drop_Aug25_RID3B7D : CVE_
       $xr1 = /Results written to \[[C-Z]:\\Program Files\\Commvault\\ContentStore\\Apache\\webapps\\ROOT\\[^\\]{1,20}\.jsp\]/ 
    condition: 
       $xr1
-}
-
-rule EXPL_RAR_Archive_With_Path_Traversal_Aug25_RID368C : CVE_2025_6218 CVE_2025_8088 DEMO EXPLOIT FILE {
-   meta:
-      description = "Detects RAR archives abused for path traversal like CVE-2025-8088 and CVE-2025-6218"
-      author = "Arnim Rupp (Nextron Systems)"
-      reference = "https://www.welivesecurity.com/en/eset-research/update-winrar-tools-now-romcom-and-others-exploiting-zero-day-vulnerability/#the-discovery-of-cve-2025-8088"
-      date = "2025-08-11 17:00:31"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "CVE_2025_6218, CVE_2025_8088, DEMO, EXPLOIT, FILE"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "..\\\\..\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu" 
-      $s2 = "..//../AppData/Roaming/Microsoft/Windows/Start Menu" 
-      $s3 = "/.. /.. /AppData/Roaming/Microsoft/Windows/Start Menu/" 
-   condition: 
-      1 of ( $s* ) and ( uint16 ( 0 ) == 0x4B50 or int32 ( 0 ) == 0x21726152 )
 }
 
 rule SUSP_Scheduled_Task_Java_JAR_Aug25_RID333E : DEMO FILE SUSP T1053_005 {
