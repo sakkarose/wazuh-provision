@@ -1,8 +1,8 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-12-11 21:19
+    Retrieved: 2025-12-12 21:16
     Generated for User: demo
-    Number of Rules: 2716
+    Number of Rules: 2715
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
@@ -136,25 +136,6 @@ rule EXPL_RCE_React_Server_Next_JS_CVE_2025_66478_Errors_Dec25_RID3A22 : CVE_202
       $s2 = "digest: 'uid=0(root) gid=0(root)" 
    condition: 
       all of them
-}
-
-rule EXPL_SUSP_JS_POC_Dec25_RID2E03 : CVE_2025_55182 DEMO EXPLOIT SUSP T1059_007 {
-   meta:
-      description = "Detects RCE indicators related to the proof-of-concept code for the React Server Remote Code Execution Vulnerability (CVE-2025-55182) but could be used in other JavaScript based PoC code as well"
-      author = "Florian Roth"
-      reference = "https://github.com/msanft/CVE-2025-55182/blob/main/poc.py"
-      date = "2025-12-05 10:56:21"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2025-12-06"
-      tags = "CVE_2025_55182, DEMO, EXPLOIT, SUSP, T1059_007"
-      minimum_yara = "2.2.0"
-      
-   strings:
-      $xr1 = /process\.mainModule\.require\(["']child_process["']\).{5,40}\(["'](whoami|powershell|\/bin\/sh|\/bin\/bash|wget|curl|cat \/etc\/passwd|uname|id["'])/ 
-   condition: 
-      1 of them
 }
 
 rule MAL_JS_NPM_SupplyChain_Attack_Nov25_RID33B0 : DEMO MAL T1059_007 {
