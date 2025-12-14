@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-12-13 21:14
+    Retrieved: 2025-12-14 21:15
     Generated for User: demo
     Number of Rules: 2715
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "pe"
 import "math"
+import "pe"
 
 rule EXPL_SUSP_JS_POC_RSC_Detector_Payloads_Dec25_RID367F : CVE_2025_55182 DEMO EXPLOIT SUSP T1059_007 {
    meta:
