@@ -1,8 +1,8 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2025-12-27 21:15
+    Retrieved: 2025-12-28 21:16
     Generated for User: demo
-    Number of Rules: 2716
+    Number of Rules: 2712
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
@@ -157,71 +157,6 @@ rule EXPL_RCE_React_Server_Next_JS_CVE_2025_66478_Errors_Dec25_RID3A22 : CVE_202
       $s2 = "digest: 'uid=0(root) gid=0(root)" 
    condition: 
       all of them
-}
-
-rule MAL_JS_NPM_SupplyChain_Attack_Nov25_RID33B0 : DEMO MAL T1059_007 {
-   meta:
-      description = "Detects malicious JavaScript worm bun_environment.js"
-      author = "Marius Benthin"
-      reference = "https://www.aikido.dev/blog/shai-hulud-strikes-again-hitting-zapier-ensdomains"
-      date = "2025-11-24 14:58:31"
-      score = 80
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, MAL, T1059_007"
-      minimum_yara = "1.7"
-      
-   strings:
-      $sa1 = "npm publish" 
-      $sb1 = "iamcredentials" 
-      $sb2 = "secretmanager" 
-      $sb3 = "secretsmanager" 
-      $sb4 = "-fips." 
-   condition: 
-      filesize < 20MB and $sa1 and 2 of ( $sb* )
-}
-
-rule SUSP_JS_NPM_Sha1_Hulud_Nov25_RID30A8 : DEMO SUSP T1059_007 {
-   meta:
-      description = "Detects suspicious indicators for Sha1 Hulud worm"
-      author = "Marius Benthin"
-      reference = "https://www.aikido.dev/blog/shai-hulud-strikes-again-hitting-zapier-ensdomains"
-      date = "2025-11-24 12:49:11"
-      score = 60
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, SUSP, T1059_007"
-      minimum_yara = "1.7"
-      
-   strings:
-      $x1 = "Sha1-Hulud:" 
-      $x2 = "SHA1HULUD" 
-   condition: 
-      filesize < 20MB and 1 of them
-}
-
-rule SUSP_JS_NPM_SetupScript_Nov25_RID3180 : DEMO SUSP T1059_007 {
-   meta:
-      description = "Detects suspicious JavaScript which exits silently and checks operating system"
-      author = "Marius Benthin"
-      reference = "https://www.aikido.dev/blog/shai-hulud-strikes-again-hitting-zapier-ensdomains"
-      date = "2025-11-24 13:25:11"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, SUSP, T1059_007"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "require('child_process')" 
-      $s2 = "process.exit(0)" 
-      $s3 = "process.platform ===" 
-      $s4 = "().catch((e" 
-   condition: 
-      filesize < 100KB and all of them
 }
 
 rule MAL_NPM_SupplyChain_Attack_PreInstallScript_Nov25_RID3986 : DEMO MAL SCRIPT {
@@ -4168,30 +4103,6 @@ rule APT_MAL_RANSOM_ViceSociety_Chily_Jan23_1_RID34E9 : APT DEMO EXE MAL RANSOM 
       $op3 = { 31 c0 47 8d 2c 00 45 85 f6 4d 63 ed 0f 8e ec 00 00 00 0f 1f 80 00 00 00 00 0f b7 94 44 40 0c 00 00 83 c1 01 } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 500KB and ( 1 of ( $x* ) or 3 of them ) or 4 of them
-}
-
-rule SUSP_ENV_Folder_Root_File_Jan23_1_RID32AE : DEMO SCRIPT SUSP {
-   meta:
-      description = "Detects suspicious file path pointing to the root of a folder easily accessible via environment variables"
-      author = "Florian Roth"
-      reference = "Internal Research"
-      date = "2023-01-11 14:15:31"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, SCRIPT, SUSP"
-      required_modules = "pe"
-      minimum_yara = "3.0.0"
-      
-   strings:
-      $xr1 = /%([Aa]pp[Dd]ata|APPDATA)%\\[A-Za-z0-9_\-]{1,20}\.[a-zA-Z0-9]{1,4}[^\\]/ wide ascii
-      $xr2 = /%([Pp]ublic|PUBLIC)%\\[A-Za-z0-9_\-]{1,20}\.[a-zA-Z0-9]{1,4}[^\\]/ wide ascii
-      $xr4 = /%([Pp]rogram[Dd]ata|PROGRAMDATA)%\\[A-Za-z0-9_\-]{1,20}\.[a-zA-Z0-9]{1,4}[^\\]/ wide ascii
-      $fp1 = "perl -MCPAN " ascii
-      $fp2 = "CCleaner" ascii
-   condition: 
-      filesize < 20MB and 1 of ( $x* ) and not 1 of ( $fp* ) and not pe.number_of_signatures > 0
 }
 
 rule HKTL_NATBypass_Dec22_1_RID2E57 : DEMO G0096 HKTL T1090 {
@@ -10545,7 +10456,7 @@ rule SUSP_Microsoft_RAR_SFX_Combo_RID3154 : ANOMALY DEMO EXE FILE SUSP {
       uint16 ( 0 ) == 0x5a4d and filesize < 3000KB and 1 of ( $s* ) and $c1
 }
 
-rule HTKL_BlackBone_DriverInjector_RID320D : DEMO EXE FILE HKTL {
+rule HKTL_BlackBone_DriverInjector_RID320D : DEMO EXE FILE HKTL {
    meta:
       description = "Detects BlackBone Driver injector"
       author = "Florian Roth"
@@ -10554,6 +10465,7 @@ rule HTKL_BlackBone_DriverInjector_RID320D : DEMO EXE FILE HKTL {
       score = 60
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2025-12-18"
       hash1 = "8062a4284c719412270614458150cb4abbdf77b2fc35f770ce9c45d10ccb1f4d"
       hash2 = "2d2fc27200c22442ac03e2f454b6e1f90f2bbc17017f05b09f7824fac6beb14b"
       hash3 = "e45da157483232d9c9c72f44b13fca2a0d268393044db00104cc1afe184ca8d1"
