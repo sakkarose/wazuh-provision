@@ -275,7 +275,28 @@ chmod 660 /var/ossec/etc/custom-sca-files/*
 chown wazuh:wazuh /var/ossec/etc/custom-sca-files/*
 ```
 
-10. Restart agent service
+10. Install `auditd` (if OS does not have it yet)
+
+```
+sudo apt -y install auditd
+sudo systemctl start auditd
+sudo systemctl enable auditd
+```
+
+11. Append `auditd` rules
+
+```
+echo "-a exit,always -F auid=1000 -F egid!=994 -F auid!=-1 -F arch=b32 -S execve -k audit-wazuh-c" >> /etc/audit/audit.rules
+echo "-a exit,always -F auid=1000 -F egid!=994 -F auid!=-1 -F arch=b64 -S execve -k audit-wazuh-c" >> /etc/audit/audit.rules
+sudo auditctl -R /etc/audit/audit.rules
+sudo auditctl -l
+
+### Output
+-a always,exit -F arch=b32 -S execve -F auid=1000 -F egid!=994 -F auid!=-1 -F key=audit-wazuh-c
+-a always,exit -F arch=b64 -S execve -F auid=1000 -F egid!=994 -F auid!=-1 -F key=audit-wazuh-c
+```
+
+12. Restart agent service
 
 ```
 systemctl restart wazuh-agent
