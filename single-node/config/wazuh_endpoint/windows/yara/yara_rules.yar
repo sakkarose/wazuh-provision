@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2026-01-03 21:15
+    Retrieved: 2026-01-04 21:16
     Generated for User: demo
-    Number of Rules: 2712
+    Number of Rules: 2711
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "pe"
 import "math"
+import "pe"
 
 rule MAL_Etoroloro_Malicious_NodePackage_Dec25_RID3677 : DEMO EXE FILE MAL {
    meta:
@@ -7188,33 +7188,6 @@ rule HKTL_Mimikatz_SkeletonKey_in_memory_Aug20_1_RID3752 : DEMO HKTL S0002 T1003
       $x1 = { 60 ba 4f ca c7 44 24 34 dc 46 6c 7a c7 44 24 38 03 3c 17 81 c7 44 24 3c 94 c0 3d f6 } 
    condition: 
       1 of them
-}
-
-rule SUSP_LNX_Linux_Malware_Indicators_Aug20_1_RID3621 : DEMO LINUX SUSP T1033 {
-   meta:
-      description = "Detects indicators often found in linux malware samples. Note: This detection is based on common characteristics typically associated with the mentioned threats, must be considered a clue and does not conclusively prove maliciousness."
-      author = "Florian Roth"
-      reference = "Internal Research"
-      date = "2020-08-03 16:42:41"
-      score = 65
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, LINUX, SUSP, T1033"
-      minimum_yara = "1.7"
-      
-   strings:
-      $s1 = "&& chmod +x" ascii
-      $s2 = "|base64 -" ascii
-      $s3 = " /tmp" ascii
-      $s4 = "|curl " ascii
-      $s5 = "whoami" ascii fullword
-      $fp1 = "WITHOUT ANY WARRANTY" ascii
-      $fp2 = "postinst" ascii fullword
-      $fp3 = "THIS SOFTWARE IS PROVIDED" ascii fullword
-      $fp4 = "Free Software Foundation" ascii fullword
-   condition: 
-      filesize < 400KB and 3 of ( $s* ) and not 1 of ( $fp* )
 }
 
 rule SUSP_RANSOMWARE_Indicator_Jul20_RID31A2 : CRIME DEMO EXE FILE RANSOM SUSP {
@@ -61799,4 +61772,38 @@ rule funklocker_ransomware {
                 (5 of ($x1, $x2, $x3, $x4, $x5, $x6, $x7)) or
                 (2 of ($x8, $x9, $x10))
         )
+}
+
+/* Cephalus ransomware*/
+rule Cephalus_ransomware {
+   meta:
+      description = "Detects Cephalus ransomware"
+      author = "Aishat Awujola"
+      reference = "https://github.com/Neo23x0/yarGen"
+      date = "2025-11-20"
+      
+   strings:
+      $x1 = "pacer: assist ratio=workbuf is not emptybad use of bucket.mpbad use of bucket.bpruntime: double waitpreempt off reason: forcegc:" ascii
+      $x2 = "_cgo_pthread_key_created missingruntime: sudog with non-nil elemruntime: sudog with non-nil nextruntime: sudog with non-nil prev" ascii
+      $x3 = "runtime: bad notifyList size - sync=accessed data from freed user arena runtime: wrong goroutine in newstackruntime: invalid pc-" ascii
+      $x4 = "lock: sleeping while lock is availableP has cached GC work at end of mark terminationfailed to acquire lock to start a GC transi" ascii
+      $x5 = " (types from different scopes)notetsleep - waitm out of syncfailed to get system page sizeruntime: found in object at *( in prep" ascii
+      $x6 = ", locked to threadruntime.semacreateruntime.semawakeupCuba Standard TimeOmsk Standard TimeArab Standard TimeIran Standard TimeRu" ascii
+      $x7 = "tried to trace goroutine with invalid or unsupported statussync: WaitGroup is reused before previous Wait has returnedecdsa: int" ascii
+      $x8 = "runtime.Pinner: object already unpinnedsuspendG from non-preemptible goroutineruntime: casfrom_Gscanstatus failed gp=stack growt" ascii
+      $x9 = " runqueue= stopwait= runqsize= gfreecnt= throwing= spinning=atomicand8float64nanfloat32nanException  ptrSize=  targetpc= until p" ascii
+      $x10 = "lock: lock countbad system huge page sizearena already initialized to unused region of span bytes failed with errno=runtime: Vir" ascii
+      $x11 = "internal error: polling on unsupported descriptor typemheap.freeSpanLocked - invalid free of user arena chunkcasfrom_Gscanstatus" ascii
+      $x12 = "stopm spinning nmidlelocked= needspinning=randinit twicestore64 failedsemaRoot queuebad allocCountbad span statestack overflow u" ascii
+      $x13 = "unlock: lock countprogToPointerMask: overflow/gc/cycles/forced:gc-cycles/memory/classes/other:bytes/memory/classes/total:bytesfa" ascii
+      $x14 = "runtime.newosprocruntime/internal/internal/runtime/thread exhaustionlocked m0 woke upentersyscallblock spinningthreads=gp.waitin" ascii
+      $x15 = "time: bad [0-9]*exec: no commandinvalid exchangeno route to hostinvalid argumentmessage too longobject is remoteremote I/O error" ascii
+      $x16 = "ckWSAGetOverlappedResultexit hook invoked exit%SystemRoot%\\system32\\sha3: Write after ReadC:\\ProgramData\\temp.datDEFGHIJKLMN" ascii
+      $x17 = "DetECDSA P-256 SHA2-512 signinvalid P224Element encodinginvalid P384Element encodinginvalid P521Element encodingC:\\Windows\\Tem" ascii
+      $x18 = "Value.SetIntGetAdaptersAddressesNtSetInformationFileGetProcessMemoryInfobcryptprimitives.dllhttplaxcontentlengthsha3: Sum after " ascii
+      $x19 = "orC:\\Windows\\Tempx509usepoliciesGetProcessTimesDuplicateHandleallocmRInternalGC (fractional)write heap dumpasyncpreemptoffforc" ascii
+      $x20 = "span set block with unpopped elements found in resetruntime: GetQueuedCompletionStatusEx failed (errno= runtime: NtCreateWaitCom" ascii
+   condition:
+      uint16(0) == 0x5a4d and filesize < 9000KB and
+      1 of ($x*)
 }
