@@ -361,3 +361,37 @@ rule funklocker_ransomware {
                 (2 of ($x8, $x9, $x10))
         )
 }
+
+/* Cephalus ransomware*/
+rule Cephalus_ransomware {
+   meta:
+      description = "Detects Cephalus ransomware"
+      author = "Aishat Awujola"
+      reference = "https://github.com/Neo23x0/yarGen"
+      date = "2025-11-20"
+      
+   strings:
+      $x1 = "pacer: assist ratio=workbuf is not emptybad use of bucket.mpbad use of bucket.bpruntime: double waitpreempt off reason: forcegc:" ascii
+      $x2 = "_cgo_pthread_key_created missingruntime: sudog with non-nil elemruntime: sudog with non-nil nextruntime: sudog with non-nil prev" ascii
+      $x3 = "runtime: bad notifyList size - sync=accessed data from freed user arena runtime: wrong goroutine in newstackruntime: invalid pc-" ascii
+      $x4 = "lock: sleeping while lock is availableP has cached GC work at end of mark terminationfailed to acquire lock to start a GC transi" ascii
+      $x5 = " (types from different scopes)notetsleep - waitm out of syncfailed to get system page sizeruntime: found in object at *( in prep" ascii
+      $x6 = ", locked to threadruntime.semacreateruntime.semawakeupCuba Standard TimeOmsk Standard TimeArab Standard TimeIran Standard TimeRu" ascii
+      $x7 = "tried to trace goroutine with invalid or unsupported statussync: WaitGroup is reused before previous Wait has returnedecdsa: int" ascii
+      $x8 = "runtime.Pinner: object already unpinnedsuspendG from non-preemptible goroutineruntime: casfrom_Gscanstatus failed gp=stack growt" ascii
+      $x9 = " runqueue= stopwait= runqsize= gfreecnt= throwing= spinning=atomicand8float64nanfloat32nanException  ptrSize=  targetpc= until p" ascii
+      $x10 = "lock: lock countbad system huge page sizearena already initialized to unused region of span bytes failed with errno=runtime: Vir" ascii
+      $x11 = "internal error: polling on unsupported descriptor typemheap.freeSpanLocked - invalid free of user arena chunkcasfrom_Gscanstatus" ascii
+      $x12 = "stopm spinning nmidlelocked= needspinning=randinit twicestore64 failedsemaRoot queuebad allocCountbad span statestack overflow u" ascii
+      $x13 = "unlock: lock countprogToPointerMask: overflow/gc/cycles/forced:gc-cycles/memory/classes/other:bytes/memory/classes/total:bytesfa" ascii
+      $x14 = "runtime.newosprocruntime/internal/internal/runtime/thread exhaustionlocked m0 woke upentersyscallblock spinningthreads=gp.waitin" ascii
+      $x15 = "time: bad [0-9]*exec: no commandinvalid exchangeno route to hostinvalid argumentmessage too longobject is remoteremote I/O error" ascii
+      $x16 = "ckWSAGetOverlappedResultexit hook invoked exit%SystemRoot%\\system32\\sha3: Write after ReadC:\\ProgramData\\temp.datDEFGHIJKLMN" ascii
+      $x17 = "DetECDSA P-256 SHA2-512 signinvalid P224Element encodinginvalid P384Element encodinginvalid P521Element encodingC:\\Windows\\Tem" ascii
+      $x18 = "Value.SetIntGetAdaptersAddressesNtSetInformationFileGetProcessMemoryInfobcryptprimitives.dllhttplaxcontentlengthsha3: Sum after " ascii
+      $x19 = "orC:\\Windows\\Tempx509usepoliciesGetProcessTimesDuplicateHandleallocmRInternalGC (fractional)write heap dumpasyncpreemptoffforc" ascii
+      $x20 = "span set block with unpopped elements found in resetruntime: GetQueuedCompletionStatusEx failed (errno= runtime: NtCreateWaitCom" ascii
+   condition:
+      uint16(0) == 0x5a4d and filesize < 9000KB and
+      1 of ($x*)
+}
