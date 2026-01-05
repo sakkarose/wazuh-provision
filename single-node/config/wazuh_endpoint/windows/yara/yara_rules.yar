@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2026-01-04 21:16
+    Retrieved: 2026-01-05 21:18
     Generated for User: demo
-    Number of Rules: 2711
+    Number of Rules: 2712
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "math"
 import "pe"
+import "math"
 
 rule MAL_Etoroloro_Malicious_NodePackage_Dec25_RID3677 : DEMO EXE FILE MAL {
    meta:
@@ -7188,6 +7188,34 @@ rule HKTL_Mimikatz_SkeletonKey_in_memory_Aug20_1_RID3752 : DEMO HKTL S0002 T1003
       $x1 = { 60 ba 4f ca c7 44 24 34 dc 46 6c 7a c7 44 24 38 03 3c 17 81 c7 44 24 3c 94 c0 3d f6 } 
    condition: 
       1 of them
+}
+
+rule SUSP_LNX_Linux_Malware_Indicators_Aug20_1_RID3621 : DEMO LINUX SUSP T1033 {
+   meta:
+      description = "Detects indicators often found in linux malware samples. Note: This detection is based on common characteristics typically associated with the mentioned threats, must be considered a clue and does not conclusively prove maliciousness."
+      author = "Florian Roth"
+      reference = "Internal Research"
+      date = "2020-08-03 16:42:41"
+      score = 65
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2026-01-04"
+      tags = "DEMO, LINUX, SUSP, T1033"
+      minimum_yara = "1.7"
+      
+   strings:
+      $s1 = "&& chmod +x" ascii
+      $s2 = "|base64 -" ascii
+      $s3 = " /tmp" ascii
+      $s4 = "|curl " ascii
+      $s5 = "whoami" ascii fullword
+      $fp1 = "WITHOUT ANY WARRANTY" ascii
+      $fp2 = "postinst" ascii fullword
+      $fp3 = "THIS SOFTWARE IS PROVIDED" ascii fullword
+      $fp4 = "Free Software Foundation" ascii fullword
+      $fp5 = "Too many sessions open! Use ssh_channel.close() or 'with'!" 
+   condition: 
+      filesize < 400KB and 3 of ( $s* ) and not 1 of ( $fp* )
 }
 
 rule SUSP_RANSOMWARE_Indicator_Jul20_RID31A2 : CRIME DEMO EXE FILE RANSOM SUSP {
