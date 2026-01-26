@@ -1,6 +1,156 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [4.14.2]
+
+### Added
+
+- Code improvements for 4.14.2 ([#2090](https://github.com/wazuh/wazuh-docker/pull/2090))
+- Artifactory vulnerabilities notification ([#2078](https://github.com/wazuh/wazuh-docker/pull/2078))
+
+### Changed
+
+- Filebeat module version update ([#2115](https://github.com/wazuh/wazuh-docker/pull/2115))
+- The location of the remove command for the wazuh-authd certificates has been changed. ([#2094](https://github.com/wazuh/wazuh-docker/pull/2094))
+- Removed sslmanager key from the docker manager image to 4.14.2. ([#2093](https://github.com/wazuh/wazuh-docker/pull/2093))
+
+### Fixed
+
+- Add missing SSL ciphers and protocols and remove outdated ports parameters from opensearch.yml template ([#2104](https://github.com/wazuh/wazuh-docker/pull/2104))
+
+### Deleted
+
+- None
+
+## [4.14.1]
+
+### Added
+
+- None
+
+### Changed
+
+- Wazuh cert tool generator improvements ([#2027](https://github.com/wazuh/wazuh-docker/pull/2027))
+
+### Fixed
+
+- None
+
+### Deleted
+
+- None
+
+## [4.14.0]
+
+### Added
+
+- None
+
+### Changed
+
+- Change filebeat install method ([#2020](https://github.com/wazuh/wazuh-docker/pull/2020))
+- Remove dashboard chat setting ([#2021](https://github.com/wazuh/wazuh-docker/pull/2021))
+- Rollback data source setting ([#1999](https://github.com/wazuh/wazuh-docker/pull/1999))
+- Dashboard settings added ([#1998](https://github.com/wazuh/wazuh-docker/pull/1998))
+- Add filebeat config file in the PERMANENT_DATA_EXCP list ([#1898](https://github.com/wazuh/wazuh-docker/pull/1898))
+- Change validation of existing certs tool in S3 buckets ([#1880](https://github.com/wazuh/wazuh-docker/pull/1880))
+
+### Fixed
+
+- Change Wazuh indexer directory owner ([#2029](https://github.com/wazuh/wazuh-docker/pull/2029))
+- Double the amount of space consumed in Wazuh Indexer ([#1953](https://github.com/wazuh/wazuh-docker/pull/1953))
+- Fix config directory for opensearch_security plugin work ([#1951](https://github.com/wazuh/wazuh-docker/pull/1951))
+- Update Dockerfile to copy opensearch-security files ([#1928](https://github.com/wazuh/wazuh-docker/pull/1928))
+
+### Deleted
+
+- None
+
+## [4.13.1]
+
+### Added
+
+- None
+
+### Changed
+
+- None
+
+### Fixed
+
+- None
+
+### Deleted
+
+- None
+
+## [4.13.0]
+
+### Added
+
+- Add opensearch_dashboard.yml parameters. ([#1985](https://github.com/wazuh/wazuh-docker/pull/1985))
+- Set right ownership for malicious-ioc files on container start ([#1926](https://github.com/wazuh/wazuh-docker/pull/1926))
+- Delete services statement in wazuh agent deployment. ([#1925](https://github.com/wazuh/wazuh-docker/pull/1925))
+- Add permanent_data exceptions. ([#1890](https://github.com/wazuh/wazuh-docker/pull/1890))
+- Integrate bumper script via GitHub action. ([#1863](https://github.com/wazuh/wazuh-docker/pull/1863))
+- Add missing malicious-ioc ruleset lists ([#1870](https://github.com/wazuh/wazuh-docker/pull/1870))
+- Added repository_bumper script. ([#1781](https://github.com/wazuh/wazuh-docker/pull/1781))
+- Fix Warning message when migrating Docker compose v2 ([#1828](https://github.com/wazuh/wazuh-docker/pull/1828))
+- Add technical documentation ([#1822](https://github.com/wazuh/wazuh-docker/pull/1822))
+- Add wazuh agent test and push ([#1817](https://github.com/wazuh/wazuh-docker/pull/1817))
+- Add Wazuh agent image build and deploy ([#1816](https://github.com/wazuh/wazuh-docker/pull/1816))
+
+### Changed
+
+- Syscollector configuration change ([#1994](https://github.com/wazuh/wazuh-docker/pull/1994))
+- Modify wazuh-keystore use ([#1750](https://github.com/wazuh/wazuh-docker/pull/1750)) \- (wazuh-keystore)
+
+### Fixed
+
+- Add wazuh-template.json into permanent data exception ([#1968](https://github.com/wazuh/wazuh-docker/pull/1968))
+
+### Deleted
+
+- Remove default docker reference version from workflow ([#1761](https://github.com/wazuh/wazuh-docker/pull/1761))
+- Remove 'stable' branch ocurrencies ([#1757](https://github.com/wazuh/wazuh-docker/pull/1757))
+
+## [4.12.0]
+
+### Added
+
+- None
+
+### Changed
+
+- Change VERSION file format ([#1728](https://github.com/wazuh/wazuh-docker/pull/1728)) \- (VERSION file)
+- Change Ubuntu version used in workflows ([#1662](https://github.com/wazuh/wazuh-docker/pull/1662)) \- (Docker workflows)
+
+### Fixed
+
+- Fix permanent data scripts ([#1603](https://github.com/wazuh/wazuh-docker/pull/1603))
+
+### Deleted
+
+- None
+
+## [4.11.2]
+
+### Added
+
+- None
+
+### Changed
+
+- None
+
+### Fixed
+
+- None
+
+### Deleted
+
+- None
+
 ## [4.11.1]
 
 ### Added
@@ -92,7 +242,6 @@ All notable changes to this project will be documented in this file.
 
 - None
 
-
 ### Fixed
 
 - Fix typos into Wazuh manager entrypoint ([#1569](https://github.com/wazuh/wazuh-docker/pull/1569))
@@ -100,7 +249,6 @@ All notable changes to this project will be documented in this file.
 ### Deleted
 
 - None
-
 
 ## Wazuh Docker v4.9.0
 ### Added
