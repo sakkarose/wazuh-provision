@@ -6,7 +6,7 @@ This forked "wazuh-docker" repository is aimed at provisioning with personal con
 
 Single-node deployment only at the moment.
 
-Current version: v4.14.0
+Current version: v4.14.2
 
 ## Task
 
@@ -56,6 +56,7 @@ Current version: v4.14.0
 
 ### To-do
 
+- Agent-side QueryList filtering
 - Zeek and Office 365 json decoder conflict
 - SOAR provisioning (Tracecat) with example workflow, ...
 - OPNsense provisioning with plugin configuration
