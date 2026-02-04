@@ -1,14 +1,116 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2026-02-03 21:31
+    Retrieved: 2026-02-04 21:29
     Generated for User: demo
-    Number of Rules: 2710
+    Number of Rules: 2715
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "math"
 import "pe"
+import "math"
+
+rule MAL_POC_Microsoft_Warbird_Loader_Feb26_RID34F5 : DEMO EXE FILE MAL {
+   meta:
+      description = "Detects a POC to turn Microsoft Warbird into a shellcode loader"
+      author = "X__Junior"
+      reference = "https://cirosec.de/en/news/abusing-microsoft-warbird-for-shellcode-execution/"
+      date = "2026-02-03 15:52:41"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, EXE, FILE, MAL"
+      minimum_yara = "3.5.0"
+      
+   strings:
+      $op = { fe af fe ca ef be ad de } 
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and $op
+}
+
+rule MAL_Chrysalis_DllLoader_Feb26_RID31A2 : CHINA DEMO EXE FILE G0030 MAL {
+   meta:
+      description = "Detects DLL used to load Chrysalis backdoor, seen being used in the compromise of the infrastructure hosting Notepad++ by Chinese APT group Lotus Blossom"
+      author = "X__Junior"
+      reference = "https://www.rapid7.com/blog/post/tr-chrysalis-backdoor-dive-into-lotus-blossoms-toolkit/"
+      date = "2026-02-02 13:30:51"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, EXE, FILE, G0030, MAL"
+      minimum_yara = "3.5.0"
+      
+   strings:
+      $op1 = { 33 D2 8B C1 F7 F6 0F B6 C1 03 55 ?? 6B C0 ?? 32 02 88 04 0F 41 83 F9 ?? 72 } 
+      $op2 = { 0F B6 04 31 41 33 C2 69 D0 ?? ?? ?? ?? 3B CB 72 } 
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and all of them
+}
+
+rule MAL_Chrysalis_Shellcode_Loader_Feb26_RID3478 : CHINA DEMO G0030 MAL {
+   meta:
+      description = "Detects shellcode used to load Chrysalis backdoor, seen being used in the compromise of the infrastructure hosting Notepad++ by Chinese APT group Lotus Blossom"
+      author = "X__Junior"
+      reference = "https://www.rapid7.com/blog/post/tr-chrysalis-backdoor-dive-into-lotus-blossoms-toolkit/"
+      date = "2026-02-02 15:31:51"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, G0030, MAL"
+      minimum_yara = "3.5.0"
+      
+   strings:
+      $op1 = { 8B C7 03 D7 83 E0 ?? 47 8A 4C 05 ?? 8A 04 13 02 C1 32 C1 2A C1 88 02 8B 55 ?? 3B FE 7C ?? 8B 5D ?? 8B 45 } 
+      $op2 = { 03 F8 8B 45 ?? 8B 50 ?? 85 C9 79 ?? 0F B7 C1 EB ?? 8D 41 ?? 03 C3 50 FF 75 ?? FF D2 89 07 85 C0 74 ?? 8B 4D ?? 46 } 
+   condition: 
+      1 of them
+}
+
+rule MAL_Chrysalis_Backdoor_Feb26_RID3154 : CHINA DEMO G0030 MAL {
+   meta:
+      description = "Detects Chrysalis backdoor, seen being used in the compromise of the infrastructure hosting Notepad++ by Chinese APT group Lotus Blossom"
+      author = "X__Junior"
+      reference = "https://www.rapid7.com/blog/post/tr-chrysalis-backdoor-dive-into-lotus-blossoms-toolkit/"
+      date = "2026-02-02 13:17:51"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "CHINA, DEMO, G0030, MAL"
+      minimum_yara = "3.5.0"
+      
+   strings:
+      $opa1 = { 8B 4D ?? C1 CF ?? C1 C1 ?? 03 F9 D1 C3 8B 4D ?? C1 C1 ?? 03 F9 03 FB 8B 5D ?? 69 CF ?? ?? ?? ?? BF ?? ?? ?? ?? 2B F9 EB } 
+      $opa2 = { F7 E9 [0-1] 8B C2 C1 E8 ?? 03 C2 8D 0C 40 8A C3 34 ?? [0-2] 0F B6 [1-4] 0F B6 C3 8B 5D [1-3] 0F 45 D0 } 
+      $opb1 = { 0F B6 84 35 ?? ?? ?? ?? 88 84 3D ?? ?? ?? ?? 88 8C 35 ?? ?? ?? ?? 0F B6 84 3D ?? ?? ?? ?? 8B 8D ?? ?? ?? ?? 03 C2 0F B6 C0 0F B6 84 05 ?? ?? ?? ?? 30 04 19 43 3B 9D ?? ?? ?? ?? 7C } 
+   condition: 
+      ( 1 of ( $opa* ) and $opb1 ) or all of ( $opa* )
+}
+
+rule MAL_CobaltStrike_Beacon_Loader_Feb26_RID3442 : BEACON COBALTSTRIKE DEMO EXE FILE MAL S0154 T1550_002 {
+   meta:
+      description = "Detects Cobalt Strike beacon loader"
+      author = "X__Junior"
+      reference = "https://www.rapid7.com/blog/post/tr-chrysalis-backdoor-dive-into-lotus-blossoms-toolkit/"
+      date = "2026-02-02 15:22:51"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "BEACON, COBALTSTRIKE, DEMO, EXE, FILE, MAL, S0154, T1550_002"
+      minimum_yara = "3.5.0"
+      
+   strings:
+      $opa1 = { 45 33 C9 41 B8 ?? ?? ?? ?? 48 8D 94 24 ?? ?? ?? ?? 48 8D 4C 24 ?? E8 ?? ?? ?? ?? 48 8D 8C 24 ?? ?? ?? ?? FF 15 ?? ?? ?? ?? 66 89 44 24 ?? 41 B8 ?? ?? ?? ?? 48 8D 94 24 ?? ?? ?? ?? 0F B7 4C 24 ?? FF 15 ?? ?? ?? ?? 48 8D 8C 24 ?? ?? ?? ?? FF 15 } 
+      $opa2 = { 4C 8D 4C 24 ?? 41 B8 ?? ?? ?? ?? BA ?? ?? ?? ?? 48 8D 8C 24 ?? ?? ?? ?? FF 15 ?? ?? ?? ?? FF 15 ?? ?? ?? ?? 48 C7 44 24 ?? ?? ?? ?? ?? C7 44 24 ?? ?? ?? ?? ?? 48 8D 8C 24 ?? ?? ?? ?? 48 89 4C 24 ?? 4C 8D 0D ?? ?? ?? ?? 45 33 C0 33 D2 48 8B C8 FF 15 } 
+      $opb1 = { 48 8D 89 ?? ?? ?? ?? 0F 10 00 0F 10 48 ?? 48 8D 80 ?? ?? ?? ?? 0F 11 41 ?? 0F 10 40 ?? 0F 11 49 ?? 0F 10 48 ?? 0F 11 41 ?? 0F 10 40 ?? 0F 11 49 ?? 0F 10 48 ?? 0F 11 41 ?? 0F 10 40 ?? 0F 11 49 ?? 0F 10 48 ?? 0F 11 41 ?? 0F 11 49 ?? 48 83 EA } 
+      $opb2 = { 45 33 C9 48 89 84 24 ?? ?? ?? ?? 41 B8 18 00 00 00 C7 84 24 ?? ?? ?? ?? 03 00 00 00 48 8D 94 24 ?? ?? ?? ?? 48 89 BC 24 ?? ?? ?? ?? B9 B9 00 00 00 FF 15 } 
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and all of ( $opa* ) or all of ( $opb* )
+}
 
 rule MAL_Etoroloro_Malicious_NodePackage_Dec25_RID3677 : DEMO EXE FILE MAL {
    meta:
