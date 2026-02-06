@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2026-02-05 21:25
+    Retrieved: 2026-02-06 21:27
     Generated for User: demo
-    Number of Rules: 2715
+    Number of Rules: 2722
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "pe"
 import "math"
+import "pe"
 
 rule MAL_POC_Microsoft_Warbird_Loader_Feb26_RID34F5 : DEMO EXE FILE MAL {
    meta:
@@ -110,6 +110,82 @@ rule MAL_CobaltStrike_Beacon_Loader_Feb26_RID3442 : BEACON COBALTSTRIKE DEMO EXE
       $opb2 = { 45 33 C9 48 89 84 24 ?? ?? ?? ?? 41 B8 18 00 00 00 C7 84 24 ?? ?? ?? ?? 03 00 00 00 48 8D 94 24 ?? ?? ?? ?? 48 89 BC 24 ?? ?? ?? ?? B9 B9 00 00 00 FF 15 } 
    condition: 
       uint16 ( 0 ) == 0x5a4d and all of ( $opa* ) or all of ( $opb* )
+}
+
+rule SUSP_Claude_Refusal_Magic_String_Jan26_RID3530 : DEMO SUSP {
+   meta:
+      description = "Detects refusal magic string that cause Claude sessions to be terminated. This might indicate that a file tries to prevent being analyzed by LLM agents."
+      author = "Marius Benthin"
+      reference = "https://x.com/williballenthin/status/2014687699165135150"
+      date = "2026-01-29 16:02:31"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, SUSP"
+      minimum_yara = "3.5.0"
+      
+   strings:
+      $x1 = "ANTHROPIC_MAGIC_STRING_TRIGGER_REFUSAL_" ascii wide nocase
+   condition: 
+      $x1
+}
+
+rule MAL_Claude_Refusal_Magic_String_Jan26_RID34BF : DEMO MAL T1132_001 {
+   meta:
+      description = "Detects Base64 variations of refusal magic string that cause Claude sessions to be terminated. This might indicate that a file tries to prevent being analyzed by LLM agents."
+      author = "Marius Benthin"
+      reference = "https://x.com/williballenthin/status/2014687699165135150"
+      date = "2026-01-29 15:43:41"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, MAL, T1132_001"
+      minimum_yara = "4.0.0"
+      
+   strings:
+      $xb1 = "ANTHROPIC_MAGIC_STRING_TRIGGER_REFUSAL_" ascii wide base64 base64wide
+   condition: 
+      $xb1
+}
+
+rule SUSP_Claude_Redacted_Thinking_Magic_String_Jan26_1_RID39A5 : DEMO SUSP {
+   meta:
+      description = "Detects redacted thinking magic string that cause Claude sessions to be terminated. This might indicate that a file tries to prevent being analyzed by LLM agents."
+      author = "Marius Benthin"
+      reference = "https://x.com/williballenthin/status/2014687699165135150"
+      date = "2026-01-29 19:12:41"
+      score = 65
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, SUSP"
+      minimum_yara = "3.5.0"
+      
+   strings:
+      $x1 = "ANTHROPIC_MAGIC_STRING_TRIGGER_REDACTED_THINKING_" ascii wide nocase
+   condition: 
+      $x1
+}
+
+rule SUSP_Claude_Redacted_Thinking_Magic_String_Jan26_2_RID39A6 : DEMO SUSP T1132_001 {
+   meta:
+      description = "Detects Base64 variations of redacted thinking magic string that cause Claude sessions to be terminated. This might indicate that a file tries to prevent being analyzed by LLM agents."
+      author = "Marius Benthin"
+      reference = "https://x.com/williballenthin/status/2014687699165135150"
+      date = "2026-01-29 19:12:51"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, SUSP, T1132_001"
+      minimum_yara = "4.0.0"
+      
+   strings:
+      $xb1 = "ANTHROPIC_MAGIC_STRING_TRIGGER_REDACTED_THINKING_" ascii wide base64 base64wide
+   condition: 
+      $xb1
 }
 
 rule MAL_Etoroloro_Malicious_NodePackage_Dec25_RID3677 : DEMO EXE FILE MAL {
@@ -259,6 +335,72 @@ rule EXPL_RCE_React_Server_Next_JS_CVE_2025_66478_Errors_Dec25_RID3A22 : CVE_202
       $s2 = "digest: 'uid=0(root) gid=0(root)" 
    condition: 
       all of them
+}
+
+rule MAL_JS_NPM_SupplyChain_Attack_Nov25_RID33B0 : DEMO MAL T1059_007 {
+   meta:
+      description = "Detects malicious JavaScript worm bun_environment.js"
+      author = "Marius Benthin"
+      reference = "https://www.aikido.dev/blog/shai-hulud-strikes-again-hitting-zapier-ensdomains"
+      date = "2025-11-24 14:58:31"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2025-12-15"
+      tags = "DEMO, MAL, T1059_007"
+      minimum_yara = "3.5.0"
+      
+   strings:
+      $sa1 = "npm publish" 
+      $sa2 = "NPM_TOKEN" 
+      $sa3 = "NPM_CONFIG_TOKEN" 
+      $sb1 = "GITHUB_" 
+      $sb2 = "GITLAB_" 
+      $sb3 = "TEAMCITY_" 
+   condition: 
+      filesize < 20MB and all of ( $sa* ) and 2 of ( $sb* )
+}
+
+rule SUSP_JS_NPM_Sha1_Hulud_Nov25_RID30A8 : DEMO SUSP T1059_007 {
+   meta:
+      description = "Detects suspicious indicators for Sha1 Hulud worm"
+      author = "Marius Benthin"
+      reference = "https://www.aikido.dev/blog/shai-hulud-strikes-again-hitting-zapier-ensdomains"
+      date = "2025-11-24 12:49:11"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2025-12-15"
+      tags = "DEMO, SUSP, T1059_007"
+      minimum_yara = "3.5.0"
+      
+   strings:
+      $x1 = "Sha1-Hulud:\\x" 
+      $x2 = "SHA1HULUD\"`" 
+   condition: 
+      filesize < 20MB and 1 of them
+}
+
+rule SUSP_JS_NPM_SetupScript_Nov25_RID3180 : DEMO SUSP T1059_007 {
+   meta:
+      description = "Detects suspicious JavaScript which exits silently and checks operating system"
+      author = "Marius Benthin"
+      reference = "https://www.aikido.dev/blog/shai-hulud-strikes-again-hitting-zapier-ensdomains"
+      date = "2025-11-24 13:25:11"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2025-12-15"
+      tags = "DEMO, SUSP, T1059_007"
+      minimum_yara = "3.5.0"
+      
+   strings:
+      $sa1 = "require('child_process')" 
+      $sa2 = "process.platform ===" 
+      $sb1 = "().catch((e" 
+      $sb2 = "process.exit(0)" 
+   condition: 
+      filesize < 100KB and all of ( $sa* ) and $sb1 in ( filesize - 50 .. filesize ) and $sb2 in ( filesize - 30 .. filesize )
 }
 
 rule MAL_NPM_SupplyChain_Attack_PreInstallScript_Nov25_RID3986 : DEMO MAL SCRIPT {
