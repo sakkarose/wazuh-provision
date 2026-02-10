@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2026-02-09 21:36
+    Retrieved: 2026-02-10 21:39
     Generated for User: demo
-    Number of Rules: 2722
+    Number of Rules: 2720
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "math"
 import "pe"
+import "math"
 
 rule MAL_POC_Microsoft_Warbird_Loader_Feb26_RID34F5 : DEMO EXE FILE MAL {
    meta:
@@ -131,25 +131,6 @@ rule SUSP_Claude_Refusal_Magic_String_Jan26_RID3530 : DEMO SUSP {
       $x1
 }
 
-rule MAL_Claude_Refusal_Magic_String_Jan26_RID34BF : DEMO MAL T1132_001 {
-   meta:
-      description = "Detects Base64 variations of refusal magic string that cause Claude sessions to be terminated. This might indicate that a file tries to prevent being analyzed by LLM agents."
-      author = "Marius Benthin"
-      reference = "https://x.com/williballenthin/status/2014687699165135150"
-      date = "2026-01-29 15:43:41"
-      score = 80
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, MAL, T1132_001"
-      minimum_yara = "4.0.0"
-      
-   strings:
-      $xb1 = "ANTHROPIC_MAGIC_STRING_TRIGGER_REFUSAL_" ascii wide base64 base64wide
-   condition: 
-      $xb1
-}
-
 rule SUSP_Claude_Redacted_Thinking_Magic_String_Jan26_1_RID39A5 : DEMO SUSP {
    meta:
       description = "Detects redacted thinking magic string that cause Claude sessions to be terminated. This might indicate that a file tries to prevent being analyzed by LLM agents."
@@ -167,25 +148,6 @@ rule SUSP_Claude_Redacted_Thinking_Magic_String_Jan26_1_RID39A5 : DEMO SUSP {
       $x1 = "ANTHROPIC_MAGIC_STRING_TRIGGER_REDACTED_THINKING_" ascii wide nocase
    condition: 
       $x1
-}
-
-rule SUSP_Claude_Redacted_Thinking_Magic_String_Jan26_2_RID39A6 : DEMO SUSP T1132_001 {
-   meta:
-      description = "Detects Base64 variations of redacted thinking magic string that cause Claude sessions to be terminated. This might indicate that a file tries to prevent being analyzed by LLM agents."
-      author = "Marius Benthin"
-      reference = "https://x.com/williballenthin/status/2014687699165135150"
-      date = "2026-01-29 19:12:51"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, SUSP, T1132_001"
-      minimum_yara = "4.0.0"
-      
-   strings:
-      $xb1 = "ANTHROPIC_MAGIC_STRING_TRIGGER_REDACTED_THINKING_" ascii wide base64 base64wide
-   condition: 
-      $xb1
 }
 
 rule MAL_Etoroloro_Malicious_NodePackage_Dec25_RID3677 : DEMO EXE FILE MAL {
