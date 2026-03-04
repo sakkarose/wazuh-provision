@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2026-03-03 21:31
+    Retrieved: 2026-03-04 21:31
     Generated for User: demo
-    Number of Rules: 2719
+    Number of Rules: 2718
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "math"
 import "pe"
+import "math"
 
 rule MAL_POC_Microsoft_Warbird_Loader_Feb26_RID34F5 : DEMO EXE FILE MAL {
    meta:
@@ -9200,26 +9200,6 @@ rule SUSP_DropperBackdoor_Keywords_RID3273 : DEMO EXE FILE SUSP {
       $x4 = "DropperBackdoor" fullword wide ascii
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and 1 of them
-}
-
-rule SUSP_Netsh_PortProxy_Command_Apr19_RID33ED : DEMO SCRIPT SUSP T1016 {
-   meta:
-      description = "Detects a suspicious command line with netsh and the portproxy command"
-      author = "Florian Roth"
-      reference = "https://docs.microsoft.com/en-us/windows-server/networking/technologies/netsh/netsh-interface-portproxy"
-      date = "2019-04-20 15:08:41"
-      score = 65
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2023-11-03"
-      hash1 = "9b33a03e336d0d02750a75efa1b9b6b2ab78b00174582a9b2cb09cd828baea09"
-      tags = "DEMO, SCRIPT, SUSP, T1016"
-      minimum_yara = "3.5.0"
-      
-   strings:
-      $x1 = "netsh interface portproxy add v4tov4 listenport=" ascii
-   condition: 
-      1 of them
 }
 
 rule APT_APT34_PS_Malware_Apr19_1_RID3047 : APT DEMO G0049 G0057 MIDDLE_EAST SCRIPT T1059_001 {
