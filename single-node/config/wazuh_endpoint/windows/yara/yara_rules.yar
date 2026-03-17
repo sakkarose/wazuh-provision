@@ -1,6 +1,6 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2026-03-16 21:36
+    Retrieved: 2026-03-17 21:34
     Generated for User: demo
     Number of Rules: 2718
     
@@ -6250,7 +6250,7 @@ rule APT_APT29_NOBELIUM_BoomBox_PDF_Masq_May21_1_RID3517 : APT DEMO G0016 G0118 
       score = 70
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
+      modified = "2026-03-12"
       tags = "APT, DEMO, G0016, G0118, RUSSIA"
       required_modules = "math"
       minimum_yara = "3.5.0"
@@ -6262,7 +6262,7 @@ rule APT_APT29_NOBELIUM_BoomBox_PDF_Masq_May21_1_RID3517 : APT DEMO G0016 G0118 
       $fp2 = "endstream" ascii
       $fp3 = { 20 6F 62 6A 0A } 
    condition: 
-      $ah1 at 0 and $af1 at ( filesize - 7 ) and filesize < 100KB and math.entropy ( 16 , filesize ) > 7 and not 1 of ( $fp* )
+      filesize < 100KB and $ah1 at 0 and $af1 at ( filesize - 7 ) and math.entropy ( 16 , filesize ) > 7 and not 1 of ( $fp* )
 }
 
 rule APT_APT29_NOBELIUM_NativeZone_Loader_May21_1_RID35F0 : APT DEMO EXE G0016 G0118 RUSSIA T1218_011 {
@@ -26949,29 +26949,6 @@ rule WPR_WindowsPasswordRecovery_EXE_64_RID3400 : DEMO EXE FILE HKTL {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 300KB and all of them )
 }
 
-rule StoneDrill_BAT_1_RID2CD7 : APT DEMO FILE MIDDLE_EAST SCRIPT {
-   meta:
-      description = "Rule to detect Batch file from StoneDrill report"
-      author = "Florian Roth"
-      reference = "https://securelist.com/blog/research/77725/from-shamoon-to-stonedrill/"
-      date = "2017-03-07 10:06:21"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "APT, DEMO, FILE, MIDDLE_EAST, SCRIPT"
-      minimum_yara = "3.5.0"
-      
-   strings:
-      $s1 = "set u100=" ascii
-      $s2 = "set u200=service" ascii fullword
-      $s3 = "set u800=%~dp0" ascii fullword
-      $s4 = "\"%systemroot%\\system32\\%u100%\"" ascii
-      $s5 = "%\" start /b %systemroot%\\system32\\%" ascii
-   condition: 
-      uint32 ( 0 ) == 0x68636540 and 2 of them and filesize < 500
-}
-
 rule StoneDrill_Service_Install_RID3177 : APT DEMO MIDDLE_EAST SCRIPT T1569_002 {
    meta:
       description = "Rule to detect Batch file from StoneDrill report"
@@ -26981,7 +26958,7 @@ rule StoneDrill_Service_Install_RID3177 : APT DEMO MIDDLE_EAST SCRIPT T1569_002 
       score = 75
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
+      modified = "2026-03-12"
       tags = "APT, DEMO, MIDDLE_EAST, SCRIPT, T1569_002"
       minimum_yara = "3.5.0"
       
@@ -26991,7 +26968,7 @@ rule StoneDrill_Service_Install_RID3177 : APT DEMO MIDDLE_EAST SCRIPT T1569_002 
       $s3 = "127.0.0.1 >nul && sc start" ascii fullword
       $s4 = "sc config NtsSrv binpath= \"C:\\WINDOWS\\system32\ntssrvr64.exe" ascii
    condition: 
-      2 of them and filesize < 500
+      filesize < 500 and 2 of them
 }
 
 rule StoneDrill_ntssrvr32_RID2EF7 : APT DEMO EXE FILE MIDDLE_EAST {
@@ -33853,7 +33830,7 @@ rule RUAG_Bot_Config_File_RID2E58 : APT DEMO FILE {
       score = 60
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2024-07-19"
+      modified = "2026-03-12"
       tags = "APT, DEMO, FILE"
       minimum_yara = "3.5.0"
       
@@ -33862,7 +33839,7 @@ rule RUAG_Bot_Config_File_RID2E58 : APT DEMO FILE {
       $s2 = "name = " ascii
       $s3 = "exe = cmd.exe" ascii
    condition: 
-      uint32 ( 0 ) == 0x4e4f435b and $s1 at 0 and $s2 and $s3 and filesize < 160
+      uint32 ( 0 ) == 0x4e4f435b and filesize < 160 and $s1 at 0 and $s2 and $s3
 }
 
 rule RUAG_Cobra_Config_File_RID2F1A : APT DEMO FILE NK {
@@ -33874,7 +33851,7 @@ rule RUAG_Cobra_Config_File_RID2F1A : APT DEMO FILE NK {
       score = 60
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2024-07-19"
+      modified = "2026-03-12"
       tags = "APT, DEMO, FILE, NK"
       minimum_yara = "3.5.0"
       
@@ -33891,7 +33868,7 @@ rule RUAG_Cobra_Config_File_RID2F1A : APT DEMO FILE NK {
       $s9 = "[WORKDATA]" ascii
       $s10 = "address1" ascii
    condition: 
-      uint32 ( 0 ) == 0x4d414e5b and $h1 at 0 and 8 of ( $s* ) and filesize < 5KB
+      uint32 ( 0 ) == 0x4d414e5b and filesize < 5KB and $h1 at 0 and 8 of ( $s* )
 }
 
 rule RUAG_Exfil_Config_File_RID2F2B : APT DEMO FILE T1020 {
@@ -33903,7 +33880,7 @@ rule RUAG_Exfil_Config_File_RID2F2B : APT DEMO FILE T1020 {
       score = 60
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2024-07-19"
+      modified = "2026-03-12"
       tags = "APT, DEMO, FILE, T1020"
       minimum_yara = "3.5.0"
       
@@ -33915,7 +33892,7 @@ rule RUAG_Exfil_Config_File_RID2F2B : APT DEMO FILE T1020 {
       $s4 = "post_frag" ascii
       $s5 = "pfsgrowperiod" ascii
    condition: 
-      uint32 ( 0 ) == 0x4152545b and $h1 at 0 and all of ( $s* ) and filesize < 1KB
+      uint32 ( 0 ) == 0x4152545b and filesize < 1KB and $h1 at 0 and all of ( $s* )
 }
 
 rule No_PowerShell_RID2C32 : DEMO EXE FILE HKTL SCRIPT T1059_001 {
@@ -47261,7 +47238,7 @@ rule SVG_LoadURL_RID2AD3 : DEMO EXPLOIT {
       score = 50
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2024-07-19"
+      modified = "2026-03-12"
       tags = "DEMO, EXPLOIT"
       minimum_yara = "3.5.0"
       
@@ -47270,7 +47247,7 @@ rule SVG_LoadURL_RID2AD3 : DEMO EXPLOIT {
       $s2 = "<script>" nocase
       $s3 = "location.href='http" nocase
    condition: 
-      all of ( $s* ) and filesize < 600
+      filesize < 600 and all of ( $s* )
 }
 
 rule DarkEYEv3_Cryptor_RID2D71 : DEMO EXE FILE SUSP {
@@ -47569,7 +47546,7 @@ rule Explosion_Sample_1_RID2E23 : APT DEMO FILE G0123 MIDDLE_EAST T1112 {
       score = 70
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2024-07-19"
+      modified = "2026-03-12"
       tags = "APT, DEMO, FILE, G0123, MIDDLE_EAST, T1112"
       minimum_yara = "3.5.0"
       
@@ -47585,7 +47562,7 @@ rule Explosion_Sample_1_RID2E23 : APT DEMO FILE G0123 MIDDLE_EAST T1112 {
       $s17 = "Office Outlook HTTP" fullword ascii
       $s20 = "Hist :<b> %ws</b>  :%s </br></br>" fullword ascii
    condition: 
-      all of them and uint16 ( 0 ) == 0x5A4D
+      uint16 ( 0 ) == 0x5A4D and all of them
 }
 
 rule Explosion_Sample_2_RID2E24 : APT DEMO FILE G0123 MIDDLE_EAST {
@@ -47597,7 +47574,7 @@ rule Explosion_Sample_2_RID2E24 : APT DEMO FILE G0123 MIDDLE_EAST {
       score = 70
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2024-07-19"
+      modified = "2026-03-12"
       tags = "APT, DEMO, FILE, G0123, MIDDLE_EAST"
       minimum_yara = "3.5.0"
       
@@ -47606,7 +47583,7 @@ rule Explosion_Sample_2_RID2E24 : APT DEMO FILE G0123 MIDDLE_EAST {
       $s1 = "Windows Help DLL" fullword wide
       $s5 = "SetWinHoK" fullword ascii
    condition: 
-      all of them and uint16 ( 0 ) == 0x5A4D
+      uint16 ( 0 ) == 0x5A4D and all of them
 }
 
 rule Explosion_Generic_1_RID2E7E : APT DEMO FILE G0123 GEN MIDDLE_EAST T1091 {
@@ -47618,6 +47595,7 @@ rule Explosion_Generic_1_RID2E7E : APT DEMO FILE G0123 GEN MIDDLE_EAST T1091 {
       score = 90
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2026-03-12"
       hash1 = "1952fa94b582e9af9dca596b5e51c585a78b8b1610639e3b878bbfa365e8e908"
       hash2 = "d8fdcdaad652c19f4f4676cd2f89ae834dbc19e2759a206044b18601875f2726"
       hash3 = "e2e6ed82703de21eb4c5885730ba3db42f3ddda8b94beb2ee0c3af61bc435747"
@@ -47636,7 +47614,7 @@ rule Explosion_Generic_1_RID2E7E : APT DEMO FILE G0123 GEN MIDDLE_EAST T1091 {
       $s13 = "%s %s|" fullword
       $s16 = ":\\autorun.exe" fullword
    condition: 
-      7 of them and uint16 ( 0 ) == 0x5A4D
+      uint16 ( 0 ) == 0x5A4D and 7 of them
 }
 
 rule APT30_Generic_H_RID2C1C : APT DEMO FILE G0013 GEN {
@@ -50206,7 +50184,7 @@ rule Regin_Sample_3_RID2C59 : APT DEMO FILE T1543_003 {
       score = 70
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
+      modified = "2026-03-12"
       tags = "APT, DEMO, FILE, T1543_003"
       minimum_yara = "3.5.0"
       
@@ -50226,7 +50204,7 @@ rule Regin_Sample_3_RID2C59 : APT DEMO FILE T1543_003 {
       $s13 = "RtlGetVersion" fullword wide
       $s14 = "ntkrnlpa.exe" fullword ascii
    condition: 
-      uint32 ( 0 ) == 0xfedcbafe and all of ( $s* ) and filesize > 160KB and filesize < 200KB
+      uint32 ( 0 ) == 0xfedcbafe and filesize > 160KB and filesize < 200KB and all of ( $s* )
 }
 
 rule Regin_sig_svcsstat_RID2E82 : APT DEMO FILE {
@@ -50238,7 +50216,7 @@ rule Regin_sig_svcsstat_RID2E82 : APT DEMO FILE {
       score = 70
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
+      modified = "2026-03-12"
       tags = "APT, DEMO, FILE"
       minimum_yara = "3.5.0"
       
@@ -50251,7 +50229,7 @@ rule Regin_sig_svcsstat_RID2E82 : APT DEMO FILE {
       $s5 = "\\\\?\\UNC" fullword wide
       $s6 = "%ls%ls" fullword wide
    condition: 
-      all of them and filesize < 15KB and filesize > 10KB
+      filesize < 15KB and filesize > 10KB and all of them
 }
 
 rule Regin_Sample_1_RID2C57 : APT DEMO T1136 {
@@ -50263,7 +50241,7 @@ rule Regin_Sample_1_RID2C57 : APT DEMO T1136 {
       score = 70
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
+      modified = "2026-03-12"
       tags = "APT, DEMO, T1136"
       minimum_yara = "3.5.0"
       
@@ -50286,7 +50264,7 @@ rule Regin_Sample_1_RID2C57 : APT DEMO T1136 {
       $s20 = "'user registry info - userIndexed: %d" fullword ascii
       $fp1 = "Enter SerialBuildResourceList" ascii fullword
    condition: 
-      all of them and filesize < 110KB and filesize > 80KB and not $fp1
+      filesize < 110KB and filesize > 80KB and all of them and not $fp1
 }
 
 rule Regin_Sample_2_RID2C58 : APT DEMO T1543_003 {
@@ -50298,7 +50276,7 @@ rule Regin_Sample_2_RID2C58 : APT DEMO T1543_003 {
       score = 70
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
+      modified = "2026-03-12"
       tags = "APT, DEMO, T1543_003"
       minimum_yara = "3.5.0"
       
@@ -50321,7 +50299,7 @@ rule Regin_Sample_2_RID2C58 : APT DEMO T1543_003 {
       $s19 = "ExReleaseFastMutexUnsafe" fullword ascii
       $s20 = "ExAcquireFastMutexUnsafe" fullword ascii
    condition: 
-      all of them and filesize < 40KB and filesize > 30KB
+      filesize < 40KB and filesize > 30KB and all of them
 }
 
 rule Regin_Sample_Set_2_RID2DE3 : APT DEMO T1543_003 {
@@ -50333,6 +50311,7 @@ rule Regin_Sample_Set_2_RID2DE3 : APT DEMO T1543_003 {
       score = 70
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2026-03-12"
       hash1 = "8487a961c8244004c9276979bb4b0c14392fc3b8"
       hash2 = "bcf3461d67b39a427c83f9e39b9833cfec977c61"
       tags = "APT, DEMO, T1543_003"
@@ -50361,7 +50340,7 @@ rule Regin_Sample_Set_2_RID2DE3 : APT DEMO T1543_003 {
       $s19 = "IoCreateDevice" fullword ascii
       $s20 = "KefReleaseSpinLockFromDpcLevel" fullword ascii
    condition: 
-      all of them and filesize < 40KB and filesize > 30KB
+      filesize < 40KB and filesize > 30KB and all of them
 }
 
 rule aspbackdoor_EDIT_RID2D1F : DEMO T1505_003 WEBSHELL {
@@ -61559,6 +61538,29 @@ rule HKTL_Amplia_Security_Tool_RID30AB : DEMO EXE HKTL SUSP T1003 {
       $f = "PPWDUMP_DATA" 
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 3000KB and ( 2 of them ) or 3 of them
+}
+
+rule StoneDrill_BAT_1_RID2CD7 : APT DEMO FILE MIDDLE_EAST SCRIPT {
+   meta:
+      description = "Rule to detect Batch file from StoneDrill report"
+      author = "Florian Roth"
+      reference = "https://securelist.com/blog/research/77725/from-shamoon-to-stonedrill/"
+      date = "1970-01-01 10:06:21"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      modified = "2026-03-12"
+      tags = "APT, DEMO, FILE, MIDDLE_EAST, SCRIPT"
+      minimum_yara = "3.5.0"
+      
+   strings:
+      $s1 = "set u100=" ascii
+      $s2 = "set u200=service" ascii fullword
+      $s3 = "set u800=%~dp0" ascii fullword
+      $s4 = "\"%systemroot%\\system32\\%u100%\"" ascii
+      $s5 = "%\" start /b %systemroot%\\system32\\%" ascii
+   condition: 
+      uint32 ( 0 ) == 0x68636540 and filesize < 500 and 2 of them
 }/* Peaklight Ransomware */
 
 rule M_AES_Encrypted_payload {
