@@ -1,8 +1,8 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2026-03-18 21:31
+    Retrieved: 2026-03-19 21:32
     Generated for User: demo
-    Number of Rules: 2718
+    Number of Rules: 2717
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
@@ -9896,24 +9896,6 @@ rule MAL_Ryuk_Ransomware_RID2E73 : CRIME DEMO EXE FILE MAL RANSOM {
       $x5 = "RyukReadMe.txt" fullword wide
    condition: 
       uint16 ( 0 ) == 0x5a4d and filesize < 400KB and ( pe.imphash ( ) == "4a069c1abe5aca148d5a8fdabc26751e" or pe.imphash ( ) == "dc5733c013378fa418d13773f5bfe6f1" or 1 of them )
-}
-
-rule APT_APT10_Malware_Imphash_Dec18_1_RID3250 : APT CHINA DEMO EXE FILE G0045 {
-   meta:
-      description = "Detects APT10 malware based on ImpHashes"
-      author = "Florian Roth"
-      reference = "AlienVault OTX IOCs - statistical sample analysis"
-      date = "2018-12-28 13:59:51"
-      score = 90
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "APT, CHINA, DEMO, EXE, FILE, G0045"
-      required_modules = "pe"
-      minimum_yara = "3.5.0"
-      
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 6000KB and ( pe.imphash ( ) == "0556ff5e5f8744bff47d4921494ba46d" or pe.imphash ( ) == "cb1194123f68a68eb14552c085b620ce" or pe.imphash ( ) == "efad9ff8c0d2a6419bf1dd970bcd806d" or pe.imphash ( ) == "7a861cd9c495e1d950a43cb708a22985" or pe.imphash ( ) == "a5d0545030be75a421529c2b0be6c4bd" or pe.imphash ( ) == "94491f4a812b0297419dc888aa4fd2a5" )
 }
 
 rule HKTL_NoPowerShell_RID2D65 : DEMO HKTL {
