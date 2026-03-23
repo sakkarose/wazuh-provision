@@ -1,14 +1,36 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2026-03-22 21:23
+    Retrieved: 2026-03-23 21:33
     Generated for User: demo
-    Number of Rules: 2717
+    Number of Rules: 2718
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "pe"
 import "math"
+import "pe"
+
+rule MAL_Kernel_RegPhantom_Mar26_RID30E6 : DEMO EXE FILE MAL T1014 {
+   meta:
+      description = "Detects RegPhantom, a kernel-mode rootkit that allow attacker to inject arbitrary code from unprivileged user-mode into kernel-mode and execute it."
+      author = "Pezier Pierre-Henri"
+      reference = "Internal Research"
+      date = "2026-03-19 12:59:31"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, EXE, FILE, MAL, T1014"
+      minimum_yara = "3.5.0"
+      
+   strings:
+      $s1 = "CmRegisterCallback" fullword
+      $s2 = "PsSetCreateThreadNotifyRoutine" fullword
+      $o1 = { 48 8b 09 0f b6 14 08 4c 31 c2 88 14 08 } 
+      $o2 = { c6 01 01 48 83 38 77 0f 94 c0 24 01 } 
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and all of them
+}
 
 rule MAL_POC_Microsoft_Warbird_Loader_Feb26_RID34F5 : DEMO EXE FILE MAL {
    meta:
