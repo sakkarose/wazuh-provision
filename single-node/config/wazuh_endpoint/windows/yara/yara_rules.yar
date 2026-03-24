@@ -1,6 +1,6 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2026-03-23 21:33
+    Retrieved: 2026-03-24 21:35
     Generated for User: demo
     Number of Rules: 2718
     
@@ -1236,10 +1236,10 @@ rule SUSP_LNK_Suspicious_Folders_Jan25_RID3343 : DEMO FILE SUSP T1210 T1547_009 
       author = "Florian Roth"
       reference = "Internal Research"
       date = "2025-01-24 14:40:21"
-      score = 65
+      score = 75
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
+      modified = "2026-03-19"
       tags = "DEMO, FILE, SUSP, T1210, T1547_009"
       minimum_yara = "3.5.0"
       
