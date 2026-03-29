@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2026-03-28 21:27
+    Retrieved: 2026-03-29 21:28
     Generated for User: demo
     Number of Rules: 2718
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "pe"
 import "math"
+import "pe"
 
 rule MAL_Kernel_RegPhantom_Mar26_RID30E6 : DEMO EXE FILE MAL T1014 {
    meta:
