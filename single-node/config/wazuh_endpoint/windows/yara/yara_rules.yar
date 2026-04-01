@@ -1,14 +1,102 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2026-03-31 21:36
+    Retrieved: 2026-04-01 21:38
     Generated for User: demo
-    Number of Rules: 2718
+    Number of Rules: 2722
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "math"
 import "pe"
+import "math"
+
+rule MAL_NPM_SupplyChain_Attack_Mar26_RID32A2 : DEMO MAL {
+   meta:
+      description = "Detects package.json which include the malicious plain-crypto-js package as dependency"
+      author = "Marius Benthin"
+      reference = "https://www.stepsecurity.io/blog/axios-compromised-on-npm-malicious-versions-drop-remote-access-trojan"
+      date = "2026-03-31 14:13:31"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, MAL"
+      minimum_yara = "3.5.0"
+      
+   strings:
+      $s1 = "\"dependencies\":" 
+      $s2 = { 22 70 6C 61 69 6E 2D 63 72 79 70 74 6F 2D 6A 73 22 3A [0-3] 22 [0-2] 34 2E 32 2E } 
+   condition: 
+      filesize < 10KB and all of them
+}
+
+rule SUSP_JS_Dropper_Mar26_RID2E7A : DEMO SUSP T1059_007 {
+   meta:
+      description = "Detects suspicious JavaScript dropper used in plain-crypto-js supply chain attacks"
+      author = "Marius Benthin"
+      reference = "https://www.stepsecurity.io/blog/axios-compromised-on-npm-malicious-versions-drop-remote-access-trojan"
+      date = "2026-03-31 11:16:11"
+      score = 70
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, SUSP, T1059_007"
+      minimum_yara = "3.5.0"
+      
+   strings:
+      $sa1 = "Buffer.from(" 
+      $sa2 = "FileSync(" 
+      $sa3 = ".replaceAll(" 
+      $sb1 = ".arch()" 
+      $sb2 = ".platform()" 
+      $sb3 = ".release()" 
+      $sb4 = ".type()" 
+   condition: 
+      filesize < 10KB and all of ( $sa* ) and 2 of ( $sb* )
+}
+
+rule MAL_LiteLLM_SupplyChain_Mar26_RID3173 : DEMO MAL {
+   meta:
+      description = "Detects malicious indicators used in LiteLLM supply chain attack"
+      author = "Marius Benthin"
+      reference = "https://github.com/BerriAI/litellm/issues/24512"
+      date = "2026-03-28 13:23:01"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, MAL"
+      minimum_yara = "4.0.0"
+      
+   strings:
+      $s1 = "exec(base64.b64decode(" 
+      $s2 = "litellm." base64
+      $s3 = "subprocess.DEVNULL" 
+   condition: 
+      filesize < 500KB and all of them
+}
+
+rule MAL_Telnyx_SupplyChain_Mar26_RID3184 : DEMO MAL {
+   meta:
+      description = "Detects malicious indicators used in Telnyx supply chain attack"
+      author = "Marius Benthin"
+      reference = "https://www.aikido.dev/blog/telnyx-pypi-compromised-teampcp-canisterworm"
+      date = "2026-03-28 13:25:51"
+      score = 80
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      
+      tags = "DEMO, MAL"
+      minimum_yara = "3.5.0"
+      
+   strings:
+      $s1 = "bXNidWlsZC5leGU=" 
+      $s2 = "TW96aWxsY" 
+      $s3 = ".getnframes(" 
+      $s4 = "exec(base64.b64decode(" 
+   condition: 
+      filesize < 500KB and 3 of them
+}
 
 rule MAL_Kernel_RegPhantom_Mar26_RID30E6 : DEMO EXE FILE MAL T1014 {
    meta:
