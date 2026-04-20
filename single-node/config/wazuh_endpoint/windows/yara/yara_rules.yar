@@ -1,14 +1,14 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2026-04-19 21:32
+    Retrieved: 2026-04-20 21:42
     Generated for User: demo
     Number of Rules: 2721
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
 
-import "math"
 import "pe"
+import "math"
 
 rule HKTL_BlueHammer_Apr26_RID2E6F : DEMO HKTL T1003 T1068 {
    meta:
@@ -122,7 +122,7 @@ rule MAL_LiteLLM_SupplyChain_Mar26_RID3173 : DEMO MAL {
       filesize < 500KB and all of them
 }
 
-rule MAL_POC_Microsoft_Warbird_Loader_Feb26_RID34F5 : DEMO EXE FILE MAL {
+rule MAL_POC_Microsoft_Warbird_Loader_Feb26_RID34F5 : DEMO EXE FILE MAL Warbird_Loader {
    meta:
       description = "Detects a POC to turn Microsoft Warbird into a shellcode loader"
       author = "X__Junior"
@@ -132,7 +132,7 @@ rule MAL_POC_Microsoft_Warbird_Loader_Feb26_RID34F5 : DEMO EXE FILE MAL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "DEMO, EXE, FILE, MAL"
+      tags = "DEMO, EXE, FILE, MAL, Warbird_Loader"
       minimum_yara = "3.5.0"
       
    strings:
@@ -141,7 +141,7 @@ rule MAL_POC_Microsoft_Warbird_Loader_Feb26_RID34F5 : DEMO EXE FILE MAL {
       uint16 ( 0 ) == 0x5a4d and $op
 }
 
-rule MAL_Chrysalis_DllLoader_Feb26_RID31A2 : CHINA DEMO EXE FILE G0030 MAL {
+rule MAL_Chrysalis_DllLoader_Feb26_RID31A2 : CHINA Chrysalis DEMO EXE FILE G0030 MAL {
    meta:
       description = "Detects DLL used to load Chrysalis backdoor, seen being used in the compromise of the infrastructure hosting Notepad++ by Chinese APT group Lotus Blossom"
       author = "X__Junior"
@@ -151,7 +151,7 @@ rule MAL_Chrysalis_DllLoader_Feb26_RID31A2 : CHINA DEMO EXE FILE G0030 MAL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "CHINA, DEMO, EXE, FILE, G0030, MAL"
+      tags = "CHINA, Chrysalis, DEMO, EXE, FILE, G0030, MAL"
       minimum_yara = "3.5.0"
       
    strings:
@@ -161,7 +161,7 @@ rule MAL_Chrysalis_DllLoader_Feb26_RID31A2 : CHINA DEMO EXE FILE G0030 MAL {
       uint16 ( 0 ) == 0x5a4d and all of them
 }
 
-rule MAL_Chrysalis_Shellcode_Loader_Feb26_RID3478 : CHINA DEMO G0030 MAL {
+rule MAL_Chrysalis_Shellcode_Loader_Feb26_RID3478 : CHINA Chrysalis DEMO G0030 MAL {
    meta:
       description = "Detects shellcode used to load Chrysalis backdoor, seen being used in the compromise of the infrastructure hosting Notepad++ by Chinese APT group Lotus Blossom"
       author = "X__Junior"
@@ -171,7 +171,7 @@ rule MAL_Chrysalis_Shellcode_Loader_Feb26_RID3478 : CHINA DEMO G0030 MAL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "CHINA, DEMO, G0030, MAL"
+      tags = "CHINA, Chrysalis, DEMO, G0030, MAL"
       minimum_yara = "3.5.0"
       
    strings:
@@ -181,7 +181,7 @@ rule MAL_Chrysalis_Shellcode_Loader_Feb26_RID3478 : CHINA DEMO G0030 MAL {
       1 of them
 }
 
-rule MAL_Chrysalis_Backdoor_Feb26_RID3154 : CHINA DEMO G0030 MAL {
+rule MAL_Chrysalis_Backdoor_Feb26_RID3154 : CHINA Chrysalis DEMO G0030 MAL {
    meta:
       description = "Detects Chrysalis backdoor, seen being used in the compromise of the infrastructure hosting Notepad++ by Chinese APT group Lotus Blossom"
       author = "X__Junior"
@@ -191,7 +191,7 @@ rule MAL_Chrysalis_Backdoor_Feb26_RID3154 : CHINA DEMO G0030 MAL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "CHINA, DEMO, G0030, MAL"
+      tags = "CHINA, Chrysalis, DEMO, G0030, MAL"
       minimum_yara = "3.5.0"
       
    strings:
@@ -7401,7 +7401,7 @@ rule APT_MAL_NK_Lazarus_VHD_Ransomware_Oct20_2_RID359F : APT CRIME DEMO EXE FILE
       uint16 ( 0 ) == 0x5a4d and filesize < 9000KB and all of them
 }
 
-rule APT_MAL_SLOTHFULMEDIA_Oct20_1_RID2FD6 : APT DEMO EXE MAL {
+rule APT_MAL_SLOTHFULMEDIA_Oct20_1_RID2FD6 : APT DEMO EXE MAL slothfulmedia {
    meta:
       description = "Detects SLOTHFULMEDIA malware"
       author = "Florian Roth"
@@ -7413,7 +7413,7 @@ rule APT_MAL_SLOTHFULMEDIA_Oct20_1_RID2FD6 : APT DEMO EXE MAL {
       hash1 = "64d78eec46c9ddd4b9a366de62ba0f2813267dc4393bc79e4c9a51a9bb7e6273"
       hash2 = "927d945476191a3523884f4c0784fb71c16b7738bd7f2abd1e3a198af403f0ae"
       hash3 = "f0503f0131040b805e106eafe64a65d9404a0e279f052237b868e456c34d36e6"
-      tags = "APT, DEMO, EXE, MAL"
+      tags = "APT, DEMO, EXE, MAL, slothfulmedia"
       minimum_yara = "3.5.0"
       
    strings:
@@ -8683,7 +8683,7 @@ rule APT_APT41_POISONPLUG_SHADOW_RID2F33 : APT DEMO EXE FILE G0096 {
       uint16 ( 0 ) == 0x5a4d and filesize < 500KB and pe.imphash ( ) == "c67de089f2009b21715744762fc484e8"
 }
 
-rule APT_APT41_CRACKSHOT_RID2CA0 : APT DEMO EXE FILE G0096 {
+rule APT_APT41_CRACKSHOT_RID2CA0 : APT DEMO EXE FILE G0096 crackshot {
    meta:
       description = "Detects APT41 malware CRACKSHOT"
       author = "Florian Roth"
@@ -8693,7 +8693,7 @@ rule APT_APT41_CRACKSHOT_RID2CA0 : APT DEMO EXE FILE G0096 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "993d14d00b1463519fea78ca65d8529663f487cd76b67b3fd35440bcdf7a8e31"
-      tags = "APT, DEMO, EXE, FILE, G0096"
+      tags = "APT, DEMO, EXE, FILE, G0096, crackshot"
       minimum_yara = "3.5.0"
       
    strings:
@@ -9196,7 +9196,7 @@ rule APT_ATP28_Sofacy_Indicators_May19_1_RID3357 : APT DEMO EXE FILE G0007 RUSSI
       uint16 ( 0 ) == 0x5a4d and filesize < 10000KB and ( pe.imphash ( ) == "f4e1c3aaec90d5dfa23c04da75ac9501" or 1 of ( $x* ) or ( $s1 and 2 of ( $op* ) ) )
 }
 
-rule MAL_RANSOM_RobinHood_May19_1_RID307D : CRIME DEMO EXE FILE MAL RANSOM {
+rule MAL_RANSOM_RobinHood_May19_1_RID307D : CRIME DEMO EXE FILE MAL RANSOM robinhood {
    meta:
       description = "Detects RobinHood Ransomware"
       author = "Florian Roth"
@@ -9206,7 +9206,7 @@ rule MAL_RANSOM_RobinHood_May19_1_RID307D : CRIME DEMO EXE FILE MAL RANSOM {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "21cb84fc7b33e8e31364ff0e58b078db8f47494a239dc3ccbea8017ff60807e3"
-      tags = "CRIME, DEMO, EXE, FILE, MAL, RANSOM"
+      tags = "CRIME, DEMO, EXE, FILE, MAL, RANSOM, robinhood"
       minimum_yara = "3.5.0"
       
    strings:
@@ -9269,7 +9269,7 @@ rule APT_NK_BabyShark_KimJoingRAT_Apr19_1_RID339E : APT DEMO EXE FILE NK {
       uint16 ( 0 ) == 0x5a4d and filesize < 2000KB and ( 1 of ( $x* ) or ( $a1 and 3 of ( $s* ) ) )
 }
 
-rule APT_DNSpionage_Karkoff_Malware_Apr19_1_RID34E4 : APT DEMO EXE FILE {
+rule APT_DNSpionage_Karkoff_Malware_Apr19_1_RID34E4 : APT DEMO EXE FILE dnspionage {
    meta:
       description = "Detects DNSpionage Karkoff malware"
       author = "Florian Roth"
@@ -9281,7 +9281,7 @@ rule APT_DNSpionage_Karkoff_Malware_Apr19_1_RID34E4 : APT DEMO EXE FILE {
       hash1 = "6a251ed6a2c6a0a2be11f2a945ec68c814d27e2b6ef445f4b2c7a779620baa11"
       hash2 = "b017b9fc2484ce0a5629ff1fed15bca9f62f942eafbb74da6a40f40337187b04"
       hash3 = "5b102bf4d997688268bab45336cead7cdf188eb0d6355764e53b4f62e1cdf30c"
-      tags = "APT, DEMO, EXE, FILE"
+      tags = "APT, DEMO, EXE, FILE, dnspionage"
       minimum_yara = "3.5.0"
       
    strings:
@@ -9718,7 +9718,7 @@ rule APT_WebShell_AUS_5_RID2D47 : APT DEMO FILE T1505_003 WEBSHELL {
       uint16 ( 0 ) == 0x7566 and filesize < 2KB and 4 of them
 }
 
-rule HKTL_PowerKatz_Feb19_1_RID2EB0 : DEMO HKTL {
+rule HKTL_PowerKatz_Feb19_1_RID2EB0 : DEMO HKTL powerkatz {
    meta:
       description = "Detetcs a tool used in the Australian Parliament House network compromise"
       author = "Florian Roth"
@@ -9728,7 +9728,7 @@ rule HKTL_PowerKatz_Feb19_1_RID2EB0 : DEMO HKTL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "DEMO, HKTL"
+      tags = "DEMO, HKTL, powerkatz"
       minimum_yara = "3.5.0"
       
    strings:
@@ -9833,7 +9833,7 @@ rule SUSP_Katz_PDB_RID2B8A : DEMO EXE FILE SUSP {
       uint16 ( 0 ) == 0x5a4d and filesize < 6000KB and all of them
 }
 
-rule MAL_ExileRAT_Feb19_1_RID2D8E : DEMO EXE FILE MAL {
+rule MAL_ExileRAT_Feb19_1_RID2D8E : DEMO EXE FILE MAL exilerat {
    meta:
       description = "Detects Exile RAT"
       author = "Florian Roth"
@@ -9843,7 +9843,7 @@ rule MAL_ExileRAT_Feb19_1_RID2D8E : DEMO EXE FILE MAL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "3eb026d8b778716231a07b3dbbdc99e2d3a635b1956de8a1e6efc659330e52de"
-      tags = "DEMO, EXE, FILE, MAL"
+      tags = "DEMO, EXE, FILE, MAL, exilerat"
       required_modules = "pe"
       minimum_yara = "3.5.0"
       
@@ -10181,7 +10181,7 @@ rule SUSP_PiratedOffice_2007_RID2EF8 : DEMO FILE OFFICE SUSP T1203 T1566_001 {
       uint16 ( 0 ) == 0xcfd0 and filesize < 300KB and all of them
 }
 
-rule MAL_DNSPIONAGE_Malware_Nov18_RID3055 : DEMO EXE FILE MAL {
+rule MAL_DNSPIONAGE_Malware_Nov18_RID3055 : DEMO EXE FILE MAL dnspionage {
    meta:
       description = "Detects DNSpionage Malware"
       author = "Florian Roth"
@@ -10193,7 +10193,7 @@ rule MAL_DNSPIONAGE_Malware_Nov18_RID3055 : DEMO EXE FILE MAL {
       modified = "2023-01-06"
       hash1 = "2010f38ef300be4349e7bc287e720b1ecec678cacbf0ea0556bcf765f6e073ec"
       hash2 = "45a9edb24d4174592c69d9d37a534a518fbe2a88d3817fc0cc739e455883b8ff"
-      tags = "DEMO, EXE, FILE, MAL"
+      tags = "DEMO, EXE, FILE, MAL, dnspionage"
       minimum_yara = "3.5.0"
       
    strings:
@@ -10699,7 +10699,7 @@ rule SUSP_Microsoft_RAR_SFX_Combo_RID3154 : ANOMALY DEMO EXE FILE SUSP {
       uint16 ( 0 ) == 0x5a4d and filesize < 3000KB and 1 of ( $s* ) and $c1
 }
 
-rule HKTL_BlackBone_DriverInjector_RID320D : DEMO EXE FILE HKTL {
+rule HKTL_BlackBone_DriverInjector_RID320D : DEMO EXE FILE HACKTOOL_Blackbone HKTL {
    meta:
       description = "Detects BlackBone Driver injector"
       author = "Florian Roth"
@@ -10712,7 +10712,7 @@ rule HKTL_BlackBone_DriverInjector_RID320D : DEMO EXE FILE HKTL {
       hash1 = "8062a4284c719412270614458150cb4abbdf77b2fc35f770ce9c45d10ccb1f4d"
       hash2 = "2d2fc27200c22442ac03e2f454b6e1f90f2bbc17017f05b09f7824fac6beb14b"
       hash3 = "e45da157483232d9c9c72f44b13fca2a0d268393044db00104cc1afe184ca8d1"
-      tags = "DEMO, EXE, FILE, HKTL"
+      tags = "DEMO, EXE, FILE, HACKTOOL_Blackbone, HKTL"
       minimum_yara = "3.5.0"
       
    strings:
@@ -11524,7 +11524,7 @@ rule APT_RANCOR_JS_Malware_RID2E3E : APT DEMO FILE G0075 T1053_005 T1059_007 {
       uint16 ( 0 ) == 0x533c and filesize < 1KB and 1 of them
 }
 
-rule APT_RANCOR_PLAINTEE_Variant_RID2FFF : APT DEMO EXE FILE G0075 T1112 {
+rule APT_RANCOR_PLAINTEE_Variant_RID2FFF : APT DEMO EXE FILE G0075 T1112 plaintee {
    meta:
       description = "Detects PLAINTEE malware"
       author = "Florian Roth"
@@ -11535,7 +11535,7 @@ rule APT_RANCOR_PLAINTEE_Variant_RID2FFF : APT DEMO EXE FILE G0075 T1112 {
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "6aad1408a72e7adc88c2e60631a6eee3d77f18a70e4eee868623588612efdd31"
       hash2 = "bcd37f1d625772c162350e5383903fe8dbed341ebf0dc38035be5078624c039e"
-      tags = "APT, DEMO, EXE, FILE, G0075, T1112"
+      tags = "APT, DEMO, EXE, FILE, G0075, T1112, plaintee"
       minimum_yara = "3.5.0"
       
    strings:
@@ -11549,7 +11549,7 @@ rule APT_RANCOR_PLAINTEE_Variant_RID2FFF : APT DEMO EXE FILE G0075 T1112 {
       uint16 ( 0 ) == 0x5a4d and filesize < 100KB and 3 of them
 }
 
-rule APT_RANCOR_PLAINTEE_Malware_Exports_RID3347 : APT DEMO EXE FILE G0075 {
+rule APT_RANCOR_PLAINTEE_Malware_Exports_RID3347 : APT DEMO EXE FILE G0075 plaintee {
    meta:
       description = "Detects PLAINTEE malware"
       author = "Florian Roth"
@@ -11559,7 +11559,7 @@ rule APT_RANCOR_PLAINTEE_Malware_Exports_RID3347 : APT DEMO EXE FILE G0075 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "c35609822e6239934606a99cb3dbc925f4768f0b0654d6a2adc35eca473c505d"
-      tags = "APT, DEMO, EXE, FILE, G0075"
+      tags = "APT, DEMO, EXE, FILE, G0075, plaintee"
       required_modules = "pe"
       minimum_yara = "3.6.0"
       
@@ -13717,7 +13717,7 @@ rule TA18_074A_screen_RID2C29 : APT DEMO EXE FILE T1113 {
       uint16 ( 0 ) == 0x5a4d and filesize < 60KB and 3 of them
 }
 
-rule APT15_Malware_Mar18_RoyalCli_RID30EA : APT DEMO EXE FILE G0004 {
+rule APT15_Malware_Mar18_RoyalCli_RID30EA : APT DEMO EXE FILE G0004 royalcli {
    meta:
       description = "Detects malware from APT 15 report by NCC Group"
       author = "Florian Roth"
@@ -13728,7 +13728,7 @@ rule APT15_Malware_Mar18_RoyalCli_RID30EA : APT DEMO EXE FILE G0004 {
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2024-07-19"
       hash1 = "6df9b712ff56009810c4000a0ad47e41b7a6183b69416251e060b5c80cd05785"
-      tags = "APT, DEMO, EXE, FILE, G0004"
+      tags = "APT, DEMO, EXE, FILE, G0004, royalcli"
       minimum_yara = "3.5.0"
       
    strings:
@@ -13743,7 +13743,7 @@ rule APT15_Malware_Mar18_RoyalCli_RID30EA : APT DEMO EXE FILE G0004 {
       uint16 ( 0 ) == 0x5a4d and filesize < 200KB and 2 of them
 }
 
-rule APT15_Malware_Mar18_RoyalDNS_RID30B7 : APT DEMO EXE FILE G0004 {
+rule APT15_Malware_Mar18_RoyalDNS_RID30B7 : APT DEMO EXE FILE G0004 royaldns {
    meta:
       description = "Detects malware from APT 15 report by NCC Group"
       author = "Florian Roth"
@@ -13754,7 +13754,7 @@ rule APT15_Malware_Mar18_RoyalDNS_RID30B7 : APT DEMO EXE FILE G0004 {
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2024-07-19"
       hash1 = "bc937f6e958b339f6925023bc2af375d669084e9551fd3753e501ef26e36b39d"
-      tags = "APT, DEMO, EXE, FILE, G0004"
+      tags = "APT, DEMO, EXE, FILE, G0004, royaldns"
       required_modules = "pe"
       minimum_yara = "3.6.0"
       
@@ -14524,7 +14524,7 @@ rule Destructive_Ransomware_Gen1_RID31CB : CRIME DEMO EXE FILE MAL RANSOM {
       uint16 ( 0 ) == 0x5a4d and filesize < 100KB and 1 of them
 }
 
-rule OlympicDestroyer_Gen2_RID2F5A : DEMO EXE FILE MAL {
+rule OlympicDestroyer_Gen2_RID2F5A : DEMO EXE FILE MAL olympicdestroyer {
    meta:
       description = "Detects Olympic Destroyer malware"
       author = "Florian Roth"
@@ -14536,7 +14536,7 @@ rule OlympicDestroyer_Gen2_RID2F5A : DEMO EXE FILE MAL {
       hash1 = "d934cb8d0eadb93f8a57a9b8853c5db218d5db78c16a35f374e413884d915016"
       hash2 = "3e27b6b287f0b9f7e85bfe18901d961110ae969d58b44af15b1d75be749022c2"
       hash3 = "edb1ff2521fb4bf748111f92786d260d40407a2e8463dcd24bb09f908ee13eb9"
-      tags = "DEMO, EXE, FILE, MAL"
+      tags = "DEMO, EXE, FILE, MAL, olympicdestroyer"
       required_modules = "pe"
       minimum_yara = "3.5.0"
       
@@ -15492,7 +15492,7 @@ rule VBS_dropper_script_Dec17_1_RID30AE : DEMO SCRIPT T1059 {
       filesize < 600KB and $a1 and 1 of ( $s* )
 }
 
-rule RemCom_RemoteCommandExecution_RID3292 : DEMO HKTL T1021_002 {
+rule RemCom_RemoteCommandExecution_RID3292 : DEMO HKTL T1021_002 remcom {
    meta:
       description = "Detects strings from RemCom tool"
       author = "Florian Roth"
@@ -15502,7 +15502,7 @@ rule RemCom_RemoteCommandExecution_RID3292 : DEMO HKTL T1021_002 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2024-07-19"
-      tags = "DEMO, HKTL, T1021_002"
+      tags = "DEMO, HKTL, T1021_002, remcom"
       minimum_yara = "3.5.0"
       
    strings:
@@ -15904,7 +15904,7 @@ rule ReconCommands_in_File_RID2F4F : DEMO FILE SUSP T1007 T1033 T1057 T1082 {
       filesize < 5KB and 4 of them
 }
 
-rule ZXshell_20171211_chrsben_RID2F0D : DEMO EXE FILE MAL {
+rule ZXshell_20171211_chrsben_RID2F0D : DEMO EXE FILE MAL zxshell {
    meta:
       description = "Detects ZxShell variant surfaced in Dec 17"
       author = "Florian Roth"
@@ -15915,7 +15915,7 @@ rule ZXshell_20171211_chrsben_RID2F0D : DEMO EXE FILE MAL {
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2024-07-19"
       hash1 = "dd01e7a1c9b20d36ea2d961737780f2c0d56005c370e50247e38c5ca80dcaa4f"
-      tags = "DEMO, EXE, FILE, MAL"
+      tags = "DEMO, EXE, FILE, MAL, zxshell"
       required_modules = "pe"
       minimum_yara = "3.6.0"
       
@@ -16216,7 +16216,7 @@ rule Webshell_FOPO_Obfuscation_APT_ON_Nov17_1_RID3580 : APT DEMO FILE NK OBFUS T
       uint16 ( 0 ) == 0x3f3c and filesize < 800KB and ( $x1 or ( $s1 in ( 0 .. 350 ) and $f1 at ( filesize - 23 ) ) )
 }
 
-rule HiddenCobra_FallChill_1_RID2F9E : APT DEMO EXE FILE G0032 NK T1218_010 {
+rule HiddenCobra_FallChill_1_RID2F9E : APT DEMO EXE FILE G0032 NK T1218_010 fallchill {
    meta:
       description = "Semiautomatically generated YARA rule"
       author = "Florian Roth"
@@ -16226,7 +16226,7 @@ rule HiddenCobra_FallChill_1_RID2F9E : APT DEMO EXE FILE G0032 NK T1218_010 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "a606716355035d4a1ea0b15f3bee30aad41a2c32df28c2d468eafd18361d60d6"
-      tags = "APT, DEMO, EXE, FILE, G0032, NK, T1218_010"
+      tags = "APT, DEMO, EXE, FILE, G0032, NK, T1218_010, fallchill"
       required_modules = "pe"
       minimum_yara = "3.5.0"
       
@@ -16244,7 +16244,7 @@ rule HiddenCobra_FallChill_1_RID2F9E : APT DEMO EXE FILE G0032 NK T1218_010 {
       uint16 ( 0 ) == 0x5a4d and filesize < 300KB and ( pe.imphash ( ) == "6135d9bc3591ae7bc72d070eadd31755" or 3 of ( $s* ) or 4 of them )
 }
 
-rule HiddenCobra_FallChill_2_RID2F9F : APT DEMO EXE FILE G0032 NK {
+rule HiddenCobra_FallChill_2_RID2F9F : APT DEMO EXE FILE G0032 NK fallchill {
    meta:
       description = "Semiautomatically generated YARA rule"
       author = "Florian Roth"
@@ -16254,7 +16254,7 @@ rule HiddenCobra_FallChill_2_RID2F9F : APT DEMO EXE FILE G0032 NK {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "0a118eb23399000d148186b9079fa59caf4c3faa7e7a8f91533e467ac9b6ff41"
-      tags = "APT, DEMO, EXE, FILE, G0032, NK"
+      tags = "APT, DEMO, EXE, FILE, G0032, NK, fallchill"
       required_modules = "pe"
       minimum_yara = "3.5.0"
       
@@ -16365,7 +16365,7 @@ rule SunOrcal_Malware_Nov17_1_RID2FEA : DEMO EXE FILE MAL {
       uint16 ( 0 ) == 0x5a4d and filesize < 200KB and 1 of them
 }
 
-rule Daserf_Nov1_BronzeButler_RID3066 : CHINA DEMO EXE FILE G0060 MAL {
+rule Daserf_Nov1_BronzeButler_RID3066 : CHINA DEMO EXE FILE G0060 MAL daserf {
    meta:
       description = "Detects Daserf malware used by Bronze Butler"
       author = "Florian Roth"
@@ -16376,7 +16376,7 @@ rule Daserf_Nov1_BronzeButler_RID3066 : CHINA DEMO EXE FILE G0060 MAL {
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2024-07-19"
       hash1 = "5ede6f93f26ccd6de2f93c9bd0f834279df5f5cfe3457915fae24a3aec46961b"
-      tags = "CHINA, DEMO, EXE, FILE, G0060, MAL"
+      tags = "CHINA, DEMO, EXE, FILE, G0060, MAL, daserf"
       minimum_yara = "3.5.0"
       
    strings:
@@ -16771,7 +16771,7 @@ rule WinAgent_BadPatch_2_RID2E15 : APT DEMO EXE FILE {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 700KB and 3 of them )
 }
 
-rule SeDLL_Javascript_Decryptor_RID3136 : APT DEMO EXE FILE T1218_010 {
+rule SeDLL_Javascript_Decryptor_RID3136 : APT DEMO EXE FILE T1218_010 sedll {
    meta:
       description = "Detects SeDll - DLL is used for decrypting and executing another JavaScript backdoor such as Orz"
       author = "Florian Roth"
@@ -16782,7 +16782,7 @@ rule SeDLL_Javascript_Decryptor_RID3136 : APT DEMO EXE FILE T1218_010 {
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2024-07-19"
       hash1 = "146aa9a0ec013aa5bdba9ea9d29f59d48d43bc17c6a20b74bb8c521dbb5bc6f4"
-      tags = "APT, DEMO, EXE, FILE, T1218_010"
+      tags = "APT, DEMO, EXE, FILE, T1218_010, sedll"
       minimum_yara = "3.5.0"
       
    strings:
@@ -16947,7 +16947,7 @@ rule OilRig_ISMAgent_Campaign_Samples2_RID3373 : APT DEMO EXE FILE G0049 MIDDLE_
       uint16 ( 0 ) == 0x5a4d and filesize < 700KB and ( 2 of ( $x* ) or 3 of them )
 }
 
-rule BronzeButler_Daserf_Delphi_1_RID31E8 : APT CHINA DEMO EXE FILE G0060 {
+rule BronzeButler_Daserf_Delphi_1_RID31E8 : APT CHINA DEMO EXE FILE G0060 daserf {
    meta:
       description = "Detects malware / hacktool sample from Bronze Butler incident"
       author = "Florian Roth"
@@ -16960,7 +16960,7 @@ rule BronzeButler_Daserf_Delphi_1_RID31E8 : APT CHINA DEMO EXE FILE G0060 {
       hash1 = "89a80ca92600af64eb9c32cab4e936c7d675cf815424d72438973e2d6788ef64"
       hash2 = "b1bd03cd12638f44d9ace271f65645e7f9b707f86e9bcf790e0e5a96b755556b"
       hash3 = "22e1965154bdb91dd281f0e86c8be96bf1f9a1e5fe93c60a1d30b79c0c0f0d43"
-      tags = "APT, CHINA, DEMO, EXE, FILE, G0060"
+      tags = "APT, CHINA, DEMO, EXE, FILE, G0060, daserf"
       minimum_yara = "3.5.0"
       
    strings:
@@ -16977,7 +16977,7 @@ rule BronzeButler_Daserf_Delphi_1_RID31E8 : APT CHINA DEMO EXE FILE G0060 {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 400KB and 3 of them )
 }
 
-rule BronzeButler_Daserf_C_1_RID2FD5 : APT CHINA DEMO EXE FILE G0060 {
+rule BronzeButler_Daserf_C_1_RID2FD5 : APT CHINA DEMO EXE FILE G0060 daserf {
    meta:
       description = "Detects malware / hacktool sample from Bronze Butler incident"
       author = "Florian Roth"
@@ -16989,7 +16989,7 @@ rule BronzeButler_Daserf_C_1_RID2FD5 : APT CHINA DEMO EXE FILE G0060 {
       hash1 = "a4afd9df1b4cc014c3a89d7b4a560fa3e368b02286c42841762714b23e68cc05"
       hash2 = "90ac1fb148ded4f46949a5fea4cd8c65d4ea9585046d66459328a5866f8198b2"
       hash3 = "331ac0965b50958db49b7794cc819b2945d7b5e5e919c185d83e997e205f107b"
-      tags = "APT, CHINA, DEMO, EXE, FILE, G0060"
+      tags = "APT, CHINA, DEMO, EXE, FILE, G0060, daserf"
       required_modules = "pe"
       minimum_yara = "3.5.0"
       
@@ -17056,7 +17056,7 @@ rule BronzeButler_UACBypass_1_RID3029 : APT CHINA DEMO EXE FILE G0060 {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and 1 of them )
 }
 
-rule BronzeButler_xxmm_1_RID2EA8 : APT CHINA DEMO EXE FILE G0060 {
+rule BronzeButler_xxmm_1_RID2EA8 : APT CHINA DEMO EXE FILE G0060 xxmm {
    meta:
       description = "Detects malware / hacktool sample from Bronze Butler incident"
       author = "Florian Roth"
@@ -17066,7 +17066,7 @@ rule BronzeButler_xxmm_1_RID2EA8 : APT CHINA DEMO EXE FILE G0060 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "7197de18bc5a4c854334ff979f3e4dafa16f43d7bf91edfe46f03e6cc88f7b73"
-      tags = "APT, CHINA, DEMO, EXE, FILE, G0060"
+      tags = "APT, CHINA, DEMO, EXE, FILE, G0060, xxmm"
       minimum_yara = "3.5.0"
       
    strings:
@@ -19540,7 +19540,7 @@ rule WinPayloads_Payload_RID2EA5 : DEMO EXE FILE HKTL {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 10000KB and all of them )
 }
 
-rule ZxShell_Related_Malware_CN_Group_Jul17_1_RID3601 : APT CHINA DEMO EXE FILE T1087_002 T1543_003 {
+rule ZxShell_Related_Malware_CN_Group_Jul17_1_RID3601 : APT CHINA DEMO EXE FILE T1087_002 T1543_003 zxshell {
    meta:
       description = "Detects a ZxShell related sample from a CN threat group"
       author = "Florian Roth"
@@ -19550,7 +19550,7 @@ rule ZxShell_Related_Malware_CN_Group_Jul17_1_RID3601 : APT CHINA DEMO EXE FILE 
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "ef56c2609bc1b90f3e04745890235e6052a4be94e35e38b6f69b64fb17a7064e"
-      tags = "APT, CHINA, DEMO, EXE, FILE, T1087_002, T1543_003"
+      tags = "APT, CHINA, DEMO, EXE, FILE, T1087_002, T1543_003, zxshell"
       minimum_yara = "3.5.0"
       
    strings:
@@ -19564,7 +19564,7 @@ rule ZxShell_Related_Malware_CN_Group_Jul17_1_RID3601 : APT CHINA DEMO EXE FILE 
       ( uint16 ( 0 ) == 0x5a4d and filesize < 400KB and 1 of them )
 }
 
-rule ZxShell_Related_Malware_CN_Group_Jul17_2_RID3602 : APT CHINA DEMO EXE FILE T1021_002 {
+rule ZxShell_Related_Malware_CN_Group_Jul17_2_RID3602 : APT CHINA DEMO EXE FILE T1021_002 zxshell {
    meta:
       description = "Detects a ZxShell related sample from a CN threat group"
       author = "Florian Roth"
@@ -19574,7 +19574,7 @@ rule ZxShell_Related_Malware_CN_Group_Jul17_2_RID3602 : APT CHINA DEMO EXE FILE 
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "204273675526649b7243ee48efbb7e2bc05239f7f9015fbc4fb65f0ada64759e"
-      tags = "APT, CHINA, DEMO, EXE, FILE, T1021_002"
+      tags = "APT, CHINA, DEMO, EXE, FILE, T1021_002, zxshell"
       minimum_yara = "3.5.0"
       
    strings:
@@ -19594,7 +19594,7 @@ rule ZxShell_Related_Malware_CN_Group_Jul17_2_RID3602 : APT CHINA DEMO EXE FILE 
       uint16 ( 0 ) == 0x5a4d and filesize < 100KB and ( 1 of ( $x* ) or 3 of them )
 }
 
-rule ZxShell_Related_Malware_CN_Group_Jul17_3_RID3603 : APT CHINA DEMO EXE FILE {
+rule ZxShell_Related_Malware_CN_Group_Jul17_3_RID3603 : APT CHINA DEMO EXE FILE zxshell {
    meta:
       description = "Detects a ZxShell related sample from a CN threat group"
       author = "Florian Roth"
@@ -19604,7 +19604,7 @@ rule ZxShell_Related_Malware_CN_Group_Jul17_3_RID3603 : APT CHINA DEMO EXE FILE 
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "2e5cf8c785dc081e5c2b43a4a785713c0ae032c5f86ccbc7abf5c109b8854ed7"
-      tags = "APT, CHINA, DEMO, EXE, FILE"
+      tags = "APT, CHINA, DEMO, EXE, FILE, zxshell"
       minimum_yara = "3.5.0"
       
    strings:
@@ -19614,7 +19614,7 @@ rule ZxShell_Related_Malware_CN_Group_Jul17_3_RID3603 : APT CHINA DEMO EXE FILE 
       ( uint16 ( 0 ) == 0x5a4d and filesize < 600KB and all of them )
 }
 
-rule ZxShell_Jul17_RID2BCD : APT CHINA DEMO T1007 {
+rule ZxShell_Jul17_RID2BCD : APT CHINA DEMO T1007 zxshell {
    meta:
       description = "Detects a ZxShell - CN threat group"
       author = "Florian Roth"
@@ -19624,7 +19624,7 @@ rule ZxShell_Jul17_RID2BCD : APT CHINA DEMO T1007 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "5d2a4cde9fa7c2fdbf39b2e2ffd23378d0c50701a3095d1e91e3cf922d7b0b16"
-      tags = "APT, CHINA, DEMO, T1007"
+      tags = "APT, CHINA, DEMO, T1007, zxshell"
       minimum_yara = "3.5.0"
       
    strings:
@@ -20047,7 +20047,7 @@ rule Disclosed_0day_POCs_shellcodegenerator_RID3605 : DEMO EXE FILE HKTL {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 40KB and all of them )
 }
 
-rule TeleDoor_Backdoor_RID2DB3 : DEMO EXE FILE MAL RANSOM {
+rule TeleDoor_Backdoor_RID2DB3 : DEMO EXE FILE MAL RANSOM teledoor {
    meta:
       description = "Detects the TeleDoor Backdoor as used in Petya Attack in June 2017"
       author = "Florian Roth"
@@ -20060,7 +20060,7 @@ rule TeleDoor_Backdoor_RID2DB3 : DEMO EXE FILE MAL RANSOM {
       hash1 = "d462966166450416d6addd3bfdf48590f8440dd80fc571a389023b7c860ca3ac"
       hash2 = "f9d6fe8bd8aca6528dec7eaa9f1aafbecde15fd61668182f2ba8a7fc2b9a6740"
       hash3 = "2fd2863d711a1f18eeee5c7c82f2349c5d4e00465de9789da837fcdca4d00277"
-      tags = "DEMO, EXE, FILE, MAL, RANSOM"
+      tags = "DEMO, EXE, FILE, MAL, RANSOM, teledoor"
       minimum_yara = "3.5.0"
       
    strings:
@@ -29365,7 +29365,7 @@ rule TeleBots_KillDisk_2_RID2E3A : APT DEMO EXE FILE G0034 {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 500KB and all of them )
 }
 
-rule TeleBots_CredRaptor_Password_Stealer_RID3569 : APT DEMO EXE FILE G0034 T1003 {
+rule TeleBots_CredRaptor_Password_Stealer_RID3569 : APT DEMO EXE FILE G0034 T1003 credraptor {
    meta:
       description = "Detects TeleBots malware - CredRaptor Password Stealer"
       author = "Florian Roth"
@@ -29376,7 +29376,7 @@ rule TeleBots_CredRaptor_Password_Stealer_RID3569 : APT DEMO EXE FILE G0034 T100
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2024-07-19"
       hash1 = "50b990f6555055a265fde98324759dbc74619d6a7c49b9fd786775299bf77d26"
-      tags = "APT, DEMO, EXE, FILE, G0034, T1003"
+      tags = "APT, DEMO, EXE, FILE, G0034, T1003, credraptor"
       minimum_yara = "3.5.0"
       
    strings:
@@ -33227,27 +33227,7 @@ rule Typical_Malware_String_Transforms_RID3473 : DEMO EXE FILE HIGHVOL SUSP {
       ( uint16 ( 0 ) == 0x5a4d and 1 of them and not 1 of ( $fp* ) )
 }
 
-rule APT_Stuxnet_Malware_2_RID2F09 : APT DEMO EXE FILE {
-   meta:
-      description = "Stuxnet Sample"
-      author = "Florian Roth"
-      reference = "Internal Research"
-      date = "2016-07-09 11:40:01"
-      score = 75
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      hash1 = "63e6b8136058d7a06dfff4034b4ab17a261cdf398e63868a601f77ddd1b32802"
-      tags = "APT, DEMO, EXE, FILE"
-      minimum_yara = "3.5.0"
-      
-   strings:
-      $s1 = "\\SystemRoot\\System32\\hal.dll" wide
-      $s2 = "http://www.jmicron.co.tw0" fullword ascii
-   condition: 
-      uint16 ( 0 ) == 0x5a4d and filesize < 70KB and all of them
-}
-
-rule APT_StuxNet_dll_RID2CCB : APT DEMO EXE FILE {
+rule APT_StuxNet_dll_RID2CCB : APT DEMO EXE FILE stuxnet {
    meta:
       description = "Stuxnet Sample - file dll.dll"
       author = "Florian Roth"
@@ -33257,7 +33237,7 @@ rule APT_StuxNet_dll_RID2CCB : APT DEMO EXE FILE {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "9e392277f62206098cf794ddebafd2817483cfd57ec03c2e05e7c3c81e72f562"
-      tags = "APT, DEMO, EXE, FILE"
+      tags = "APT, DEMO, EXE, FILE, stuxnet"
       minimum_yara = "3.5.0"
       
    strings:
@@ -33266,7 +33246,7 @@ rule APT_StuxNet_dll_RID2CCB : APT DEMO EXE FILE {
       uint16 ( 0 ) == 0x5a4d and filesize < 100KB and $s1
 }
 
-rule APT_StuxNet_Malware_1_RID2EE8 : APT DEMO {
+rule APT_StuxNet_Malware_1_RID2EE8 : APT DEMO stuxnet {
    meta:
       description = "Stuxnet Sample - file malware.exe"
       author = "Florian Roth"
@@ -33276,7 +33256,7 @@ rule APT_StuxNet_Malware_1_RID2EE8 : APT DEMO {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "9c891edb5da763398969b6aaa86a5d46971bd28a455b20c2067cb512c9f9a0f8"
-      tags = "APT, DEMO"
+      tags = "APT, DEMO, stuxnet"
       minimum_yara = "3.5.0"
       
    strings:
@@ -33287,7 +33267,27 @@ rule APT_StuxNet_Malware_1_RID2EE8 : APT DEMO {
       all of them
 }
 
-rule APT_Stuxnet_Shortcut_to_RID304D : APT DEMO FILE T1210 T1547_009 {
+rule APT_Stuxnet_Malware_2_RID2F09 : APT DEMO EXE FILE stuxnet {
+   meta:
+      description = "Stuxnet Sample"
+      author = "Florian Roth"
+      reference = "Internal Research"
+      date = "2016-07-09 11:40:01"
+      score = 75
+      customer = "demo"
+      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
+      hash1 = "63e6b8136058d7a06dfff4034b4ab17a261cdf398e63868a601f77ddd1b32802"
+      tags = "APT, DEMO, EXE, FILE, stuxnet"
+      minimum_yara = "3.5.0"
+      
+   strings:
+      $s1 = "\\SystemRoot\\System32\\hal.dll" wide
+      $s2 = "http://www.jmicron.co.tw0" fullword ascii
+   condition: 
+      uint16 ( 0 ) == 0x5a4d and filesize < 70KB and all of them
+}
+
+rule APT_Stuxnet_Shortcut_to_RID304D : APT DEMO FILE T1210 T1547_009 stuxnet {
    meta:
       description = "Stuxnet Sample - file Copy of Shortcut to.lnk"
       author = "Florian Roth"
@@ -33297,7 +33297,7 @@ rule APT_Stuxnet_Shortcut_to_RID304D : APT DEMO FILE T1210 T1547_009 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "801e3b6d84862163a735502f93b9663be53ccbdd7f12b0707336fecba3a829a2"
-      tags = "APT, DEMO, FILE, T1210, T1547_009"
+      tags = "APT, DEMO, FILE, T1210, T1547_009, stuxnet"
       minimum_yara = "3.5.0"
       
    strings:
@@ -33306,7 +33306,7 @@ rule APT_Stuxnet_Shortcut_to_RID304D : APT DEMO FILE T1210 T1547_009 {
       uint16 ( 0 ) == 0x004c and filesize < 10KB and $x1
 }
 
-rule APT_Stuxnet_Malware_3_RID2F0A : APT DEMO EXE FILE {
+rule APT_Stuxnet_Malware_3_RID2F0A : APT DEMO EXE FILE stuxnet {
    meta:
       description = "Stuxnet Sample - file ~WTR4141.tmp"
       author = "Florian Roth"
@@ -33317,7 +33317,7 @@ rule APT_Stuxnet_Malware_3_RID2F0A : APT DEMO EXE FILE {
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "6bcf88251c876ef00b2f32cf97456a3e306c2a263d487b0a50216c6e3cc07c6a"
       hash2 = "70f8789b03e38d07584f57581363afa848dd5c3a197f2483c6dfa4f3e7f78b9b"
-      tags = "APT, DEMO, EXE, FILE"
+      tags = "APT, DEMO, EXE, FILE, stuxnet"
       minimum_yara = "3.5.0"
       
    strings:
@@ -33332,7 +33332,7 @@ rule APT_Stuxnet_Malware_3_RID2F0A : APT DEMO EXE FILE {
       ( uint16 ( 0 ) == 0x5a4d and filesize < 150KB and ( $x1 or 3 of ( $s* ) ) ) or ( 5 of them )
 }
 
-rule APT_Stuxnet_maindll_decrypted_unpacked_RID365D : APT DEMO {
+rule APT_Stuxnet_maindll_decrypted_unpacked_RID365D : APT DEMO stuxnet {
    meta:
       description = "Stuxnet Sample - file maindll.decrypted.unpacked.dll_"
       author = "Florian Roth"
@@ -33342,7 +33342,7 @@ rule APT_Stuxnet_maindll_decrypted_unpacked_RID365D : APT DEMO {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "4c3d7b38339d7b8adf73eaf85f0eb9fab4420585c6ab6950ebd360428af11712"
-      tags = "APT, DEMO"
+      tags = "APT, DEMO, stuxnet"
       minimum_yara = "3.5.0"
       
    strings:
@@ -33358,7 +33358,7 @@ rule APT_Stuxnet_maindll_decrypted_unpacked_RID365D : APT DEMO {
       6 of them
 }
 
-rule APT_Stuxnet_s7hkimdb_RID2EC8 : APT DEMO EXE FILE {
+rule APT_Stuxnet_s7hkimdb_RID2EC8 : APT DEMO EXE FILE stuxnet {
    meta:
       description = "Stuxnet Sample - file s7hkimdb.dll"
       author = "Florian Roth"
@@ -33368,7 +33368,7 @@ rule APT_Stuxnet_s7hkimdb_RID2EC8 : APT DEMO EXE FILE {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "4071ec265a44d1f0d42ff92b2fa0b30aafa7f6bb2160ed1d0d5372d70ac654bd"
-      tags = "APT, DEMO, EXE, FILE"
+      tags = "APT, DEMO, EXE, FILE, stuxnet"
       minimum_yara = "3.5.0"
       
    strings:
@@ -34816,7 +34816,7 @@ rule Sofacy_Fysbis_ELF_Backdoor_Gen2_RID32AA : APT DEMO FILE G0007 LINUX RUSSIA 
       uint16 ( 0 ) == 0x457f and filesize < 500KB and all of them
 }
 
-rule Powerkatz_DLL_Generic_RID2F2F : DEMO EXE GEN HKTL S0002 SCRIPT T1003 T1059_001 T1134_005 T1550_002 T1550_003 {
+rule Powerkatz_DLL_Generic_RID2F2F : DEMO EXE GEN HKTL S0002 SCRIPT T1003 T1059_001 T1134_005 T1550_002 T1550_003 powerkatz {
    meta:
       description = "Detects Powerkatz - a Mimikatz version prepared to run in memory via Powershell (overlap with other Mimikatz versions is possible)"
       author = "Florian Roth"
@@ -34828,7 +34828,7 @@ rule Powerkatz_DLL_Generic_RID2F2F : DEMO EXE GEN HKTL S0002 SCRIPT T1003 T1059_
       hash1 = "c20f30326fcebad25446cf2e267c341ac34664efad5c50ff07f0738ae2390eae"
       hash2 = "1e67476281c1ec1cf40e17d7fc28a3ab3250b474ef41cb10a72130990f0be6a0"
       hash3 = "49e7bac7e0db87bf3f0185e9cf51f2539dbc11384fefced465230c4e5bce0872"
-      tags = "DEMO, EXE, GEN, HKTL, S0002, SCRIPT, T1003, T1059_001, T1134_005, T1550_002, T1550_003"
+      tags = "DEMO, EXE, GEN, HKTL, S0002, SCRIPT, T1003, T1059_001, T1134_005, T1550_002, T1550_003, powerkatz"
       minimum_yara = "3.5.0"
       
    strings:
@@ -35497,7 +35497,7 @@ rule Webshell_c99_4_RID2C0E : DEMO T1505_003 WEBSHELL {
       filesize < 900KB and 1 of them
 }
 
-rule BlackEnergy_Driver_USBMDM_RID304A : APT DEMO EXE FILE {
+rule BlackEnergy_Driver_USBMDM_RID304A : APT DEMO EXE FILE blackenergy {
    meta:
       description = "Semiautomatically generated YARA rule"
       author = "Florian Roth"
@@ -35509,7 +35509,7 @@ rule BlackEnergy_Driver_USBMDM_RID304A : APT DEMO EXE FILE {
       hash1 = "7874a10e551377d50264da5906dc07ec31b173dee18867f88ea556ad70d8f094"
       hash2 = "b73777469f939c331cbc1c9ad703f973d55851f3ad09282ab5b3546befa5b54a"
       hash3 = "edb16d3ccd50fc8f0f77d0875bf50a629fa38e5ba1b8eeefd54468df97eba281"
-      tags = "APT, DEMO, EXE, FILE"
+      tags = "APT, DEMO, EXE, FILE, blackenergy"
       minimum_yara = "3.5.0"
       
    strings:
@@ -35520,7 +35520,7 @@ rule BlackEnergy_Driver_USBMDM_RID304A : APT DEMO EXE FILE {
       uint16 ( 0 ) == 0x5a4d and filesize < 180KB and all of them
 }
 
-rule BlackEnergy_Driver_AMDIDE_RID3026 : APT DEMO EXE FILE {
+rule BlackEnergy_Driver_AMDIDE_RID3026 : APT DEMO EXE FILE blackenergy {
    meta:
       description = "Semiautomatically generated YARA rule"
       author = "Florian Roth"
@@ -35532,7 +35532,7 @@ rule BlackEnergy_Driver_AMDIDE_RID3026 : APT DEMO EXE FILE {
       hash1 = "32d3121135a835c3347b553b70f3c4c68eef711af02c161f007a9fbaffe7e614"
       hash2 = "3432db9cb1fb9daa2f2ac554a0a006be96040d2a7776a072a8db051d064a8be2"
       hash3 = "90ba78b6710462c2d97815e8745679942b3b296135490f0095bdc0cd97a34d9c"
-      tags = "APT, DEMO, EXE, FILE"
+      tags = "APT, DEMO, EXE, FILE, blackenergy"
       minimum_yara = "3.5.0"
       
    strings:
@@ -35544,7 +35544,7 @@ rule BlackEnergy_Driver_AMDIDE_RID3026 : APT DEMO EXE FILE {
       uint16 ( 0 ) == 0x5a4d and filesize < 150KB and all of them
 }
 
-rule BlackEnergy_VBS_Agent_RID2EF0 : APT DEMO SCRIPT {
+rule BlackEnergy_VBS_Agent_RID2EF0 : APT DEMO SCRIPT blackenergy {
    meta:
       description = "Detects VBS Agent from BlackEnergy Report - file Dropbearrun.vbs"
       author = "Florian Roth"
@@ -35554,7 +35554,7 @@ rule BlackEnergy_VBS_Agent_RID2EF0 : APT DEMO SCRIPT {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "APT, DEMO, SCRIPT"
+      tags = "APT, DEMO, SCRIPT, blackenergy"
       minimum_yara = "3.5.0"
       
    strings:
@@ -35588,7 +35588,7 @@ rule DropBear_SSH_Server_RID2E43 : APT DEMO EXE FILE T1021_004 {
       uint16 ( 0 ) == 0x5a4d and filesize < 1000KB and 2 of them
 }
 
-rule BlackEnergy_BackdoorPass_DropBear_SSH_RID352E : APT DEMO EXE FILE T1021_004 {
+rule BlackEnergy_BackdoorPass_DropBear_SSH_RID352E : APT DEMO EXE FILE T1021_004 blackenergy {
    meta:
       description = "Detects the password of the backdoored DropBear SSH Server - BlackEnergy"
       author = "Florian Roth"
@@ -35598,7 +35598,7 @@ rule BlackEnergy_BackdoorPass_DropBear_SSH_RID352E : APT DEMO EXE FILE T1021_004
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "APT, DEMO, EXE, FILE, T1021_004"
+      tags = "APT, DEMO, EXE, FILE, T1021_004, blackenergy"
       minimum_yara = "3.5.0"
       
    strings:
@@ -35607,7 +35607,7 @@ rule BlackEnergy_BackdoorPass_DropBear_SSH_RID352E : APT DEMO EXE FILE T1021_004
       uint16 ( 0 ) == 0x5a4d and $s1
 }
 
-rule BlackEnergy_KillDisk_1_RID2F5E : APT DEMO EXE FILE {
+rule BlackEnergy_KillDisk_1_RID2F5E : APT DEMO EXE FILE blackenergy {
    meta:
       description = "Detects KillDisk malware from BlackEnergy"
       author = "Florian Roth"
@@ -35619,7 +35619,7 @@ rule BlackEnergy_KillDisk_1_RID2F5E : APT DEMO EXE FILE {
       hash1 = "11b7b8a7965b52ebb213b023b6772dd2c76c66893fc96a18a9a33c8cf125af80"
       hash2 = "5d2b1abc7c35de73375dd54a4ec5f0b060ca80a1831dac46ad411b4fe4eac4c6"
       hash3 = "c7536ab90621311b526aefd56003ef8e1166168f038307ae960346ce8f75203d"
-      tags = "APT, DEMO, EXE, FILE"
+      tags = "APT, DEMO, EXE, FILE, blackenergy"
       minimum_yara = "3.5.0"
       
    strings:
@@ -35637,7 +35637,7 @@ rule BlackEnergy_KillDisk_1_RID2F5E : APT DEMO EXE FILE {
       uint16 ( 0 ) == 0x5a4d and filesize < 500KB and 8 of them
 }
 
-rule BlackEnergy_KillDisk_2_RID2F5F : APT DEMO EXE FILE {
+rule BlackEnergy_KillDisk_2_RID2F5F : APT DEMO EXE FILE blackenergy {
    meta:
       description = "Detects KillDisk malware from BlackEnergy"
       author = "Florian Roth"
@@ -35650,7 +35650,7 @@ rule BlackEnergy_KillDisk_2_RID2F5F : APT DEMO EXE FILE {
       hash1 = "11b7b8a7965b52ebb213b023b6772dd2c76c66893fc96a18a9a33c8cf125af80"
       hash2 = "5d2b1abc7c35de73375dd54a4ec5f0b060ca80a1831dac46ad411b4fe4eac4c6"
       hash3 = "f52869474834be5a6b5df7f8f0c46cbc7e9b22fa5cb30bee0f363ec6eb056b95"
-      tags = "APT, DEMO, EXE, FILE"
+      tags = "APT, DEMO, EXE, FILE, blackenergy"
       minimum_yara = "3.5.0"
       
    strings:
@@ -36664,7 +36664,7 @@ rule MAL_Korplug_FAST_RID2CBB : DEMO EXE FILE MAL T1218_011 {
       uint16 ( 0 ) == 0x5a4d and filesize < 500KB and ( $x1 or ( $a1 and 1 of ( $s* ) ) or 4 of ( $s* ) )
 }
 
-rule MAL_Emdivi_SFX_RID2BF8 : DEMO EXE FILE MAL {
+rule MAL_Emdivi_SFX_RID2BF8 : DEMO EXE FILE MAL emdivi {
    meta:
       description = "Detects Emdivi malware in SFX Archive"
       author = "Florian Roth"
@@ -36675,7 +36675,7 @@ rule MAL_Emdivi_SFX_RID2BF8 : DEMO EXE FILE MAL {
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       hash1 = "7a3c81b2b3c14b9cd913692347019887b607c54152b348d6d3ccd3ecfd406196"
       hash2 = "8c3df4e4549db3ce57fc1f7b1b2dfeedb7ba079f654861ca0b608cbfa1df0f6b"
-      tags = "DEMO, EXE, FILE, MAL"
+      tags = "DEMO, EXE, FILE, MAL, emdivi"
       minimum_yara = "3.5.0"
       
    strings:
@@ -36688,7 +36688,7 @@ rule MAL_Emdivi_SFX_RID2BF8 : DEMO EXE FILE MAL {
       uint16 ( 0 ) == 0x5a4d and filesize < 740KB and ( 1 of ( $x* ) and all of ( $s* ) )
 }
 
-rule MAL_Emdivi_Gen3_RID2C54 : DEMO EXE FILE MAL {
+rule MAL_Emdivi_Gen3_RID2C54 : DEMO EXE FILE MAL emdivi {
    meta:
       description = "Detects Emdivi Malware"
       author = "Florian Roth"
@@ -36700,7 +36700,7 @@ rule MAL_Emdivi_Gen3_RID2C54 : DEMO EXE FILE MAL {
       modified = "2023-01-06"
       hash1 = "008f4f14cf64dc9d323b6cb5942da4a99979c4c7d750ec1228d8c8285883771e"
       hash2 = "a94bf485cebeda8e4b74bbe2c0a0567903a13c36b9bf60fab484a9b55207fe0d"
-      tags = "DEMO, EXE, FILE, MAL"
+      tags = "DEMO, EXE, FILE, MAL, emdivi"
       minimum_yara = "3.5.0"
       
    strings:
@@ -36715,7 +36715,7 @@ rule MAL_Emdivi_Gen3_RID2C54 : DEMO EXE FILE MAL {
       uint16 ( 0 ) == 0x5a4d and filesize < 850KB and ( ( $x1 and 1 of ( $s* ) ) or ( 4 of ( $s* ) ) )
 }
 
-rule MAL_Emdivi_Gen4_RID2C55 : DEMO EXE FILE MAL {
+rule MAL_Emdivi_Gen4_RID2C55 : DEMO EXE FILE MAL emdivi {
    meta:
       description = "Detects Emdivi Malware"
       author = "Florian Roth"
@@ -36727,7 +36727,7 @@ rule MAL_Emdivi_Gen4_RID2C55 : DEMO EXE FILE MAL {
       hash1 = "008f4f14cf64dc9d323b6cb5942da4a99979c4c7d750ec1228d8c8285883771e"
       hash2 = "17e646ca2558a65ffe7aa185ba75d5c3a573c041b897355c2721e9a8ca5fee24"
       hash3 = "3553c136b4eba70eec5d80abe44bd7c7c33ab1b65de617dbb7be5025c9cf01f1"
-      tags = "DEMO, EXE, FILE, MAL"
+      tags = "DEMO, EXE, FILE, MAL, emdivi"
       minimum_yara = "3.5.0"
       
    strings:
@@ -45656,7 +45656,7 @@ rule Pc_xai_RID2965 : CHINA DEMO EXE FILE HKTL {
       uint16 ( 0 ) == 0x5a4d and filesize < 3000KB and all of them
 }
 
-rule Radmin_Hash_RID2B4F : CHINA DEMO EXE FILE HKTL {
+rule Radmin_Hash_RID2B4F : CHINA DEMO EXE FILE HKTL remoteadmin {
    meta:
       description = "Chinese Hacktool Set - file Radmin_Hash_RID2B4F.exe"
       author = "Florian Roth"
@@ -45666,7 +45666,7 @@ rule Radmin_Hash_RID2B4F : CHINA DEMO EXE FILE HKTL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "CHINA, DEMO, EXE, FILE, HKTL"
+      tags = "CHINA, DEMO, EXE, FILE, HKTL, remoteadmin"
       minimum_yara = "3.5.0"
       
    strings:
@@ -49464,7 +49464,7 @@ rule Equation_Kaspersky_EquationLaserInstaller_RID37BD : APT DEMO EXE FILE G0020
       ( uint16 ( 0 ) == 0x5a4d ) and filesize < 250000 and 6 of ( $s* )
 }
 
-rule Equation_Kaspersky_FannyWorm_RID3273 : APT DEMO EXE FILE G0020 T1543_003 {
+rule Equation_Kaspersky_FannyWorm_RID3273 : APT DEMO EXE FILE G0020 T1543_003 fanny {
    meta:
       description = "Equation Group Malware - Fanny Worm"
       author = "Florian Roth"
@@ -49474,7 +49474,7 @@ rule Equation_Kaspersky_FannyWorm_RID3273 : APT DEMO EXE FILE G0020 T1543_003 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2024-07-19"
-      tags = "APT, DEMO, EXE, FILE, G0020, T1543_003"
+      tags = "APT, DEMO, EXE, FILE, G0020, T1543_003, fanny"
       minimum_yara = "3.5.0"
       
    strings:
@@ -50168,7 +50168,7 @@ rule OPCLEAVER_CCProxy_Config_RID2F6E : APT DEMO G0003 {
       all of ( $s* ) or $x1
 }
 
-rule Regin_Sample_3_RID2C59 : APT DEMO FILE T1543_003 {
+rule Regin_Sample_3_RID2C59 : APT DEMO FILE T1543_003 regin {
    meta:
       description = "Detects Regin Backdoor sample fe1419e9dde6d479bd7cda27edd39fafdab2668d498931931a2769b370727129"
       author = "Florian Roth"
@@ -50178,7 +50178,7 @@ rule Regin_Sample_3_RID2C59 : APT DEMO FILE T1543_003 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2026-03-12"
-      tags = "APT, DEMO, FILE, T1543_003"
+      tags = "APT, DEMO, FILE, T1543_003, regin"
       minimum_yara = "3.5.0"
       
    strings:
@@ -50200,7 +50200,7 @@ rule Regin_Sample_3_RID2C59 : APT DEMO FILE T1543_003 {
       uint32 ( 0 ) == 0xfedcbafe and filesize > 160KB and filesize < 200KB and all of ( $s* )
 }
 
-rule Regin_sig_svcsstat_RID2E82 : APT DEMO FILE {
+rule Regin_sig_svcsstat_RID2E82 : APT DEMO FILE regin {
    meta:
       description = "Detects svcstat from Regin report - file svcsstat.exe_sample"
       author = "Florian Roth"
@@ -50210,7 +50210,7 @@ rule Regin_sig_svcsstat_RID2E82 : APT DEMO FILE {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2026-03-12"
-      tags = "APT, DEMO, FILE"
+      tags = "APT, DEMO, FILE, regin"
       minimum_yara = "3.5.0"
       
    strings:
@@ -50225,7 +50225,7 @@ rule Regin_sig_svcsstat_RID2E82 : APT DEMO FILE {
       filesize < 15KB and filesize > 10KB and all of them
 }
 
-rule Regin_Sample_1_RID2C57 : APT DEMO T1136 {
+rule Regin_Sample_1_RID2C57 : APT DEMO T1136 regin {
    meta:
       description = "Semiautomatically generated YARA rule - file-3665415_sys"
       author = "Florian Roth"
@@ -50235,7 +50235,7 @@ rule Regin_Sample_1_RID2C57 : APT DEMO T1136 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2026-03-12"
-      tags = "APT, DEMO, T1136"
+      tags = "APT, DEMO, T1136, regin"
       minimum_yara = "3.5.0"
       
    strings:
@@ -50260,7 +50260,7 @@ rule Regin_Sample_1_RID2C57 : APT DEMO T1136 {
       filesize < 110KB and filesize > 80KB and all of them and not $fp1
 }
 
-rule Regin_Sample_2_RID2C58 : APT DEMO T1543_003 {
+rule Regin_Sample_2_RID2C58 : APT DEMO T1543_003 regin {
    meta:
       description = "Semiautomatically generated YARA rule - file hiddenmod_hookdisk_and_kdbg_8949d000.bin"
       author = "Florian Roth"
@@ -50270,7 +50270,7 @@ rule Regin_Sample_2_RID2C58 : APT DEMO T1543_003 {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       modified = "2026-03-12"
-      tags = "APT, DEMO, T1543_003"
+      tags = "APT, DEMO, T1543_003, regin"
       minimum_yara = "3.5.0"
       
    strings:
@@ -50295,7 +50295,7 @@ rule Regin_Sample_2_RID2C58 : APT DEMO T1543_003 {
       filesize < 40KB and filesize > 30KB and all of them
 }
 
-rule Regin_Sample_Set_2_RID2DE3 : APT DEMO T1543_003 {
+rule Regin_Sample_Set_2_RID2DE3 : APT DEMO T1543_003 regin {
    meta:
       description = "Semiautomatically generated YARA rule - file SHF-000052 and ndisips.sys"
       author = "Florian Roth"
@@ -50307,7 +50307,7 @@ rule Regin_Sample_Set_2_RID2DE3 : APT DEMO T1543_003 {
       modified = "2026-03-12"
       hash1 = "8487a961c8244004c9276979bb4b0c14392fc3b8"
       hash2 = "bcf3461d67b39a427c83f9e39b9833cfec977c61"
-      tags = "APT, DEMO, T1543_003"
+      tags = "APT, DEMO, T1543_003, regin"
       minimum_yara = "3.5.0"
       
    strings:
@@ -53260,7 +53260,7 @@ rule MAL_Debug_BDoor_RID2C66 : DEMO MAL T1505_003 WEBSHELL {
       all of them
 }
 
-rule ZXshell2_0_rar_Folder_ZXshell_RID3224 : DEMO T1505_003 WEBSHELL {
+rule ZXshell2_0_rar_Folder_ZXshell_RID3224 : DEMO T1505_003 WEBSHELL zxshell {
    meta:
       description = "Webshells Auto-generated - file ZXshell.exe"
       author = "Florian Roth"
@@ -53270,7 +53270,7 @@ rule ZXshell2_0_rar_Folder_ZXshell_RID3224 : DEMO T1505_003 WEBSHELL {
       customer = "demo"
       license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
       
-      tags = "DEMO, T1505_003, WEBSHELL"
+      tags = "DEMO, T1505_003, WEBSHELL, zxshell"
       minimum_yara = "3.5.0"
       
    strings:
