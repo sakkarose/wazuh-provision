@@ -1,8 +1,8 @@
 /*
     VALHALLA YARA RULE SET
-    Retrieved: 2026-04-21 21:41
+    Retrieved: 2026-04-22 21:48
     Generated for User: demo
-    Number of Rules: 2721
+    Number of Rules: 2718
     
     This is the VALHALLA demo rule set. The content represents the 'signature-base' repository in a streamlined format but lacks the rules provided by 3rd parties. All rules are licensed under CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/.
 */
@@ -32,26 +32,6 @@ rule HKTL_BlueHammer_Apr26_RID2E6F : DEMO HKTL T1003 T1068 {
       $op1 = { 8D 47 02 66 89 43 0C 66 C7 43 0E 02 00 48 8B C7 48 D1 E8 66 44 89 7C 43 12 } 
    condition: 
       uint16 ( 0 ) == 0x5A4D and filesize < 7MB and ( 1 of ( $x* ) or all of ( $s* ) or $op1 ) or 3 of them
-}
-
-rule MAL_NPM_SupplyChain_Attack_Mar26_RID32A2 : DEMO MAL {
-   meta:
-      description = "Detects package.json which include the malicious plain-crypto-js package as dependency"
-      author = "Marius Benthin"
-      reference = "https://www.stepsecurity.io/blog/axios-compromised-on-npm-malicious-versions-drop-remote-access-trojan"
-      date = "2026-03-31 14:13:31"
-      score = 80
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, MAL"
-      minimum_yara = "3.5.0"
-      
-   strings:
-      $s1 = "\"dependencies\":" 
-      $s2 = { 22 70 6C 61 69 6E 2D 63 72 79 70 74 6F 2D 6A 73 22 3A [0-3] 22 [0-2] 34 2E 32 2E } 
-   condition: 
-      filesize < 10KB and all of them
 }
 
 rule SUSP_JS_Dropper_Mar26_RID2E7A : DEMO SUSP T1059_007 {
@@ -475,25 +455,6 @@ rule SUSP_JS_NPM_SetupScript_Nov25_RID3180 : DEMO SUSP T1059_007 {
       $sb2 = "process.exit(0)" 
    condition: 
       filesize < 100KB and all of ( $sa* ) and $sb1 in ( filesize - 50 .. filesize ) and $sb2 in ( filesize - 30 .. filesize )
-}
-
-rule MAL_NPM_SupplyChain_Attack_PreInstallScript_Nov25_RID3986 : DEMO MAL SCRIPT {
-   meta:
-      description = "Detects known malicious preinstall script in package.json"
-      author = "Marius Benthin"
-      reference = "https://www.aikido.dev/blog/shai-hulud-strikes-again-hitting-zapier-ensdomains"
-      date = "2025-11-24 19:07:31"
-      score = 80
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      
-      tags = "DEMO, MAL, SCRIPT"
-      minimum_yara = "3.5.0"
-      
-   strings:
-      $x1 = "\"preinstall\": \"node setup_bun.js\"" 
-   condition: 
-      filesize < 10KB and all of them
 }
 
 rule EXPL_WSUS_Exploitation_Indicators_Oct25_RID35B5 : CVE_2025_59287 DEMO EXPLOIT T1016 T1033 T1087_002 {
@@ -12375,29 +12336,6 @@ rule HKTL_shellpop_Telnet_TCP_RID301B : DEMO HKTL SCRIPT {
       $x2 = "0</tmp/f|/bin/bash 1>/tmp/f" fullword ascii
    condition: 
       filesize < 3KB and 1 of them
-}
-
-rule SUSP_shellpop_Bash_RID2DFF : DEMO HKTL SCRIPT SUSP T1059_004 {
-   meta:
-      description = "Detects susupicious bash command"
-      author = "Tobias Michalski"
-      reference = "https://github.com/0x00-0x00/ShellPop"
-      date = "2018-05-18 10:55:41"
-      score = 70
-      customer = "demo"
-      license = "CC-BY-NC https://creativecommons.org/licenses/by-nc/4.0/"
-      modified = "2025-04-11"
-      hash1 = "36fad575a8bc459d0c2e3ad626e97d5cf4f5f8bedc56b3cc27dd2f7d88ed889b"
-      id = "771b7d01-272a-5986-af07-7417b84c52ed"
-      tags = "DEMO, HKTL, SCRIPT, SUSP, T1059_004"
-      minimum_yara = "4.0.0"
-      
-   strings:
-      $x1 = "bash -i >& /dev/tcp/" ascii
-      $x2 = "bash -i >& /dev/tcp/" ascii base64
-      $fp1 = "bash -i >& /dev/tcp/IP/PORT" ascii
-   condition: 
-      1 of ( $x* ) and not 1 of ( $fp* )
 }
 
 rule HKTL_shellpop_netcat_RID2EE8 : DEMO HKTL {
