@@ -70,6 +70,8 @@ Current version: v4.14.2
 - VALHALLA SIGMA managed rule update through Github Action
 - Linux agent provision script
 
+- SIGMA re-setup due to 5.0 availability
+
 ## Note
 
 1. SCA policies serve as a second method for malware detection in case of a network problem or a flooded event queue, which could cause the Wazuh server to miss important information.
